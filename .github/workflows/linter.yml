@@ -1,0 +1,21 @@
+name: Linter style check
+run-name: Checking best practices on ${{ github.actor }}'s deployment
+on: [pull_request]
+jobs:
+    Run-Style-Check:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check out repository code
+              uses: actions/checkout@v4
+            - name: Setup nodejs
+              uses: actions/setup-node@v4
+              with:
+                node-version: 22
+            - name: Install dependencies
+              run: npm i
+            - name: Fail if lint bad
+              uses: GuillaumeFalourd/assert-command-line-output@v2.4
+              with:
+                command_line: npm run lint | grep -oh "No ESLint warnings or errors"
+                assert_file_path: eslintpass.txt
+                expected_result: PASSED

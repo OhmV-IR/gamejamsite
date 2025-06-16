@@ -1,0 +1,29 @@
+name: Build
+run-name: Running test build on ${{ github.actor }}'s deployment
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+    Run-Build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check out repository code
+              uses: actions/checkout@v4
+            - name: Setup nodejs
+              uses: actions/setup-node@v4
+              with:
+                node-version: 22
+            - name: Install dependencies
+              run: npm i
+            - name: Create env file
+              run: |
+                touch .env
+                echo DBENDPOINT=${{secrets.DBENDPOINT}} >> .env
+                echo DBKEY=${{secrets.DBKEY}} >> .env
+                echo DBID=${{secrets.DBID}} >> .env
+                echo CONTAINERID=${{secrets.CONTAINERID}} >> .env
+            - name: Build site
+              run: npm run build
