@@ -18,12 +18,5 @@ jobs:
                 node-version: 22
             - name: Install dependencies
               run: npm i
-            - name: Create env file
-              run: |
-                touch .env
-                echo DBENDPOINT=${{secrets.DBENDPOINT}} >> .env
-                echo DBKEY=${{secrets.DBKEY}} >> .env
-                echo DBID=${{secrets.DBID}} >> .env
-                echo CONTAINERID=${{secrets.CONTAINERID}} >> .env
             - name: Build site
               run: npm run build

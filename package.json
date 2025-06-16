@@ -13,7 +13,8 @@
     "react-dom": "^19.0.0",
     "next": "15.3.3",
     "@tabler/icons-react": "^3.34.0",
-    "@azure/cosmos": "^4.4.1"
+    "@azure/cosmos": "^4.4.1",
+    "dotenv": "^16.5.0"
   },
   "devDependencies": {
     "eslint": "^9",
