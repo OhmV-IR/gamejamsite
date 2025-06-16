@@ -1,95 +1,66 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import { IconCalendar, IconClipboardCheck, IconHome, IconInfoCircle, IconJetpack, IconLayoutDashboard, IconUserSearch } from "@tabler/icons-react";
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
+    <div id="homepageroot">
+      <header className="navbar navbar-expand-md d-print-none">
+        <div className="container-xl">
+          <a href="/" aria-label="SiteLogo" className="navbar-brand navbar-brand-autodark me-3">
+            <IconJetpack></IconJetpack>
+            <h1>GameJam Name</h1>
           </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
+          <ul className="navbar-nav">
+          <li className="nav-item active">
+        <a className="nav-link" href="/">
+          <span className="nav-link-icon">
+            <IconHome></IconHome>
+          </span>
+          <span className="nav-link-title"> Home </span>
         </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
+      </li>
+      <li className="nav-item">
+        <a className="nav-link" href="/aboutus">
+          <span className="nav-link-icon">
+            <IconInfoCircle></IconInfoCircle>
+          </span>
+          <span className="nav-link-title"> About us </span>
         </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
+      </li>
+      <li className="nav-item">
+        <a className="nav-link" href="/eventdetails">
+          <span className="nav-link-icon">
+            <IconCalendar></IconCalendar>
+          </span>
+          <span className="nav-link-title"> Event Details </span>
         </a>
-      </footer>
+      </li>
+      <li className="nav-item">
+        <a className="nav-link" href="/login">
+          <span className="nav-link-icon">
+            <IconClipboardCheck></IconClipboardCheck>
+          </span>
+          <span className="nav-link-title"> Register </span>
+        </a>
+      </li>
+      <li className="nav-item">
+        <a className="nav-link" href="/dashboard">
+          <span className="nav-link-icon">
+            <IconLayoutDashboard></IconLayoutDashboard>
+          </span>
+          <span className="nav-link-title"> Contestant Dashboard </span>
+        </a>
+      </li>
+      <li className="nav-item">
+        <a className="nav-link" href="/teamfinder">
+          <span className="nav-link-icon">
+            <IconUserSearch></IconUserSearch>
+          </span>
+          <span className="nav-link-title"> Team Finder </span>
+        </a>
+      </li>
+          </ul>
+      </div>
+      </header>
     </div>
   );
 }
