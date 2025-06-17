@@ -9,11 +9,12 @@ export default function Navbar(){
     useEffect(() => {
         var navitems = document.getElementsByClassName("nav-item");
         for(let i = 0; i < navitems.length; i++){
+            navitems[i].classList.remove("active");
           if(navitems[i].id == path){
             navitems[i].classList.add("active");
           }
         }
-      }, []);
+      }, [path]);
     return (
         <header className="navbar navbar-expand-md d-print-none">
         <div className="container-xl">
