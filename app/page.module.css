@@ -1,9 +1,8 @@
 .titlebox {
-    width: 50vw;
+    width: 100vw;
     height: 25vh;
     position: relative;
-    margin-top: 15vh;
-    margin-left: 25vw;
+    margin-top: 25vh;
     text-align: center;
 }
 
