@@ -12,7 +12,8 @@ export default function AboutUs(){
         <h2 className={styles.text}>We promote our goals by organizing and overseeing game jams, events where students come to learn
         and veterans come to create.</h2>
         <h1 className={styles.subheader}>How you can help us</h1>
-        <h2 className={styles.text}>We are always appreciative of sponsorships and volunteers, please send us an email at ourteamemail@gmail.com to learn more about how you can get involved!</h2>
+        <h2 className={styles.text}>We are always appreciative of sponsorships and volunteers, please send us an email at&nbsp;
+        <a className={styles.emaillink} href="mailto:jambytesteam@gmail.com">jambytesteam@gmail.com</a> to learn more about how you can get involved!</h2>
         </div>
     )
 }
