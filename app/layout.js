@@ -1,6 +1,8 @@
 import "./globals.css";
 import Script from "next/script";
 import Navbar from "./navbar";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export default function RootLayout({ children }) {
   return (
@@ -14,6 +16,8 @@ export default function RootLayout({ children }) {
         <Script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.3.2/dist/js/tabler.min.js"/>
       </head>
       <body>
+      <Analytics></Analytics>
+      <SpeedInsights></SpeedInsights>
       <Navbar></Navbar>
         {children}
       </body>
