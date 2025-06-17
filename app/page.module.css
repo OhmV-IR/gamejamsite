@@ -2,12 +2,13 @@
     width: 50vw;
     height: 25vh;
     position: relative;
-    margin-top: 35vh;
+    margin-top: 15vh;
     margin-left: 25vw;
     text-align: center;
 }
 
 .jamtitle {
+    position: relative;
     font-size: 8vw;
     height: 15vh;
     color: white;
