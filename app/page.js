@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 export default function Home() {
   useEffect(() => {
-    document.querySelector("video").playbackRate = 0.75;
+    document.querySelector("video").playbackRate = 0.3;
   }, []);
   return (
     <div id="homepageroot">
