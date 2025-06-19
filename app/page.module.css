@@ -27,3 +27,21 @@
     z-index: -1;
     object-fit: cover;
 }
+
+.pagetitle {
+    font-size: xx-large;
+    text-align: center;
+    width: 100%;
+}
+
+.oauthbtn {
+    position: relative;
+    width: 100%;
+}
+
+.adulttext {
+    position: relative;
+    margin-top: 10vh;
+    text-align: center;
+    width: 100%;
+}
