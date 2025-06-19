@@ -1,0 +1,21 @@
+.root {
+    width: 90vw;
+    margin-left: 5vw;
+}
+
+.background {
+    background-color: grey;
+}
+
+.pagetitle {
+    text-align: center;
+    font-size: xx-large;
+    position: relative;
+    margin-top: 5vh;
+}
+
+.rangelabels {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
