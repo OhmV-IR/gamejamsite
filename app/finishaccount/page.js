@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './page.module.css';
 import { IconAlertCircle } from '@tabler/icons-react';
 
@@ -78,6 +78,25 @@ export default function FinishAccount() {
         event.preventDefault();
         setOnlineDisabled(false);
     }
+
+    useEffect(() => {
+        fetch("/api/fetchuserinfo", {
+            method: "POST",
+            credentials: "include"
+        }).then((res) => {
+            if(res.ok){
+                res.json().then((body) => {
+                    document.getElementById(body.role).checked = true;
+                    document.getElementById(body.attendeetype).checked = true;
+                    document.getElementById("lookingforteam").checked = body.lookingforteam;
+                    document.getElementById(body.bracket).checked = true;
+                    document.getElementById("tosbox").checked = true;
+                    document.getElementById("privacybox").checked = true;
+                    document.getElementById("proficiencyrange").value = body.experiencelevel;
+                });
+            }
+        })
+    }, []);
 
     return (
         <div className={styles.root}>

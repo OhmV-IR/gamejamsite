@@ -40,11 +40,10 @@ export async function GET(req){
         query: sqlstring.format("SELECT * from c WHERE c.userid=?", user.userid)
     }
     const existinguser = await container.items.query(query).fetchAll();
+    await createSession(userres.data.id);
     if(existinguser.resources.length != 0){
-        refreshSession();
         return NextResponse.redirect(process.env.DOMAIN + "/dashboard");
     }
     container.items.create(user);
-    await createSession(userres.data.id);
     return NextResponse.redirect(process.env.DOMAIN + "/finishaccount");
 }
