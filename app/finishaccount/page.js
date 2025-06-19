@@ -6,9 +6,10 @@ import { IconAlertCircle } from '@tabler/icons-react';
 export default function FinishAccount() {
     const [errorBadgeVisible, setErrorBadgeVisible] = useState(false);
     const [errorBadgeText, setErrorBadgeText] = useState("");
+    const [onlineDisabled, setOnlineDisabled] = useState(false);
 
     function DisplayErrorBadge(text) {
-        setErrorBadgeText(text);
+        setErrorBadgeText(text);``
         setErrorBadgeVisible(true);
         setTimeout(() => {
             setErrorBadgeVisible(false);
@@ -23,7 +24,7 @@ export default function FinishAccount() {
         }
         const selectedRoleText = selectedRole.id;
         const selectedAttendee = document.querySelector('input[name="attendancetype"]:checked');
-        if (!selectedAttendee) {
+        if (!selectedAttendee || selectedAttendee.disabled) {
             DisplayErrorBadge("Attendance type not selected");
             return;
         }
@@ -68,18 +69,28 @@ export default function FinishAccount() {
         })
     }
 
+    const HandleJunior = (event) => {
+        event.preventDefault();
+        setOnlineDisabled(true);
+    }
+
+    const HandleSenior = (event) => {
+        event.preventDefault();
+        setOnlineDisabled(false);
+    }
+
     return (
         <div className={styles.root}>
             <h1 className={styles.pagetitle}>Complete your account</h1>
             <div className="mb-3 mt-5">
                 <label className="form-label">Select your competition bracket</label>
                 <label className="form-check">
-                    <input className="form-check-input" type="radio" id="junior" name="bracket"></input>
-                    <span className="form-check-label">Junior (under 14)</span>
+                    <input className="form-check-input" type="radio" id="junior" name="bracket" onChange={HandleJunior}></input>
+                    <span className="form-check-label">Junior (11-14)</span>
                 </label>
                 <label className="form-check">
-                    <input className="form-check-input" type="radio" id="senior" name="bracket"></input>
-                    <span className="form-check-label">Senior (14+)</span>
+                    <input className="form-check-input" type="radio" id="senior" name="bracket" onChange={HandleSenior}></input>
+                    <span className="form-check-label">Senior (14-18)</span>
                 </label>
                 <label className="form-label">Which role would you prefer to take on in a team?</label>
                 <div>
@@ -128,7 +139,7 @@ export default function FinishAccount() {
                         <span className="form-check-label">In-Person</span>
                     </label>
                     <label className="form-check">
-                        <input className="form-check-input" id="online" type="radio" name="attendancetype"></input>
+                        <input className="form-check-input" id="online" type="radio" name="attendancetype" disabled={onlineDisabled}></input>
                         <span className="form-check-label">Online</span>
                     </label>
                 </div>
