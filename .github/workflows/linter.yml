@@ -1,6 +1,10 @@
 name: Linter style check
 run-name: Checking best practices on ${{ github.actor }}'s deployment
-on: [pull_request]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
 jobs:
     Run-Style-Check:
         runs-on: ubuntu-latest
