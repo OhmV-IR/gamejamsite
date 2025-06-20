@@ -10,9 +10,10 @@ export default function Navbar() {
   const [name, setName] = useState("");
   const [pfpurl, setPfpurl] = useState("");
   const [role, setRole] = useState("");
+  const [hasRole, setHasRole] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
 
-  function Capitalize(str){
+  function Capitalize(str) {
     return String(str).charAt(0).toUpperCase() + String(str).slice(1);
   }
 
@@ -26,7 +27,7 @@ export default function Navbar() {
     });
   }
 
-  function RedirectToGithub(){
+  function RedirectToGithub() {
     fetch("/api/oauth/github/geturl", {
       method: "POST"
     }).then((res) => {
@@ -36,7 +37,7 @@ export default function Navbar() {
     })
   }
 
-  function RedirectToDiscord(){
+  function RedirectToDiscord() {
     fetch("/api/oauth/discord/geturl", {
       method: "POST"
     }).then((res) => {
@@ -65,7 +66,10 @@ export default function Navbar() {
         res.json().then((body) => {
           setName(body.name);
           setPfpurl(body.pfp);
-          setRole(Capitalize(body.role));
+          if (body.role) {
+            setRole(Capitalize(body.role));
+            setHasRole(true);
+          }
           setIsSignedIn(true);
         });
       }
@@ -125,10 +129,13 @@ export default function Navbar() {
               ? <div className="navbar-nav flex-row order-md-last ms-auto">
                 <div className="nav-item dropdown">
                   <a href="#" className="nav-link d-flex lh-1 text-reset" data-bs-toggle="dropdown" aria-label="Open user menu">
-                    <span className="avatar avatar-sm" style={{backgroundImage: "url(" + pfpurl + ")"}}></span>
+                    <span className="avatar avatar-sm" style={{ backgroundImage: "url(" + pfpurl + ")" }}></span>
                     <div className="d-none d-xl-block ps-2">
                       <div>{name}</div>
-                      <div className="mt-1 small text-secondary">{role}</div>
+                      { hasRole
+                      ? <div className="mt-1 small text-secondary">{role}</div>
+                      : <></>
+                      }
                     </div>
                   </a>
                   <div className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">

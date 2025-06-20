@@ -9,7 +9,7 @@ export default function FinishAccount() {
     const [onlineDisabled, setOnlineDisabled] = useState(false);
 
     function DisplayErrorBadge(text) {
-        setErrorBadgeText(text);``
+        setErrorBadgeText(text);
         setErrorBadgeVisible(true);
         setTimeout(() => {
             setErrorBadgeVisible(false);
@@ -58,7 +58,7 @@ export default function FinishAccount() {
             }),
             credentials: 'include'
         }).then((res) => {
-            if(res.status == 200){
+            if (res.ok) {
                 window.location.href = "/dashboard";
             }
             else {
@@ -82,15 +82,23 @@ export default function FinishAccount() {
             method: "POST",
             credentials: "include"
         }).then((res) => {
-            if(res.ok){
+            if (res.ok) {
                 res.json().then((body) => {
-                    document.getElementById(body.role).checked = true;
-                    document.getElementById(body.attendeetype).checked = true;
-                    document.getElementById("lookingforteam").checked = body.lookingforteam;
-                    document.getElementById(body.bracket).checked = true;
-                    document.getElementById("tosbox").checked = true;
-                    document.getElementById("privacybox").checked = true;
-                    document.getElementById("proficiencyrange").value = body.experiencelevel;
+                    if (body.role) {
+                        document.getElementById(body.role).checked = true;
+                    }
+                    if (body.attendeetype) {
+                        document.getElementById(body.attendeetype).checked = true;
+                    }
+                    if (body.lookingforteam) {
+                        document.getElementById("lookingforteam").checked = body.lookingforteam;
+                    }
+                    if (body.bracket) {
+                        document.getElementById(body.bracket).checked = true;
+                    }
+                    if (body.experiencelevel) {
+                        document.getElementById("proficiencyrange").value = body.experiencelevel;
+                    }
                 });
             }
         })
