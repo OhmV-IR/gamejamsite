@@ -70,12 +70,10 @@ export default function FinishAccount() {
     }
 
     const HandleJunior = (event) => {
-        event.preventDefault();
         setOnlineDisabled(true);
     }
 
     const HandleSenior = (event) => {
-        event.preventDefault();
         setOnlineDisabled(false);
     }
 
