@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link";
-import { IconCalendar, IconClipboardCheck, IconHome, IconInfoCircle, IconJetpack, IconLayoutDashboard, IconUserSearch, IconBrandGoogleFilled } from "@tabler/icons-react";
+import { IconCalendar, IconClipboardCheck, IconHome, IconInfoCircle, IconJetpack, IconLayoutDashboard, IconUserSearch, IconBrandGoogleFilled, IconAlertTriangle } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import styles from './page.module.css';
@@ -114,6 +114,7 @@ export default function Navbar() {
                   <div className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                     <a href="/finishaccount" className="dropdown-item">Account Details</a>
                     <div className="dropdown-divider"></div>
+                    <button className="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteaccountmodal">Delete my account</button>
                     <a href="/api/logout" className="dropdown-item text-danger">Logout</a>
                   </div>
                 </div>
@@ -144,6 +145,35 @@ export default function Navbar() {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn me-auto" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="modal" id="deleteaccountmodal" tabIndex={-1}>
+        <div className="modal-dialog modal-sm" role="document">
+          <div className="modal-content">
+            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div className="modal-status bg-danger"></div>
+            <div className="modal-body text-center py-4">
+              <IconAlertTriangle className="text-danger"></IconAlertTriangle>
+              <h3 className="text-danger mt-3 mb-3">Are you sure?</h3>
+              <div className="text-secondary">
+                Do you really want to delete your account? This CANNOT be undone and is <strong>PERMANENT</strong>.
+              </div>
+            </div>
+            <div className="modal-footer">
+              <div className="w-100">
+                <div className="row">
+                  <div className="col">
+                    <a href="#" className="btn w-100" data-bs-dismiss="modal"> Cancel </a>
+                  </div>
+                  <div className="col">
+                    <a href="/api/deleteaccount" className="btn btn-danger w-100">
+                      Delete my account
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
