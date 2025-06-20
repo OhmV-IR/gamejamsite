@@ -111,11 +111,11 @@ export default function FinishAccount() {
                 <label className="form-label">Select your competition bracket</label>
                 <label className="form-check">
                     <input className="form-check-input" type="radio" id="junior" name="bracket" onChange={HandleJunior}></input>
-                    <span className="form-check-label">Junior (11-14)</span>
+                    <span className="form-check-label">Junior (11-14 years old, cannot attend online)</span>
                 </label>
                 <label className="form-check">
                     <input className="form-check-input" type="radio" id="senior" name="bracket" onChange={HandleSenior}></input>
-                    <span className="form-check-label">Senior (14-18)</span>
+                    <span className="form-check-label">Senior (14-18 years old)</span>
                 </label>
                 <label className="form-label">Which role would you prefer to take on in a team?</label>
                 <div>
