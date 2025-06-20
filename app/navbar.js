@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link";
-import { IconCalendar, IconClipboardCheck, IconHome, IconInfoCircle, IconJetpack, IconLayoutDashboard, IconUserSearch, IconBrandGoogleFilled, IconAlertTriangle, IconBrandGithubFilled } from "@tabler/icons-react";
+import { IconCalendar, IconClipboardCheck, IconHome, IconInfoCircle, IconJetpack, IconLayoutDashboard, IconUserSearch, IconBrandGoogleFilled, IconAlertTriangle, IconBrandGithubFilled, IconBrandDiscordFilled } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import styles from './page.module.css';
@@ -28,6 +28,16 @@ export default function Navbar() {
 
   function RedirectToGithub(){
     fetch("/api/oauth/github/geturl", {
+      method: "POST"
+    }).then((res) => {
+      res.json().then((json) => {
+        window.location.href = json.url;
+      })
+    })
+  }
+
+  function RedirectToDiscord(){
+    fetch("/api/oauth/discord/geturl", {
       method: "POST"
     }).then((res) => {
       res.json().then((json) => {
@@ -148,12 +158,16 @@ export default function Navbar() {
             </div>
             <div className="modal-body">
               <button type="button" className={`${styles.oauthbtn} btn btn-google mt-3 mb-3 h-25`} onClick={RedirectToGoogle}>
-                <IconBrandGoogleFilled></IconBrandGoogleFilled>
+                <IconBrandGoogleFilled></IconBrandGoogleFilled>&nbsp;
                 Sign in with Google
               </button>
               <button type="button" className={`${styles.oauthbtn} btn btn-github mb-3 h-25`} onClick={RedirectToGithub}>
-                <IconBrandGithubFilled></IconBrandGithubFilled>
+                <IconBrandGithubFilled></IconBrandGithubFilled>&nbsp;
                 Sign in with Github
+              </button>
+              <button type="button" className={`${styles.oauthbtn} btn btn-discord mb-3 h-25`} onClick={RedirectToDiscord}>
+                <IconBrandDiscordFilled></IconBrandDiscordFilled>&nbsp;
+                Sign in with Discord
               </button>
               <h3 className={styles.adulttext}>If you are under 13, please have your parent complete this step.</h3>
             </div>

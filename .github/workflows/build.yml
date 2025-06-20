@@ -30,6 +30,9 @@ jobs:
                 echo GITHUB_OAUTH_CLIENT_ID=${{secrets.GH_OAUTH_CLIENT_ID}} >> .env
                 echo GITHUB_OAUTH_CLIENT_SECRET=${{secrets.GH_OAUTH_CLIENT_SECRET}} >> .env
                 echo GITHUB_OAUTH_REDIRECT_URL=${{secrets.GH_OAUTH_REDIRECT_URL}} >> .env
+                echo DISCORD_OAUTH_CLIENT_ID=${{secrets.DISCORD_OAUTH_CLIENT_ID}} >> .env
+                echo DISCORD_OAUTH_CLIENT_SECRET=${{secrets.DISCORD_OAUTH_CLIENT_SECRET}} >> .env
+                echo DISCORD_OAUTH_REDIRECT_URL=${{secrets.DISCORD_OAUTH_REDIRECT_URL}} >> .env
                 echo DB_ENDPOINT=${{secrets.DB_ENDPOINT}} >> .env
                 echo DB_KEY=${{secrets.DB_KEY}} >> .env
                 echo DB_ID=${{secrets.DB_ID}} >> .env
