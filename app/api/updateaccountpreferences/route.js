@@ -27,7 +27,7 @@ export async function POST(req){
         return new Response("Bad session", {status: 400});
     }
     const query = {
-        query: sqlstring.format("SELECT * from c WHERE c.userid=?", payload.uid)
+        query: sqlstring.format("SELECT * from c WHERE c.userid=? AND c.provider=?", [payload.uid, payload.provider])
     }
     const items = await container.items.query(query).fetchAll();
     if(items.resources.length != 1){

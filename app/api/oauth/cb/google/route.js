@@ -34,13 +34,14 @@ export async function GET(req){
         userid: userres.data.id,
         email: userres.data.email,
         name: userres.data.name,
-        pfp: userres.data.picture
+        pfp: userres.data.picture,
+        provider: "google"
     }
     const query = {
         query: sqlstring.format("SELECT * from c WHERE c.userid=?", user.userid)
     }
     const existinguser = await container.items.query(query).fetchAll();
-    await createSession(userres.data.id);
+    await createSession(userres.data.id, "google");
     if(existinguser.resources.length != 0){
         return NextResponse.redirect(process.env.DOMAIN + "/dashboard");
     }

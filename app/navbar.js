@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link";
-import { IconCalendar, IconClipboardCheck, IconHome, IconInfoCircle, IconJetpack, IconLayoutDashboard, IconUserSearch, IconBrandGoogleFilled, IconAlertTriangle } from "@tabler/icons-react";
+import { IconCalendar, IconClipboardCheck, IconHome, IconInfoCircle, IconJetpack, IconLayoutDashboard, IconUserSearch, IconBrandGoogleFilled, IconAlertTriangle, IconBrandGithubFilled } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import styles from './page.module.css';
@@ -24,6 +24,16 @@ export default function Navbar() {
         window.location.href = json.url;
       })
     });
+  }
+
+  function RedirectToGithub(){
+    fetch("/api/oauth/github/geturl", {
+      method: "POST"
+    }).then((res) => {
+      res.json().then((json) => {
+        window.location.href = json.url;
+      })
+    })
   }
 
   const path = usePathname();
@@ -137,9 +147,13 @@ export default function Navbar() {
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
             </div>
             <div className="modal-body">
-              <button type="button" className={`${styles.oauthbtn} btn btn-google`} onClick={RedirectToGoogle}>
+              <button type="button" className={`${styles.oauthbtn} btn btn-google mt-3 mb-3 h-25`} onClick={RedirectToGoogle}>
                 <IconBrandGoogleFilled></IconBrandGoogleFilled>
                 Sign in with Google
+              </button>
+              <button type="button" className={`${styles.oauthbtn} btn btn-github mb-3 h-25`} onClick={RedirectToGithub}>
+                <IconBrandGithubFilled></IconBrandGithubFilled>
+                Sign in with Github
               </button>
               <h3 className={styles.adulttext}>If you are under 13, please have your parent complete this step.</h3>
             </div>
