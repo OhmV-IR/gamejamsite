@@ -15,11 +15,11 @@ export default function AboutUs() {
             <h2 className={styles.text}>We are always appreciative of sponsorships and volunteers, please send us an email at&nbsp;
                 <a className={styles.emaillink} href="mailto:jambytesteam@gmail.com">jambytesteam@gmail.com</a> to learn more about how you can get involved!</h2>
             <h1 className={styles.pagetitle}>Meet The Team</h1>
-            <div className="row">
+            <div className="row w-75">
                 <div className="col">
                     <div className={styles.personcard}>
                         <div className="card">
-                            <Image src="/Vishnu.jpg" alt="A portrait of Vishnu" width={1024} height={1024} style={{ objectFit: "contain" }}></Image>
+                            <Image src="/Vishnu.jpg" alt="A portrait of Vishnu" width={1024} height={1024} ></Image>
                             <div className="card-body">
                                 <h3 className="card-title">Vishnu</h3>
                                 <p className="text-secondary">Lead Organizer</p>
@@ -30,7 +30,7 @@ export default function AboutUs() {
                 <div className="col">
                     <div className={styles.personcard}>
                         <div className="card">
-                            <Image src="/Aryaman.jpeg" alt="A portrait of Aryaman" width={1024} height={1024} style={{ objectFit: "contain" }}></Image>
+                            <Image src="/Aryaman.jpeg" alt="A portrait of Aryaman" width={1024} height={1024} ></Image>
                             <div className="card-body">
                                 <h3 className="card-title">Aryaman</h3>
                                 <p className="text-secondary">Head of Marketing</p>
@@ -39,11 +39,11 @@ export default function AboutUs() {
                     </div>
                 </div>
             </div>
-            <div className="row">
+            <div className="row w-75">
                 <div className="col">
                     <div className={styles.personcard}>
                         <div className="card">
-                            <Image src="/Jared.png" alt="A portrait of Jared" width={1024} height={1024} style={{ objectFit: "contain" }}></Image>
+                            <Image src="/Jared.png" alt="A portrait of Jared" width={1024} height={1024} ></Image>
                             <div className="card-body">
                                 <h3 className="card-title">Jared</h3>
                                 <p className="text-secondary">Workshop Coordinator</p>
@@ -54,7 +54,7 @@ export default function AboutUs() {
                 <div className="col">
                     <div className={styles.personcard}>
                         <div className="card">
-                            <Image src="/Adrien.png" alt="A portrait of Adrien" width={1024} height={1024} style={{ objectFit: "contain" }}></Image>
+                            <Image src="/Adrien.png" alt="A portrait of Adrien" width={1024} height={1024} ></Image>
                             <div className="card-body">
                                 <h3 className="card-title">Adrien</h3>
                                 <p className="text-secondary">Website Manager</p>
