@@ -60,3 +60,8 @@
     margin-top: 10vh;
     margin-left: 37.5vw;
 }
+
+.roundImage {
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+}
