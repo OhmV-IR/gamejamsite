@@ -1,5 +1,6 @@
 "use client"
 import styles from "./page.module.css"
+import Image from "next/image";
 
 export default function AboutUs() {
     return (
@@ -18,7 +19,7 @@ export default function AboutUs() {
                 <div className="col">
                     <div className={styles.personcard}>
                         <div className="card">
-                            <img src="./Vishnu.jpg"></img>
+                            <Image src="./Vishnu.jpg"></Image>
                             <div className="card-body">
                                 <h3 className="card-title">Vishnu</h3>
                                 <p className="text-secondary">Lead Organizer</p>
@@ -29,7 +30,7 @@ export default function AboutUs() {
                 <div className="col">
                     <div className={styles.personcard}>
                         <div className="card">
-                            <img src="./Aryaman.jpeg"></img>
+                            <Image src="./Aryaman.jpeg"></Image>
                             <div className="card-body">
                                 <h3 className="card-title">Aryaman</h3>
                                 <p className="text-secondary">Head of Marketing</p>
@@ -42,7 +43,7 @@ export default function AboutUs() {
                 <div className="col">
                     <div className={styles.personcard}>
                         <div className="card">
-                            <img src="./Jared.png"></img>
+                            <Image src="./Jared.png"></Image>
                             <div className="card-body">
                                 <h3 className="card-title">Jared</h3>
                                 <p className="text-secondary">Workshop Coordinator</p>
@@ -53,7 +54,7 @@ export default function AboutUs() {
                 <div className="col">
                     <div className={styles.personcard}>
                         <div className="card">
-                            <img src="./Adrien.png"></img>
+                            <Image src="./Adrien.png"></Image>
                             <div className="card-body">
                                 <h3 className="card-title">Adrien</h3>
                                 <p className="text-secondary">Website Manager</p>
