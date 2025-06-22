@@ -19,7 +19,7 @@ export default function AboutUs() {
                 <div className="col">
                     <div className={styles.personcard}>
                         <div className="card">
-                            <Image src="./Vishnu.jpg"></Image>
+                            <Image src="./Vishnu.jpg" alt="A portrait of Vishnu"></Image>
                             <div className="card-body">
                                 <h3 className="card-title">Vishnu</h3>
                                 <p className="text-secondary">Lead Organizer</p>
@@ -30,7 +30,7 @@ export default function AboutUs() {
                 <div className="col">
                     <div className={styles.personcard}>
                         <div className="card">
-                            <Image src="./Aryaman.jpeg"></Image>
+                            <Image src="./Aryaman.jpeg" alt="A portrait of Aryaman"></Image>
                             <div className="card-body">
                                 <h3 className="card-title">Aryaman</h3>
                                 <p className="text-secondary">Head of Marketing</p>
@@ -43,7 +43,7 @@ export default function AboutUs() {
                 <div className="col">
                     <div className={styles.personcard}>
                         <div className="card">
-                            <Image src="./Jared.png"></Image>
+                            <Image src="./Jared.png" alt="A portrait of Jared"></Image>
                             <div className="card-body">
                                 <h3 className="card-title">Jared</h3>
                                 <p className="text-secondary">Workshop Coordinator</p>
@@ -54,7 +54,7 @@ export default function AboutUs() {
                 <div className="col">
                     <div className={styles.personcard}>
                         <div className="card">
-                            <Image src="./Adrien.png"></Image>
+                            <Image src="./Adrien.png" alt="A portrait of Adrien"></Image>
                             <div className="card-body">
                                 <h3 className="card-title">Adrien</h3>
                                 <p className="text-secondary">Website Manager</p>
