@@ -4,8 +4,7 @@
     width: 100vw;
     margin-left: 0vw;
     text-align: center;
-    font-size: 8vw;
-    height: 15vh;
+    font-size: 5vw;
     color: #0d911e;
     text-rendering: optimizeLegibility;
 }
@@ -34,4 +33,11 @@
 
 .emaillink {
     color: blue;
+}
+
+.personcard {
+    width: 25vw;
+    position: relative;
+    margin-left: 5vw;
+    margin-top: 10vh;
 }
