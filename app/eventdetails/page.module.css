@@ -3,4 +3,21 @@
     margin-left: 25vw;
     margin-top: 5vh;
     text-align: center;
+    font-size: xx-large;
+}
+
+.subheader {
+    width: 50vw;
+    margin-left: 2vw;
+    margin-top: 3vh;
+    margin-bottom: 2vh;
+    text-align: left;
+    font-size: large;
+}
+
+.answertext {
+    width: 90vw;
+    margin-left: 4vw;
+    text-align: left;
+    font-size: medium;
 }
