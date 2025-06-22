@@ -1,18 +1,17 @@
 .pagetitle {
     position: relative;
     margin-top: 8vh;
-    width: 100vw;
-    margin-left: 0vw;
+    width: 50vw;
+    margin-left: 25vw;
     text-align: center;
-    font-size: 8vw;
-    height: 15vh;
+    font-size: 5vw;
     color: #0d911e;
     text-rendering: optimizeLegibility;
 }
 
 .subheader {
     position: relative;
-    width: 95vw;
+    width: 90vw;
     margin-top: 4vh;
     text-align: left;
     font-size: xx-large;
@@ -24,7 +23,7 @@
 
 .text {
     position: relative;
-    width: 95vw;
+    width: 85vw;
     margin-top: 2vh;
     text-align: left;
     font-size: x-large;
@@ -34,4 +33,11 @@
 
 .emaillink {
     color: blue;
+}
+
+.personcard {
+    width: 25vw;
+    position: relative;
+    margin-top: 10vh;
+    margin-left: 18vw;
 }

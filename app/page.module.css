@@ -45,3 +45,20 @@
     text-align: center;
     width: 100%;
 }
+
+.footerdiv {
+    bottom: 0;
+    width: 95vw;
+    height: 10vh;
+    text-align: center;
+}
+
+.linktext {
+    color: blue;
+}
+
+.footerpad {
+    height: 10vh;
+    position: relative;
+    margin-top: 0;
+}
