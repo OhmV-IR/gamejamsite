@@ -8,7 +8,7 @@ export default function Home() {
   }, []);
   return (
     <div id="homepageroot">
-      <video autoPlay muted loop className={styles.bgvideo} id="bgvideo">
+      <video autoPlay muted loop className={styles.bgvideo} id="bgvideo" controls={false}>
         <source src="homepagebg.mp4" type="video/mp4"></source>
       </video>
       <div className={styles.titlebox}>
