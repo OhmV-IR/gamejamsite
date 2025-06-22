@@ -6,11 +6,11 @@ export default function AboutUs() {
     return (
         <div>
             <h1 className={styles.pagetitle}>About Us</h1>
-            <h1 className={styles.subheader}>Who We Are</h1> 
-                <h2 className={styles.text}>We are a youth-led organization from the Kitchener-Waterloo region hosting JamBytes,
+            <h1 className={styles.subheader}>Who We Are</h1>
+            <h2 className={styles.text}>We are a youth-led organization from the Kitchener-Waterloo region hosting JamBytes,
                 granting the programmers of tomorrow an opportunity to excel today.</h2>
             <h1 className={styles.subheader}>Mission Statement</h1>
-                <h2 className={styles.text}>We strive to educate and inspire young minds to learn, create, and play by providing them with a platform to showcase their problem-solving skills through our game jam.</h2>
+            <h2 className={styles.text}>We strive to educate and inspire young minds to learn, create, and play by providing them with a platform to showcase their problem-solving skills through our game jam.</h2>
             <h1 className={styles.subheader}>How you can help us</h1>
             <h2 className={styles.text}>We are always appreciative of sponsorships and volunteers, please send us an email at&nbsp;
                 <a className={styles.emaillink} href="mailto:jambytesteam@gmail.com">jambytesteam@gmail.com</a> to learn more about how you can get involved!</h2>
