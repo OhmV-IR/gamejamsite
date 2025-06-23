@@ -1,0 +1,17 @@
+.pagetitle {
+    width: 95vw;
+    text-align: center;
+    margin-top: 5vh;
+    font-size: xx-large;
+}
+
+.maintext {
+    font-size: medium;
+    text-align: left;
+    margin-top: 2vh;
+    width: 85vw;
+}
+
+.emaillink {
+    color: blue;
+}
