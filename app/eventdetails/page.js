@@ -13,7 +13,7 @@ export default function EventDetails() {
             <ul>
                 <li className={styles.answertext}>Your own device</li>
                 <li className={styles.answertext}>Device charger</li>
-                <li className={styles.answertext}>Required software for the gamejam (ex. Scratch, VSCode, Blender)</li>
+                <li className={styles.answertext}>Any software you might need to create your game (ex. Scratch, VSCode, Blender)</li>
                 <li className={styles.answertext}>Food and water</li>
             </ul>
             <h2 className={styles.subheader}>Competition Format</h2>
