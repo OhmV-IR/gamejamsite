@@ -4,6 +4,7 @@ import { IconCalendar, IconClipboardCheck, IconHome, IconInfoCircle, IconJetpack
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import styles from './page.module.css';
+import Image from "next/image";
 
 export default function Navbar() {
 
@@ -81,7 +82,7 @@ export default function Navbar() {
       <header className="navbar navbar-expand-md d-print-none">
         <div className="container-xl">
           <Link href="/" aria-label="SiteLogo" className="navbar-brand navbar-brand-autodark me-3">
-            <IconJetpack></IconJetpack>
+            <Image src="/favicon.svg" width={48} height={48} alt="The JamBytes logo"></Image>
             <h1>JamBytes</h1>
           </Link>
           <ul className="navbar-nav">
