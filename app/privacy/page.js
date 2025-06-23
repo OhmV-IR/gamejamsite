@@ -5,8 +5,8 @@ export default function Privacy() {
         <div>
             <h1 className={styles.pagetitle}>Privacy Policy</h1>
             <h3 className={styles.maintext}><bold>Effective Date: June 23, 2025</bold></h3>
-            <h3 className={styles.maintext}>JamBytes ("we", "us", "our") is committed to protecting your privacy.
-                This Privacy Policy explains how we collect, use, and protect your personal information when you use our website at <a href="https://jambytes.ca">https://jambytes.ca</a> (the "Site").
+            <h3 className={styles.maintext}>JamBytes (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) is committed to protecting your privacy.
+                This Privacy Policy explains how we collect, use, and protect your personal information when you use our website at <a href="https://jambytes.ca">https://jambytes.ca</a> (the &quot;Site&quot;).
                 By using the Site, you agree to the collection and use of information in accordance with this policy.</h3>
             <div className="hr-text">1. Information We Collect</div>
             <h3 className={styles.maintext}>We collect information in the following ways:</h3>
@@ -45,13 +45,13 @@ export default function Privacy() {
                 <li className={styles.maintext}>Withdraw consent at any time(where applicable).</li>
                 <li className={styles.maintext}>Request data portability.</li>
             </ul>
-            <div className="hr-text">6. Children's Privacy</div>
+            <div className="hr-text">6. Children&apos;s Privacy</div>
             <h3 className={styles.maintext}>
             The JamBytes website is intended for users aged 13 and older. 
             We do not knowingly collect personal data from children under 13. 
             If you believe a child has provided us with personal data, please contact us so we can remove it. </h3>
             <div className="hr-text">7. Retention</div>
-            <h3 className={styles.maintext}>We retain your information as long as needed to provide services or meet legal obligations. You may request account deletion at any time by clicking the "Delete my Account" button
+            <h3 className={styles.maintext}>We retain your information as long as needed to provide services or meet legal obligations. You may request account deletion at any time by clicking the &quot;Delete my Account&quot; button
             that is visible after clicking on your profile picture from the homepage while signed in to your account.</h3>
             <div className="hr-text">8. Changes to This Privacy Policy</div>
             <h3 className={styles.maintext}>We may update this policy from time to time. 

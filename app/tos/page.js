@@ -5,7 +5,7 @@ export default function TOS() {
         <div>
             <h1 className={styles.pagetitle}>Terms of Service</h1>
             <h3 className={styles.maintext}><bold>Effective Date: June 23, 2025</bold></h3>
-            <h3 className={styles.maintext}>Please read these Terms of Service ("Terms") carefully before using the site.
+            <h3 className={styles.maintext}>Please read these Terms of Service (&quot;Terms&quot;) carefully before using the site.
                 By accessing or using <a href="https://jambytes.ca">jambytes.ca</a>, you agree to be bound by these Terms.
                 If you do not agree, you may not use the site.</h3>
             <div className="hr-text">1. Use of the Site</div>
@@ -38,7 +38,7 @@ export default function TOS() {
             <div className="hr-text">5. Termination</div>
             <h3 className={styles.maintext}>We may suspend or terminate your access to the site or game jams at our sole discretion if you violate these Terms or engage in behavior deemed harmful to the community.</h3>
             <div className="hr-text">6. Disclaimer of Warranties</div>
-            <h3 className={styles.maintext}>The site is provided "as is" and "as available". 
+            <h3 className={styles.maintext}>The site is provided &quot;as is&quot; and &quot;as available&quot;. 
             JamBytes makes no guarantees that the site will be error-free or uninterrupted. 
             We do not guarantee that participation in a jam will result in any reward, feedback, or recognition.</h3>
             <div className="hr-text">7. Limitation of Liability</div>
