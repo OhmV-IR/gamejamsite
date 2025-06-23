@@ -3,7 +3,7 @@ import styles from './page.module.css';
 export default function TOS() {
     return (
         <div>
-            <h1 className={styles.pagetitle}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Terms of Service</h1>
+            <h1 className={styles.pagetitle}>Terms of Service</h1>
             <h3 className={styles.maintext}><bold>Effective Date: June 23, 2025</bold></h3>
             <h3 className={styles.maintext}>Please read these Terms of Service ("Terms") carefully before using the site.
                 By accessing or using <a href="https://jambytes.ca">jambytes.ca</a>, you agree to be bound by these Terms.

@@ -3,7 +3,7 @@ import styles from './page.module.css';
 export default function Privacy() {
     return (
         <div>
-            <h1 className={styles.pagetitle}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Privacy Policy</h1>
+            <h1 className={styles.pagetitle}>Privacy Policy</h1>
             <h3 className={styles.maintext}><bold>Effective Date: June 23, 2025</bold></h3>
             <h3 className={styles.maintext}>JamBytes ("we", "us", "our") is committed to protecting your privacy.
                 This Privacy Policy explains how we collect, use, and protect your personal information when you use our website at <a href="https://jambytes.ca">https://jambytes.ca</a> (the "Site").
