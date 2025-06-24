@@ -174,7 +174,7 @@ export default function FinishAccount() {
                 </label>
                 <label className="form-check">
                     <input className="form-check-input" id="privacybox" type="checkbox"></input>
-                    <span className="form-check-label">I have read and agree to the <a href="/privacypolicy">Privacy Policy</a></span>
+                    <span className="form-check-label">I have read and agree to the <a href="/privacy">Privacy Policy</a></span>
                 </label>
                 {
                     errorBadgeVisible
