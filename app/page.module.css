@@ -47,9 +47,12 @@
 }
 
 .footerdiv {
+    position: absolute;
+    width: 100vw;
     bottom: 0;
-    height: 8vh;
+    height: 12vh;
     text-align: center;
+    background-color: white;
 }
 
 .linktext {
