@@ -22,7 +22,6 @@ export async function POST(req){
     const query = {
         query: sqlstring.format('SELECT * from c WHERE c.email LIKE ? OR c.name LIKE ? OFFSET 0 LIMIT 5', [term, term])
     }
-    console.log(query.query);
     const users = (await container.items.query(query).fetchAll()).resources;
     const filteredusers = [];
     for(let i = 0; i < users.length; i++){
@@ -31,11 +30,9 @@ export async function POST(req){
                 name: users[i].name,
                 email: users[i].email,
                 pfp: users[i].pfp,
-                id: users[i].id + (users[i].provider).substr(0, 3)
+                id: users[i].userid + (users[i].provider).substr(0, 3)
             }
         )
     }
-    console.log(users);
-    console.log(filteredusers);
     return new Response(JSON.stringify({users: filteredusers}), {status: 200});
 }
