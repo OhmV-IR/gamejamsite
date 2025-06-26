@@ -28,7 +28,7 @@ export async function POST(req) {
     if (!payload) {
         return new Response("Bad session", { status: 400 });
     }
-    if (isAdmin && incomingurl.searchParams.has("id") && incomingurl.has("provider")) {
+    if (isAdmin && incomingurl.searchParams.has("id") && incomingurl.searchParams.has("provider")) {
         const query = {
             query: sqlstring.format("SELECT * from c WHERE c.userid=? AND c.provider=?", [incomingurl.searchParams.get("id"), incomingurl.searchParams.get("provider")])
         }
@@ -38,7 +38,7 @@ export async function POST(req) {
         }
         var userdata = user.resources[0];
         const data = await req.json();
-        if(!data.role || !data.attendeetype || !data.experiencelevel || !data.lookingforteam || !data.bracket || !data.email || !data.name || !data.pfp || !data.permissions){
+        if(!data.role || !data.attendeetype || !data.experiencelevel || data.lookingforteam == null || !data.bracket || !data.email || !data.name || !data.pfp || !data.permissions){
             return new Response("missing data", {status: 400});
         }
         userdata.role = data.role;

@@ -19,7 +19,16 @@ export default function UserPage({ params }) {
     const { id, provider } = React.use(params);
 
     function SaveAccountChanges(){
-        fetch("/api/updateaccountpreferences", {
+        console.log(name);
+        console.log(email);
+        console.log(pfp);
+        console.log(role);
+        console.log(isAdmin);
+        console.log(attendeetype);
+        console.log(experienceLevel);
+        console.log(bracket);
+        console.log(isLookingForTeam);
+        fetch("/api/updateaccountpreferences?id=" + id + "&provider=" + provider, {
             method: "POST",
             credentials: "include",
             body: JSON.stringify({
@@ -27,13 +36,13 @@ export default function UserPage({ params }) {
                 email: email,
                 pfp: pfp,
                 role: role,
-                permissions: isAdmin,
+                permissions: isAdmin ? "admin" : "user",
                 attendeetype: attendeetype,
                 experiencelevel: experienceLevel,
                 lookingforteam: isLookingForTeam,
                 bracket: bracket
             })
-        })
+        });
     }
 
     useEffect(() => {
@@ -203,12 +212,24 @@ export default function UserPage({ params }) {
                                 </div>
                             </div>
                             <label className="form-label">Role</label>
-                            <select className="form-select">
-                                <option value="1" checked={role == "programmer"} onChange={() => setRole("programmer")}>Programmer</option>
-                                <option value="2" checked={role == "designer"} onChange={() => setRole("designer")}>Designer</option>
-                                <option value="3" checked={role == "artist"} onChange={() => setRole("artist")}>Artist</option>
-                                <option value="4" checked={role != "programmer" && role != "designer" && role != "artist"} onChange={() => setRole("other")}>Other</option>
-                            </select>
+                            <div>
+                            <label className="form-check form-check-inline">
+                                <input className="form-check-input" type="radio" name="role" checked={role == "programmer"} onChange={() => setRole("programmer")}></input>
+                                <span className="form-check-label">Programmer</span>
+                            </label>
+                            <label className="form-check form-check-inline">
+                                <input className="form-check-input" type="radio" name="role" checked={role == "designer"} onChange={() => setRole("designer")}></input>
+                                <span className="form-check-label">Designer</span>
+                            </label>
+                            <label className="form-check form-check-inline">
+                                <input className="form-check-input" type="radio" name="role" checked={role == "artist"} onChange={() => setRole("artist")}></input>
+                                <span className="form-check-label">Artist</span>
+                            </label>
+                            <label className="form-check form-check-inline">
+                                <input className="form-check-input" type="radio" name="role" checked={role == "other"} onChange={() => setRole("other")}></input>
+                                <span className="form-check-label">Other</span>
+                            </label>
+                            </div>
                             <label className="form-check form-check-inline mt-3">
                                 <input className="form-check-input" type="checkbox" name="lookingforteam" onChange={() => {setIsLookingForTeam(!isLookingForTeam)}} checked={isLookingForTeam}/>
                                 <span className="form-check-label">Looking for team</span>
