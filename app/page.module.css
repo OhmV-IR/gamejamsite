@@ -47,24 +47,28 @@
 }
 
 .footerdiv {
-    position: absolute;
+    position: fixed;
     width: 100vw;
     bottom: 0;
-    height: 12vh;
+    left: 0;
+    height: 9vh;
     text-align: center;
     background-color: white;
 }
 
-.linktext {
-    color: blue;
+.footercontent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
-.footerpad {
-    height: 10vh;
-    position: relative;
-    margin-top: 0;
+.lefttext {
+    margin-left: 2vw;
+    text-align: left;
 }
 
-.greylink {
-    font-size: large;
+.righttext {
+    margin-right: 2vw;
+    text-align: right;
 }
