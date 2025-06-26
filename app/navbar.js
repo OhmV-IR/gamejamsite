@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link";
-import { IconCalendar, IconClipboardCheck, IconHome, IconInfoCircle, IconJetpack, IconLayoutDashboard, IconUserSearch, IconBrandGoogleFilled, IconAlertTriangle, IconBrandGithubFilled, IconBrandDiscordFilled, IconUsersGroup } from "@tabler/icons-react";
+import { IconCalendar, IconClipboardCheck, IconHome, IconInfoCircle, IconJetpack, IconLayoutDashboard, IconUserSearch, IconBrandGoogleFilled, IconAlertTriangle, IconBrandGithubFilled, IconBrandDiscordFilled, IconUsersGroup, IconBinoculars } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import styles from './page.module.css';

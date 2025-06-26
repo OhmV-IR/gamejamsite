@@ -47,7 +47,8 @@ export async function GET(req){
         email: userdata.email,
         name: userdata.name,
         pfp: userdata.avatar_url,
-        provider: "github"
+        provider: "github",
+        permissions: "user"
     }
     const query = {
         query: sqlstring.format("SELECT * from c WHERE c.userid=? AND c.provider=?", [user.userid, "github"])
