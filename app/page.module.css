@@ -56,6 +56,12 @@
     background-color: white;
 }
 
+.footerpad {
+    position: relative;
+    height: 15vh;
+    margin-top: 0;
+}
+
 .footercontent {
     display: flex;
     justify-content: space-between;

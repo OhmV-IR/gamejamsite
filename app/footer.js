@@ -3,6 +3,7 @@ import styles from "./page.module.css";
 export default function Footer() {
     return (
         <div>
+            <div className={styles.footerpad}></div>
             <div className={styles.footerdiv}>
                 <div className="hr-text mt-3 mb-3">Additional Information</div>
                 <div className={styles.footercontent}>
