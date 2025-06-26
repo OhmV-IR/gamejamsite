@@ -74,6 +74,10 @@ export default function UserPage({ params }) {
         });
     }, [id, provider]);
 
+    function Capitalize(inputstr){
+        return inputstr.charAt(0).toUpperCase() + inputstr.slice(1);
+    }
+
     return (
         <div>
             <div className={`card ${styles.profilecard}`}>
@@ -81,7 +85,7 @@ export default function UserPage({ params }) {
                 <div className="card-body">
                     <h3 className="card-title">{name}</h3>
                     <span className={`badge ${roleclass}`}>
-                        <span className={styles.roletext}>{role}</span>
+                        <span className={styles.roletext}>{Capitalize(role)}</span>
                     </span>
                     {isAdmin
                         ? <span className="badge bg-github">

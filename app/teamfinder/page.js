@@ -26,7 +26,7 @@ export default function TeamFinder() {
             <div className={`mb-5 mt-5 w-75 ${styles.searchbar}`}>
                 <label className="form-label mb-5">Search by name or email</label>
                 <div className="input-icon">
-                    <input type="text" id="searchbar" onInput={UpdateSearchResults} className="form-control form-control-rounded" placeholder="johndoe@example.com or John Doe"></input>
+                    <input type="text" id="searchbar" onInput={UpdateSearchResults} className="form-control form-control-rounded" placeholder="John Doe"></input>
                     <span className="input-icon-addon">
                         <IconSearch></IconSearch>
                     </span>
