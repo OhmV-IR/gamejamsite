@@ -50,7 +50,8 @@ export async function GET(req){
         email: userdata.email,
         name: userdata.global_name,
         pfp: userdata.avatar ? `https://cdn.discordapp.com/avatars/${userdata.id}/${userdata.avatar}.png` : "https://cdn.discordapp.com/embed/avatars/0.png",
-        provider: "discord"
+        provider: "discord",
+        permissions: "user"
     }
     const query = {
         query: sqlstring.format("SELECT * from c WHERE c.userid=? AND c.provider=?", [user.userid, "discord"])

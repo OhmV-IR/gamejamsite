@@ -35,7 +35,8 @@ export async function GET(req){
         email: userres.data.email,
         name: userres.data.name,
         pfp: userres.data.picture,
-        provider: "google"
+        provider: "google",
+        permissions: "user"
     }
     const query = {
         query: sqlstring.format("SELECT * from c WHERE c.userid=?", user.userid)
