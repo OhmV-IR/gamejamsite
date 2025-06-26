@@ -1,0 +1,20 @@
+.profilecard {
+    width: 25vw;
+    margin-left: 37.5vw;
+}
+
+.roundImage {
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    width: 100%;
+}
+
+.roletext {
+    color: white;
+}
+
+.rangelabels {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}

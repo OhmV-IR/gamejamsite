@@ -13,7 +13,6 @@ export default function Navbar() {
   const [role, setRole] = useState("");
   const [hasRole, setHasRole] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
 
   function Capitalize(str) {
     return String(str).charAt(0).toUpperCase() + String(str).slice(1);
@@ -71,7 +70,6 @@ export default function Navbar() {
           if (body.role) {
             setRole(Capitalize(body.role));
             setHasRole(true);
-            setIsAdmin(body.permissions == "admin");
           }
           setIsSignedIn(true);
         });
@@ -128,17 +126,6 @@ export default function Navbar() {
                 <span className="nav-link-title"> Team Finder </span>
               </Link>
             </li>
-            { isAdmin
-            ? <li className="nav-item" id="/admindashboard">
-              <Link className="nav-link" href="/admindashboard">
-                <span className="nav-link-icon">
-                  <IconBinoculars></IconBinoculars>
-                </span>
-                <span className="nav-link-title"> Admin Dashboard </span>
-              </Link>
-            </li>
-            : <></>
-            }
             {isSignedIn
               ? <div className="navbar-nav flex-row order-md-last ms-auto">
                 <div className="nav-item dropdown">
