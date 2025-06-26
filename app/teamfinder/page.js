@@ -33,7 +33,7 @@ export default function TeamFinder() {
                 </div>
                 {
                     users.map(user => (
-                        <a href={`/user/${user.id}`} key={user.id} className="btn btn-dark w-50">
+                        <a href={`/user/${user.id}/${user.provider}`} key={user.id} className="btn btn-dark w-50">
                             <span className="avatar" style={{ backgroundImage: `url(${user.pfp})` }}></span>
                             <span>{user.name}</span>
                             <span>&nbsp;|&nbsp;</span>

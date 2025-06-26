@@ -17,6 +17,7 @@ const { database } = await dbclient.databases.createIfNotExists({id: process.env
 const { container } = await database.containers.createIfNotExists({id: process.env.USERCONTAINER_ID});
 
 export async function POST(req){
+    const incomingurl = new URL(req.url);
     const session = (await cookies()).get("session")?.value;
     if(!session){
         return new Response("No session", {status: 401});
@@ -30,7 +31,17 @@ export async function POST(req){
     }
     const items = await container.items.query(query).fetchAll();
     if(items.resources.length != 1){
-        return new Response("user not found", {status: 401});
+        return new Response("user not found", {status: 404});
+    }
+    if(items.resources[0].permissions == "admin" && incomingurl.searchParams.has("userid") && incomingurl.searchParams.has("provider")){
+        const query2 = {
+            query: sqlstring.format("SELECT * from c WHERE c.userid=? AND c.provider=?" [incomingurl.searchParams.get("userid"), incomingurl.searchParams.get("provider")])
+        }
+        const user = await container.items.query(query2).fetchAll();
+        if(user.resources.length != 1){
+            return new Response("user not found", {status: 404})
+        }
+        return new Response(JSON.stringify(user.resources[0], {status: 200}));
     }
     refreshSession();
     return new Response(JSON.stringify(items.resources[0]), {status: 200});

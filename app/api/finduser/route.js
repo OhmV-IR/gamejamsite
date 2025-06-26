@@ -30,7 +30,8 @@ export async function POST(req){
                 name: users[i].name,
                 email: users[i].email,
                 pfp: users[i].pfp,
-                id: users[i].userid + (users[i].provider).substr(0, 3)
+                id: users[i].userid,
+                provider: users[i].provider
             }
         )
     }

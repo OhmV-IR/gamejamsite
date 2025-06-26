@@ -21,11 +21,10 @@ export async function POST(req) {
     if (!incomingurl.searchParams.get("id")) {
         return new Response("no id provided", { status: 400 });
     }
-    const id = incomingurl.searchParams.get("id");
-    const userid = id.substring(0, id.length - 3);
-    const providertag = id.substring(id.length - 3, id.length) + "%";
+    const userid = incomingurl.searchParams.get("id");
+    const provider = incomingurl.searchParams.get("provider")
     const query = {
-        query: sqlstring.format('SELECT * from c WHERE c.userid=? AND c.provider LIKE ?', [userid, providertag])
+        query: sqlstring.format('SELECT * from c WHERE c.userid=? AND c.provider=?', [userid, provider])
     }
     const users = (await container.items.query(query).fetchAll()).resources;
     if (users.length != 1) {

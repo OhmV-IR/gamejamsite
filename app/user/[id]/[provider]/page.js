@@ -6,15 +6,38 @@ import { useEffect, useState } from "react"
 
 export default function UserPage({ params }) {
     const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
     const [role, setRole] = useState("");
     const [pfp, setPfp] = useState("");
     const [roleclass, setRoleClass] = useState("");
+    const [attendeetype, setAttendeetype] = useState("");
+    const [isLookingForTeam, setIsLookingForTeam] = useState(false);
+    const [bracket, setBracket] = useState("");
+    const [experienceLevel, setExperienceLevel] = useState(0);
     const [isAdmin, setIsAdmin] = useState(false);
     const [isUserAdmin, setIsUserAdmin] = useState(false);
-    const { id } = React.use(params);
+    const { id, provider } = React.use(params);
+
+    function SaveAccountChanges(){
+        fetch("/api/updateaccountpreferences", {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                pfp: pfp,
+                role: role,
+                permissions: isAdmin,
+                attendeetype: attendeetype,
+                experiencelevel: experienceLevel,
+                lookingforteam: isLookingForTeam,
+                bracket: bracket
+            })
+        })
+    }
 
     useEffect(() => {
-        fetch("/api/getuser?id=" + id, {
+        fetch("/api/getuser?id=" + id + "&provider=" + provider, {
             method: "POST",
             credentials: "include"
         }).then((res) => {
@@ -22,8 +45,13 @@ export default function UserPage({ params }) {
                 res.json().then((body) => {
                     console.log(body);
                     setName(body.name);
+                    setEmail(body.email);
                     setRole(body.role);
                     setPfp(body.pfp);
+                    setAttendeetype(body.attendeetype);
+                    setBracket(body.bracket);
+                    setIsLookingForTeam(body.lookingforteam);
+                    setExperienceLevel(body.experiencelevel);
                     setIsAdmin(body.permissions == "admin");
                     setIsUserAdmin(body.containsprivate);
                     if (body.role == "programmer") {
@@ -77,30 +105,21 @@ export default function UserPage({ params }) {
                         <div className="modal-body">
                             <div className="mb-3">
                                 <label className="form-label">Name</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    name="name"
-                                />
+                                <input type="text" className="form-control" name="name" value={name} onChange={(evt) => setName(evt.target.value)}/>
                             </div>
                             <div className="mb-3">
                                 <label className="form-label">Email</label>
-                                <input type="text" className="form-control" name="email"></input>
+                                <input type="text" className="form-control" name="email" value={email} onChange={(evt) => setEmail(evt.target.value)}></input>
                             </div>
                             <div className="mb-3">
                                 <label className="form-label">Profile picture link</label>
-                                <input type="text" className="form-control" name="pfp"></input>
+                                <input type="text" className="form-control" name="pfp" value={pfp} onChange={(evt) => setPfp(evt.target.value)}></input>
                             </div>
                             <label className="form-label">Attendance Type</label>
                             <div className="form-selectgroup-boxes row mb-3">
                                 <div className="col-md-6">
                                     <label className="form-selectgroup-item">
-                                        <input
-                                            type="radio"
-                                            name="attendancetype"
-                                            className="form-selectgroup-input"
-                                            defaultChecked
-                                        />
+                                        <input type="radio" name="attendancetype" className="form-selectgroup-input" onChange={() => {setAttendeetype("inperson")}} checked={attendeetype == "inperson"}/>
                                         <span className="form-selectgroup-label d-flex align-items-center p-3">
                                             <span className="me-3">
                                                 <span className="form-selectgroup-check"></span>
@@ -113,7 +132,7 @@ export default function UserPage({ params }) {
                                 </div>
                                 <div className="col-md-6">
                                     <label className="form-selectgroup-item">
-                                        <input type="radio" name="attendancetype" className="form-selectgroup-input" />
+                                        <input type="radio" name="attendancetype" className="form-selectgroup-input" onChange={() => {setAttendeetype("online")}} checked={attendeetype == "online"}/>
                                         <span className="form-selectgroup-label d-flex align-items-center p-3">
                                             <span className="me-3">
                                                 <span className="form-selectgroup-check"></span>
@@ -129,12 +148,7 @@ export default function UserPage({ params }) {
                             <div className="form-selectgroup-boxes row mb-3">
                                 <div className="col-md-6">
                                     <label className="form-selectgroup-item">
-                                        <input
-                                            type="radio"
-                                            name="permissionlevel"
-                                            className="form-selectgroup-input"
-                                            defaultChecked
-                                        />
+                                        <input type="radio" name="permissionlevel" className="form-selectgroup-input" onChange={() => {setIsAdmin(false)}} checked={!isAdmin}/>
                                         <span className="form-selectgroup-label d-flex align-items-center p-3">
                                             <span className="me-3">
                                                 <span className="form-selectgroup-check"></span>
@@ -147,7 +161,7 @@ export default function UserPage({ params }) {
                                 </div>
                                 <div className="col-md-6">
                                     <label className="form-selectgroup-item">
-                                        <input type="radio" name="permissionlevel" className="form-selectgroup-input" />
+                                        <input type="radio" name="permissionlevel" className="form-selectgroup-input" onChange={() => {setIsAdmin(true)}} checked={isAdmin}/>
                                         <span className="form-selectgroup-label d-flex align-items-center p-3">
                                             <span className="me-3">
                                                 <span className="form-selectgroup-check"></span>
@@ -163,12 +177,7 @@ export default function UserPage({ params }) {
                             <div className="form-selectgroup-boxes row mb-3">
                                 <div className="col-md-6">
                                     <label className="form-selectgroup-item">
-                                        <input
-                                            type="radio"
-                                            name="bracket"
-                                            className="form-selectgroup-input"
-                                            defaultChecked
-                                        />
+                                        <input type="radio" name="bracket" className="form-selectgroup-input" onChange={() => {setBracket("junior")}} checked={bracket == "junior"}/>
                                         <span className="form-selectgroup-label d-flex align-items-center p-3">
                                             <span className="me-3">
                                                 <span className="form-selectgroup-check"></span>
@@ -181,7 +190,7 @@ export default function UserPage({ params }) {
                                 </div>
                                 <div className="col-md-6">
                                     <label className="form-selectgroup-item">
-                                        <input type="radio" name="bracket" className="form-selectgroup-input" />
+                                        <input type="radio" name="bracket" className="form-selectgroup-input" onChange={() => {setBracket("senior")}} checked={bracket == "senior"}/>
                                         <span className="form-selectgroup-label d-flex align-items-center p-3">
                                             <span className="me-3">
                                                 <span className="form-selectgroup-check"></span>
@@ -195,19 +204,18 @@ export default function UserPage({ params }) {
                             </div>
                             <label className="form-label">Role</label>
                             <select className="form-select">
-                                <option value="1" selected>Programmer</option>
-                                <option value="2">Designer</option>
-                                <option value="3">Artist</option>
-                                <option value="4">Other</option>
+                                <option value="1" checked={role == "programmer"} onChange={() => setRole("programmer")}>Programmer</option>
+                                <option value="2" checked={role == "designer"} onChange={() => setRole("designer")}>Designer</option>
+                                <option value="3" checked={role == "artist"} onChange={() => setRole("artist")}>Artist</option>
+                                <option value="4" checked={role != "programmer" && role != "designer" && role != "artist"} onChange={() => setRole("other")}>Other</option>
                             </select>
                             <label className="form-check form-check-inline mt-3">
-                                <input className="form-check-input" type="checkbox" name="lookingforteam"
-                                    defaultChecked />
+                                <input className="form-check-input" type="checkbox" name="lookingforteam" onChange={() => {setIsLookingForTeam(!isLookingForTeam)}} checked={isLookingForTeam}/>
                                 <span className="form-check-label">Looking for team</span>
                             </label>
                             <div className="mt-5 mb-3">
                                 <label className="form-label">Experience level</label>
-                                <input type="range" id="proficiencyrange" className="form-range mb-2" min="0" max="10" step="1"></input>
+                                <input type="range" id="proficiencyrange" className="form-range mb-2" min="0" max="10" step="1" value={experienceLevel} onChange={(evt) => setExperienceLevel(evt.target.value)}></input>
                                 <div className={styles.rangelabels}>
                                     <span>0</span>
                                     <span>1</span>
@@ -225,7 +233,7 @@ export default function UserPage({ params }) {
                         </div>
                         <div className="modal-footer">
                             <a href="#" className="btn btn-link link-secondary" data-bs-dismiss="modal"> Cancel </a>
-                            <a href="#" className="btn btn-primary ms-auto" data-bs-dismiss="modal">
+                            <a href="#" className="btn btn-primary ms-auto" data-bs-dismiss="modal" onClick={SaveAccountChanges}>
                                 <IconDeviceFloppy></IconDeviceFloppy>
                                 Save changes
                             </a>
