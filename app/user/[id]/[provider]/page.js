@@ -19,7 +19,7 @@ export default function UserPage({ params }) {
     const [isUserAdmin, setIsUserAdmin] = useState(false);
     const { id, provider } = React.use(params);
 
-    function SaveAccountChanges(){
+    function SaveAccountChanges() {
         fetch("/api/updateaccountpreferences?id=" + id + "&provider=" + provider, {
             method: "POST",
             credentials: "include",
@@ -74,8 +74,13 @@ export default function UserPage({ params }) {
         });
     }, [id, provider]);
 
-    function Capitalize(inputstr){
-        return inputstr.charAt(0).toUpperCase() + inputstr.slice(1);
+    function Capitalize(inputstr) {
+        if (typeof inputstr == "string") {
+            return inputstr.charAt(0).toUpperCase() + inputstr.slice(1);
+        }
+        else {
+            return null;
+        }
     }
 
     return (
@@ -109,7 +114,7 @@ export default function UserPage({ params }) {
                         <div className="modal-body">
                             <div className="mb-3">
                                 <label className="form-label">Name</label>
-                                <input type="text" className="form-control" name="name" value={name || ""} onChange={(evt) => setName(evt.target.value)}/>
+                                <input type="text" className="form-control" name="name" value={name || ""} onChange={(evt) => setName(evt.target.value)} />
                             </div>
                             <div className="mb-3">
                                 <label className="form-label">Email</label>
@@ -123,7 +128,7 @@ export default function UserPage({ params }) {
                             <div className="form-selectgroup-boxes row mb-3">
                                 <div className="col-md-6">
                                     <label className="form-selectgroup-item">
-                                        <input type="radio" name="attendancetype" className="form-selectgroup-input" checked={attendeetype == "inperson"} onChange={() => {setAttendeetype("inperson")}}/>
+                                        <input type="radio" name="attendancetype" className="form-selectgroup-input" checked={attendeetype == "inperson"} onChange={() => { setAttendeetype("inperson") }} />
                                         <span className="form-selectgroup-label d-flex align-items-center p-3">
                                             <span className="me-3">
                                                 <span className="form-selectgroup-check"></span>
@@ -136,7 +141,7 @@ export default function UserPage({ params }) {
                                 </div>
                                 <div className="col-md-6">
                                     <label className="form-selectgroup-item">
-                                        <input type="radio" name="attendancetype" className="form-selectgroup-input" checked={attendeetype == "online"} onChange={() => {setAttendeetype("online")}}/>
+                                        <input type="radio" name="attendancetype" className="form-selectgroup-input" checked={attendeetype == "online"} onChange={() => { setAttendeetype("online") }} />
                                         <span className="form-selectgroup-label d-flex align-items-center p-3">
                                             <span className="me-3">
                                                 <span className="form-selectgroup-check"></span>
@@ -152,7 +157,7 @@ export default function UserPage({ params }) {
                             <div className="form-selectgroup-boxes row mb-3">
                                 <div className="col-md-6">
                                     <label className="form-selectgroup-item">
-                                        <input type="radio" name="permissionlevel" className="form-selectgroup-input" checked={!isAdmin} onChange={() => {setIsAdmin(false)}}/>
+                                        <input type="radio" name="permissionlevel" className="form-selectgroup-input" checked={!isAdmin} onChange={() => { setIsAdmin(false) }} />
                                         <span className="form-selectgroup-label d-flex align-items-center p-3">
                                             <span className="me-3">
                                                 <span className="form-selectgroup-check"></span>
@@ -165,7 +170,7 @@ export default function UserPage({ params }) {
                                 </div>
                                 <div className="col-md-6">
                                     <label className="form-selectgroup-item">
-                                        <input type="radio" name="permissionlevel" className="form-selectgroup-input" checked={isAdmin} onChange={() => {setIsAdmin(true)}}/>
+                                        <input type="radio" name="permissionlevel" className="form-selectgroup-input" checked={isAdmin} onChange={() => { setIsAdmin(true) }} />
                                         <span className="form-selectgroup-label d-flex align-items-center p-3">
                                             <span className="me-3">
                                                 <span className="form-selectgroup-check"></span>
@@ -181,7 +186,7 @@ export default function UserPage({ params }) {
                             <div className="form-selectgroup-boxes row mb-3">
                                 <div className="col-md-6">
                                     <label className="form-selectgroup-item">
-                                        <input type="radio" name="bracket" className="form-selectgroup-input" checked={bracket == "junior"} onChange={() => {setBracket("junior")}}/>
+                                        <input type="radio" name="bracket" className="form-selectgroup-input" checked={bracket == "junior"} onChange={() => { setBracket("junior") }} />
                                         <span className="form-selectgroup-label d-flex align-items-center p-3">
                                             <span className="me-3">
                                                 <span className="form-selectgroup-check"></span>
@@ -194,7 +199,7 @@ export default function UserPage({ params }) {
                                 </div>
                                 <div className="col-md-6">
                                     <label className="form-selectgroup-item">
-                                        <input type="radio" name="bracket" className="form-selectgroup-input" checked={bracket == "senior"} onChange={() => {setBracket("senior")}}/>
+                                        <input type="radio" name="bracket" className="form-selectgroup-input" checked={bracket == "senior"} onChange={() => { setBracket("senior") }} />
                                         <span className="form-selectgroup-label d-flex align-items-center p-3">
                                             <span className="me-3">
                                                 <span className="form-selectgroup-check"></span>
@@ -208,25 +213,25 @@ export default function UserPage({ params }) {
                             </div>
                             <label className="form-label">Role</label>
                             <div>
-                            <label className="form-check form-check-inline">
-                                <input className="form-check-input" type="radio" name="role" checked={role == "programmer"} onChange={() => setRole("programmer")}></input>
-                                <span className="form-check-label">Programmer</span>
-                            </label>
-                            <label className="form-check form-check-inline">
-                                <input className="form-check-input" type="radio" name="role" checked={role == "designer"} onChange={() => setRole("designer")}></input>
-                                <span className="form-check-label">Designer</span>
-                            </label>
-                            <label className="form-check form-check-inline">
-                                <input className="form-check-input" type="radio" name="role" checked={role == "artist"} onChange={() => setRole("artist")}></input>
-                                <span className="form-check-label">Artist</span>
-                            </label>
-                            <label className="form-check form-check-inline">
-                                <input className="form-check-input" type="radio" name="role" checked={role == "other"} onChange={() => setRole("other")}></input>
-                                <span className="form-check-label">Other</span>
-                            </label>
+                                <label className="form-check form-check-inline">
+                                    <input className="form-check-input" type="radio" name="role" checked={role == "programmer"} onChange={() => setRole("programmer")}></input>
+                                    <span className="form-check-label">Programmer</span>
+                                </label>
+                                <label className="form-check form-check-inline">
+                                    <input className="form-check-input" type="radio" name="role" checked={role == "designer"} onChange={() => setRole("designer")}></input>
+                                    <span className="form-check-label">Designer</span>
+                                </label>
+                                <label className="form-check form-check-inline">
+                                    <input className="form-check-input" type="radio" name="role" checked={role == "artist"} onChange={() => setRole("artist")}></input>
+                                    <span className="form-check-label">Artist</span>
+                                </label>
+                                <label className="form-check form-check-inline">
+                                    <input className="form-check-input" type="radio" name="role" checked={role == "other"} onChange={() => setRole("other")}></input>
+                                    <span className="form-check-label">Other</span>
+                                </label>
                             </div>
                             <label className="form-check form-check-inline mt-3">
-                                <input className="form-check-input" type="checkbox" name="lookingforteam" checked={isLookingForTeam || false} onChange={() => {setIsLookingForTeam(!isLookingForTeam)}}/>
+                                <input className="form-check-input" type="checkbox" name="lookingforteam" checked={isLookingForTeam || false} onChange={() => { setIsLookingForTeam(!isLookingForTeam) }} />
                                 <span className="form-check-label">Looking for team</span>
                             </label>
                             <div className="mt-5 mb-3">
