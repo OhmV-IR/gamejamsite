@@ -18,9 +18,9 @@ export async function POST(req){
     if(!incomingurl.searchParams.get("term")){
         return new Response("no search term", {status: 400});
     }
-    var term = "%" + incomingurl.searchParams.get("term") + "%";
+    var term = incomingurl.searchParams.get("term") + "%";
     const query = {
-        query: sqlstring.format('SELECT * from c WHERE c.email LIKE ? OR c.name LIKE ? OFFSET 0 LIMIT 5', [term, term])
+        query: sqlstring.format('SELECT * from c WHERE c.email LIKE ? OR c.name LIKE ? OFFSET 0 LIMIT 10', [term, term])
     }
     const users = (await container.items.query(query).fetchAll()).resources;
     const filteredusers = [];
