@@ -11,12 +11,12 @@ export default function Dashboard() {
         fetch("/api/createteam", {
             method: "POST",
             credentials: "include",
-            body: {
+            body: JSON.stringify({
                 teamName
-            }
+            })
         }).then(res => {
             if (res.ok) {
-                setTimeout(window.location.reload, 1000);
+                setTimeout(() => window.location.reload(), 1000);
             }
         });
     }
