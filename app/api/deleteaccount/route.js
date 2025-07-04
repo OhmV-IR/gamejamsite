@@ -33,6 +33,6 @@ export async function GET(req){
     if(items.resources.length != 1){
         return new Response("user not found", {status: 401});
     }
-    container.item(items.resources[0].id).delete();
+    container.item(items.resources[0].id, items.resources[0].userid).delete();
     return NextResponse.redirect(process.env.DOMAIN + "/");
 }
