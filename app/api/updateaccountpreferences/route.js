@@ -50,7 +50,7 @@ export async function POST(req) {
         userdata.name = data.name;
         userdata.pfp = data.pfp;
         userdata.permissions = data.permissions;
-        container.item(userdata.id).replace(userdata);
+        container.item(userdata.id, userdata.userid).replace(userdata);
     }
     else {
         const query = {
@@ -70,7 +70,7 @@ export async function POST(req) {
         userdata.experiencelevel = data.experiencelevel;
         userdata.lookingforteam = data.lookingforteam;
         userdata.bracket = data.bracket;
-        container.item(userdata.id).replace(userdata);
+        container.item(userdata.id, userdata.userid).replace(userdata);
     }
     refreshSession();
     return new Response("Success", { status: 200 });
