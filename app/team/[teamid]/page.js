@@ -24,7 +24,6 @@ export default function TeamPage({ params }) {
         }).then(res => {
             if (res.ok) {
                 res.json().then(body => {
-                    console.log(body);
                     setTeamName(body.name);
                     setOwnerId(body.owner.uid);
                     setOwnerProvider(body.owner.provider);
@@ -87,7 +86,7 @@ export default function TeamPage({ params }) {
                             <tbody>
                                 {
                                     members.map(member => (
-                                        <tr key={member.uid + member.provider}>
+                                        <tr key={member.uid}>
                                             <td>
                                                 <button className="btn" onClick={() => window.location.href = `/user/${member.uid}/${member.provider}`}>
                                                     <span className="avatar avatar-sm" style={{ backgroundImage: `url(${member.pfp})` }}></span>
