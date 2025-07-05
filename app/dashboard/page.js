@@ -26,7 +26,7 @@ export default function Dashboard() {
             {isInTeam
                 ? <h1>Random team info</h1>
                 : <div>
-                    <h1>It looks like you're not part of a team, would you like to create or join one?</h1>
+                    <h1>It looks like you&apos;re not part of a team, would you like to create or join one?</h1>
                     <div className="row w-100">
                         <div className="col">
                             <button type="button" data-bs-toggle="modal" data-bs-target="#createTeamModal" className="btn btn-primary">Create a team</button>
