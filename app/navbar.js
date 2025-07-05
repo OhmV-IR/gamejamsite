@@ -126,6 +126,14 @@ export default function Navbar() {
                 <span className="nav-link-title"> Team Finder </span>
               </Link>
             </li>
+            <li className="nav-item" id="/userfinder">
+              <Link className="nav-link" href="/userfinder">
+                <span className="nav-link-icon">
+                  <IconUserSearch></IconUserSearch>
+                </span>
+                <span className="nav-link-title"> User Finder </span>
+              </Link>
+            </li>
             {isSignedIn
               ? <div className="navbar-nav flex-row order-md-last ms-auto">
                 <div className="nav-item dropdown">
