@@ -17,15 +17,20 @@ const { container } = await database.containers.createIfNotExists({id: process.e
 
 export async function POST(req){
     const incomingbody = await req.json();
-    if(incomingbody.id == null || typeof(incomingbody.id) != "string"){
-        return new Response("Missing id", {status: 400});
+    const session = (await cookies()).get("session")?.value;
+    const payload = await decrypt(session);
+    if(payload == null){
+        return new Response("bad session", {status: 401});
     }
     const query = {
-        query: sqlstring.format('SELECT * from c WHERE c.id=?', [incomingbody.id])
+        query: sqlstring.format("SELECT * FROM c WHERE c.id=?", [incomingbody.id])
     }
     const team = (await container.items.query(query).fetchAll()).resources[0];
-    if(!team){
+    if(team == null){
         return new Response("team not found", {status: 404});
     }
-    return new Response(JSON.stringify(team), {status: 200});
+    team.joinrequests.push({
+        uid: payload.uid,
+        provider: payload.provider
+    });
 }
