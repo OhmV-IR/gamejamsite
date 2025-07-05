@@ -106,12 +106,6 @@ export default function TeamPage({ params }) {
                     <h1 className={`${styles.subheader} ${styles.centeralign}`}>Submissions</h1>
                     <table className="table">
                         <tbody>
-                            {
-                                submissions.map(submission => (
-                                    // Do something...
-                                    <h1>Some submission</h1>
-                                ))
-                            }
                         </tbody>
                     </table>
                 </div>
@@ -124,12 +118,6 @@ export default function TeamPage({ params }) {
                     <h1 className={`${styles.subheader} ${styles.centeralign}`}>Join Requests</h1>
                     <table className="table">
                         <tbody>
-                            {
-                                joinRequests.map(request => (
-                                    // Do something...
-                                    <h1>Some request</h1>
-                                ))
-                            }
                         </tbody>
                     </table>
                 </div>
