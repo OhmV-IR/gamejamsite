@@ -65,8 +65,7 @@ export default function TeamPage({ params }) {
                 })
             }
         });
-        console.log(teamName);
-    }, []);
+    }, [teamName, teamid]);
 
     return (
         <div>
