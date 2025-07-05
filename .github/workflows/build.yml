@@ -37,6 +37,7 @@ jobs:
                 printf 'DB_KEY=${{secrets.DB_KEY}}\n' >> .env
                 printf 'DB_ID=${{secrets.DB_ID}}\n' >> .env
                 printf 'USERCONTAINER_ID=${{secrets.USERCONTAINER_ID}}\n' >> .env
+                printf 'TEAMSCONTAINER_ID=${{secrets.TEAMSCONTAINER_ID}}\n' >> .env
                 printf 'DOMAIN=${{secrets.DOMAIN}}\n' >> .env
                 printf 'COOKIE_SECRET=${{secrets.COOKIE_SECRET}}\n' >> .env
 
