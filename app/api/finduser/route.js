@@ -28,7 +28,6 @@ export async function POST(req){
         filteredusers.push(
             {
                 name: users[i].name,
-                email: users[i].email,
                 pfp: users[i].pfp,
                 id: users[i].userid,
                 provider: users[i].provider
