@@ -18,17 +18,8 @@ const { container } = await database.containers.createIfNotExists({id: process.e
 
 export async function POST(req){
     const incomingbody = await req.json();
-    // Check auth as a rate-limiting measure
-    const session = (await cookies()).get("session")?.value;
-    if(!session){
-        return new Response("No session", {status: 401});
-    }
-    const payload = await decrypt(session);
-    if(!payload){
-        return new Response("Bad session", {status: 400});
-    }
     const query = {
-        query: sqlstring.format("SELECT * from c WHERE c.userid=? AND c.provider=?", [payload.uid, payload.provider])
+        query: sqlstring.format("SELECT * from c WHERE c.userid=? AND c.provider=?", [incomingbody.uid, incomingbody.provider])
     }
     const items = await container.items.query(query).fetchAll();
     if(items.resources.length != 1){

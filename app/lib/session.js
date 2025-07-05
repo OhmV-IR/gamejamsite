@@ -27,6 +27,9 @@ export async function encrypt(payload) {
 }
 
 export async function decrypt(session) {
+    if(!session){
+        return null;
+    }
     try {
         const { payload } = await jwtVerify(session, encodedKey, {
             algorithms: ["HS256"]
