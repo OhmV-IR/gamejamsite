@@ -37,4 +37,6 @@ export async function POST(req){
         uid: payload.uid,
         provider: payload.provider
     });
+    container.item(team.id, team.id).replace(team);
+    return new Response("requested to join", {status: 200});
 }
