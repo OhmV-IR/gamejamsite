@@ -34,5 +34,5 @@ export async function GET(req){
         return new Response("user not found", {status: 401});
     }
     container.item(items.resources[0].id, items.resources[0].userid).delete();
-    return NextResponse.redirect(process.env.DOMAIN + "/");
+    return NextResponse.redirect(req.headers.get('x-forwarded-proto') || 'http' + "://" + req.headers.get("host") + "/");
 }
