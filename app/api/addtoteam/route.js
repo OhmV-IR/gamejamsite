@@ -1,4 +1,5 @@
 import { decrypt, GetIsAdmin } from "@/app/lib/session";
+import { IsPartOfTeam } from "@/app/lib/teams";
 import { CosmosClient } from "@azure/cosmos";
 import { cookies } from "next/headers";
 const sqlstring = require('sqlstring');
@@ -30,6 +31,9 @@ export async function POST(req){
     }
     if(!(await GetIsAdmin(session)) && (team.owner.uid != provider.uid || team.owner.payload != payload.provider)){
         return new Response("not enough rights", {status: 403});
+    }
+    if(await IsPartOfTeam(incomingbody.uid, incomingbody.provider)){
+        return new Response("person already on team", {status: 406});
     }
     if(rqindex != -1){
         team.joinrequests.splice(rqindex, 1);

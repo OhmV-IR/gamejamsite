@@ -1,4 +1,5 @@
 import { decrypt, GetIsAdmin } from "@/app/lib/session";
+import { IsPartOfTeam } from "@/app/lib/teams";
 import { CosmosClient } from "@azure/cosmos";
 import { cookies } from "next/headers";
 const sqlstring = require('sqlstring');
@@ -28,6 +29,9 @@ export async function POST(req){
     const team = (await container.items.query(query).fetchAll()).resources[0];
     if(team == null){
         return new Response("team not found", {status: 404});
+    }
+    if(await IsPartOfTeam(payload.uid, payload.provider)){
+        return new Response("already on team", {status: 406});
     }
     team.joinrequests.push({
         uid: payload.uid,
