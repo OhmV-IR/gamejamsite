@@ -7,18 +7,24 @@ export default function UserFinder() {
     const [users, setUsers] = useState([]);
 
     function UpdateSearchResults(event) {
-        fetch("/api/finduser?term=" + event.target.value, {
-            method: "POST",
-            credentials: "include"
-        }).then((res) => {
-            if (res.ok) {
-                res.json().then((body) => {
-                    setUsers(body.users);
-                });
-            }
-        });
+        if (event.target.value == "") {
+            setUsers([]);
+        }
+        else {
+            fetch("/api/finduser?term=" + event.target.value, {
+                method: "POST",
+                credentials: "include"
+            }).then((res) => {
+                if (res.ok) {
+                    res.json().then((body) => {
+                        setUsers([]);
+                        setUsers(body.users);
+                    });
+                }
+            });
+        }
     }
-    
+
     return (
         <div>
             <div className={`mb-5 mt-5 w-75 ${styles.searchbar}`}>
