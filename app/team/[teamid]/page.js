@@ -22,6 +22,7 @@ export default function TeamPage({ params }) {
     const [submissions, setSubmissions] = useState([]);
     const [joinRequests, setJoinRequests] = useState([]);
     const [viewerUid, setViewerUid] = useState("");
+    const [viewerProvider, setViewerProvider] = useState("");
     const [isAdmin, setIsAdmin] = useState(false);
     const [uidToAdd, setUidToAdd] = useState("");
     const [providerToAdd, setProviderToAdd] = useState("");
@@ -56,6 +57,7 @@ export default function TeamPage({ params }) {
             if (res.ok) {
                 res.json().then(body => {
                     setViewerUid(body.userid);
+                    setViewerProvider(body.provider);
                     setIsAdmin(body.permissions == "admin");
                 })
             }
@@ -124,14 +126,16 @@ export default function TeamPage({ params }) {
             </div>
             {!joinRequests.some(val => {
                 return val.uid == viewerUid;
-            }) && viewerUid != ""
+            }) && viewerUid != "" && !members.some(val => {
+                return val.uid == viewerUid
+            })
                 ? <button className="btn btn-primary" onClick={RequestToJoinTeam}>
                     <IconMail></IconMail>
                     Request to join
                 </button>
                 : <></>
             }
-            {isAdmin || ownerId == viewerUid
+            {isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)
                 ? <button className="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addToTeamModal">
                     <IconPlus></IconPlus>
                     Add person to team
