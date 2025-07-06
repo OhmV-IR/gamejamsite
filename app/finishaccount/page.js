@@ -59,7 +59,7 @@ export default function FinishAccount() {
             credentials: 'include'
         }).then((res) => {
             if (res.ok) {
-                window.location.href = "/dashboard";
+                window.location.href = "/myteam";
             }
             else {
                 res.text((text) => {
