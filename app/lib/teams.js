@@ -1,3 +1,4 @@
+import 'server-only'
 import { CosmosClient } from "@azure/cosmos";
 const dotenv = require('dotenv')
 dotenv.config();
