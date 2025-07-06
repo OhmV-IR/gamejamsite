@@ -110,8 +110,8 @@ export default function Navbar() {
                 <span className="nav-link-title"> Event Details </span>
               </Link>
             </li>
-            <li className="nav-item" id="/dashboard">
-              <Link className="nav-link" href="/dashboard">
+            <li className="nav-item" id="/myteam">
+              <Link className="nav-link" href="/myteam">
                 <span className="nav-link-icon">
                   <IconLayoutDashboard></IconLayoutDashboard>
                 </span>

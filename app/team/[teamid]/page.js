@@ -5,7 +5,14 @@ import React from "react";
 import styles from './page.module.css';
 
 export default function TeamPage({ params }) {
-    const { teamid } = React.use(params);
+    let teamId = "";
+    if (typeof params != "string") {
+        const { teamid } = React.use(params);
+        teamId = teamid;
+    }
+    else {
+        teamId = params
+    }
     const [teamName, setTeamName] = useState("");
     const [ownerId, setOwnerId] = useState("");
     const [ownerProvider, setOwnerProvider] = useState("");
@@ -24,7 +31,7 @@ export default function TeamPage({ params }) {
             method: "POST",
             credentials: "include",
             body: JSON.stringify({
-                id: teamid
+                id: teamId
             })
         })
     }
@@ -34,7 +41,7 @@ export default function TeamPage({ params }) {
             method: "POST",
             credentials: "include",
             body: JSON.stringify({
-                id: teamid,
+                id: teamId,
                 uid: uidToAdd,
                 provider: providerToAdd
             })
@@ -56,7 +63,7 @@ export default function TeamPage({ params }) {
                 method: "POST",
                 credentials: "include",
                 body: JSON.stringify({
-                    id: teamid
+                    id: teamId
                 })
             }).then(res => {
                 if (res.ok) {
@@ -103,7 +110,7 @@ export default function TeamPage({ params }) {
                 }
             });
         }))
-    }, [teamName, teamid]);
+    }, [teamName, teamId]);
 
     return (
         <div>

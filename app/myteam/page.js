@@ -2,10 +2,12 @@
 
 import { IconPlus } from "@tabler/icons-react";
 import { useEffect, useState } from "react"
+import TeamPage from "../team/[teamid]/page";
 
 export default function Dashboard() {
     const [isInTeam, setIsInTeam] = useState(false);
     const [teamName, setTeamName] = useState("");
+    const [teamId, setTeamId] = useState("");
 
     function CreateTeam() {
         fetch("/api/createteam", {
@@ -21,10 +23,24 @@ export default function Dashboard() {
         });
     }
 
+    useEffect(() => {
+        fetch("/api/fetchteam", {
+            method: "POST",
+            credentials: "include"
+        }).then(res => {
+            if(res.ok){
+                res.json().then(body => {
+                    setTeamId(body.id);
+                    setIsInTeam(true);
+                });
+            }
+        })
+    }, []);
+
     return (
         <div>
             {isInTeam
-                ? <h1>Random team info</h1>
+                ? <TeamPage params={teamId}></TeamPage>
                 : <div>
                     <h1>It looks like you&apos;re not part of a team, would you like to create or join one?</h1>
                     <div className="row w-100">
