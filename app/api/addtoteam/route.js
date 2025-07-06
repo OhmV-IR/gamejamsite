@@ -22,18 +22,18 @@ export async function POST(req){
         return new Response("missing info", {status: 400});
     }
     const session = (await cookies()).get("session")?.value;
+    if(!(await GetIsAdmin(session))){
+        return new Response("not enough rights", {status: 403});
+    }
+    if(await IsPartOfTeam(incomingbody.uid, incomingbody.provider)){
+        return new Response("person already on team", {status: 406});
+    }
     const query = {
         query: sqlstring.format("SELECT * FROM c WHERE c.id=?", [incomingbody.id])
     }
     const team = (await container.items.query(query).fetchAll()).resources[0];
     if(team == null){
         return new Response("team not found", {status: 404});
-    }
-    if(!(await GetIsAdmin(session)) && (team.owner.uid != provider.uid || team.owner.payload != payload.provider)){
-        return new Response("not enough rights", {status: 403});
-    }
-    if(await IsPartOfTeam(incomingbody.uid, incomingbody.provider)){
-        return new Response("person already on team", {status: 406});
     }
     if(rqindex != -1){
         team.joinrequests.splice(rqindex, 1);

@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from "react";
-import { IconMail, IconPlus } from "@tabler/icons-react";
+import { IconAlertCircle, IconMail, IconPlus } from "@tabler/icons-react";
 import React from "react";
 import styles from './page.module.css';
 
@@ -26,6 +26,11 @@ export default function TeamPage({ params }) {
     const [isAdmin, setIsAdmin] = useState(false);
     const [uidToAdd, setUidToAdd] = useState("");
     const [providerToAdd, setProviderToAdd] = useState("");
+    const [okBannerDisplay, setOkBannerDisplay] = useState(false);
+    const [okBannerText, setOkBannerText] = useState("");
+    const [failedBannerDisplay, setFailedBannerDisplay] = useState(false);
+    const [failedBannerText, setFailedBannerText] = useState("");
+    const [failedBannerSubtext, setFailedBannerSubtext] = useState("");
 
     function RequestToJoinTeam() {
         fetch("/api/requesttojoin", {
@@ -34,6 +39,18 @@ export default function TeamPage({ params }) {
             body: JSON.stringify({
                 id: teamId
             })
+        }).then(res => {
+            if (res.ok) {
+                setOkBannerDisplay(true);
+                setOkBannerText("Requested to join team. Waiting for response from team owner.");
+                setTimeout(() => setOkBannerDisplay(false), 7000);
+            }
+            else {
+                setFailedBannerDisplay(true);
+                setFailedBannerText("Failed to request to join team.");
+                res.text().then(text => setFailedBannerSubtext(text));
+                setTimeout(() => setFailedBannerDisplay(false), 7000);
+            }
         })
     }
 
@@ -46,7 +63,19 @@ export default function TeamPage({ params }) {
                 uid: uidToAdd,
                 provider: providerToAdd
             })
-        });
+        }).then(res => {
+            if(res.ok){
+                setOkBannerDisplay(true);
+                setOkBannerText("Added person to the team successfully.");
+                setTimeout(() => setOkBannerDisplay(false), 7000);
+            }
+            else{
+                setFailedBannerDisplay(true);
+                setFailedBannerText("Failed to add person to team.");
+                res.text().then(text => setFailedBannerSubtext(text));
+                setTimeout(() => setFailedBannerDisplay(false), 7000);
+            }
+        })
     }
 
     useEffect(() => {
@@ -116,6 +145,29 @@ export default function TeamPage({ params }) {
 
     return (
         <div>
+            {failedBannerDisplay
+                ? <div className="alert alert-danger" role="alert">
+                    <div className="alert-icon">
+                        <IconAlertCircle></IconAlertCircle>
+                    </div>
+                    <div>
+                        <h4 className="alert-heading">{failedBannerText}&hellip;</h4>
+                        <div className="alert-description">{failedBannerSubtext}</div>
+                    </div>
+                </div>
+                : <></>
+            }
+            {okBannerDisplay
+                ? <div className="alert alert-success" role="alert">
+                    <div className="alert-icon">
+                        <IconAlertCircle></IconAlertCircle>
+                    </div>
+                    <div>
+                        <h4 className="alert-heading">{okBannerText}&hellip;</h4>
+                    </div>
+                </div>
+                : <></>
+            }
             <h1 className={`w-100 ${styles.teamname} ${styles.centeralign} mt-5`}>{teamName}</h1>
             <div className={`w-100 ${styles.centeralign} ${styles.ownertext} mt-3`}>
                 Owned by:&nbsp;&nbsp;
@@ -135,7 +187,7 @@ export default function TeamPage({ params }) {
                 </button>
                 : <></>
             }
-            {isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)
+            {isAdmin
                 ? <button className="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addToTeamModal">
                     <IconPlus></IconPlus>
                     Add person to team
