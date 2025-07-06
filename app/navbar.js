@@ -115,7 +115,7 @@ export default function Navbar() {
                 <span className="nav-link-icon">
                   <IconLayoutDashboard></IconLayoutDashboard>
                 </span>
-                <span className="nav-link-title"> Contestant Dashboard </span>
+                <span className="nav-link-title"> My Team </span>
               </Link>
             </li>
             <li className="nav-item" id="/teamfinder">
