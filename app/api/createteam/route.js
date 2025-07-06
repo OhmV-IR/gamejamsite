@@ -3,6 +3,7 @@ import { decrypt, refreshSession } from "@/app/lib/session";
 import { cookies } from "next/headers";
 const dotenv = require('dotenv')
 dotenv.config();
+import { IsPartOfTeam } from "@/app/lib/teams";
 
 const dbclient = new CosmosClient({
     endpoint: process.env.DB_ENDPOINT,
@@ -24,7 +25,9 @@ export async function POST(req){
         return new Response("invalid session", {status: 400});
     }
 
-    // TODO: Check if user is part of any other teams
+    if(await IsPartOfTeam(payload.uid, payload.provider)){
+        return new Response("already in team", {status: 406})
+    }
     const team = {
         name: incomingbody.teamName,
         owner: {
