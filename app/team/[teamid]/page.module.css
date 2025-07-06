@@ -17,3 +17,15 @@
 .membername {
     font-size: large;
 }
+
+.greencheck {
+    color: green;
+}
+
+.redx {
+    color: red;
+}
+
+.lmbtn {
+    margin-left: 2vw;
+}

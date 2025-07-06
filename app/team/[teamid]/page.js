@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from "react";
-import { IconAlertCircle, IconMail, IconPlus } from "@tabler/icons-react";
+import { IconAlertCircle, IconCheck, IconMail, IconPlus, IconX } from "@tabler/icons-react";
 import React from "react";
 import styles from './page.module.css';
 
@@ -64,14 +64,62 @@ export default function TeamPage({ params }) {
                 provider: providerToAdd
             })
         }).then(res => {
-            if(res.ok){
+            if (res.ok) {
                 setOkBannerDisplay(true);
                 setOkBannerText("Added person to the team successfully.");
                 setTimeout(() => setOkBannerDisplay(false), 7000);
             }
-            else{
+            else {
                 setFailedBannerDisplay(true);
                 setFailedBannerText("Failed to add person to team.");
+                res.text().then(text => setFailedBannerSubtext(text));
+                setTimeout(() => setFailedBannerDisplay(false), 7000);
+            }
+        })
+    }
+
+    function AcceptJoinRequest(uid, provider){
+        fetch("/api/acceptjoinrequest", {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify({
+                uid: uid,
+                provider: provider,
+                tid: teamId
+            })
+        }).then(res => {
+            if(res.ok){
+                setOkBannerDisplay(true);
+                setOkBannerText("Added to team, refresh to see changes");
+                setTimeout(() => setOkBannerDisplay(false), 7000);
+            }
+            else{
+                setFailedBannerDisplay(true);
+                setFailedBannerText("Failed to add to team");
+                res.text().then(text => setFailedBannerSubtext(text));
+                setTimeout(() => setFailedBannerDisplay(false), 7000);
+            }
+        })
+    }
+
+    function RejectJoinRequest(uid, provider){
+        fetch("/api/rejectjoinrequest", {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify({
+                uid: uid,
+                provider: provider,
+                tid: teamId
+            })
+        }).then(res => {
+            if(res.ok){
+                setOkBannerDisplay(true);
+                setOkBannerText("Deleted join request, refresh to see changes");
+                setTimeout(() => setOkBannerDisplay(false), 7000);
+            }
+            else{
+                setFailedBannerDisplay(true);
+                setFailedBannerText("Failed to delete join request");
                 res.text().then(text => setFailedBannerSubtext(text));
                 setTimeout(() => setFailedBannerDisplay(false), 7000);
             }
@@ -134,6 +182,23 @@ export default function TeamPage({ params }) {
                                 }
                             })
                         }
+                        for (let i = 0; i < body.joinrequests.length; i++) {
+                            fetch("/api/fetchbasicuserinfo", {
+                                method: "POST",
+                                credentials: "include",
+                                body: JSON.stringify({
+                                    uid: body.joinrequests[i].uid,
+                                    provider: body.joinrequests[i].provider
+                                })
+                            }).then(res => {
+                                if (res.ok) {
+                                    res.json().then(requesterbody => {
+                                        body.joinrequests[i].name = requesterbody.name;
+                                        body.joinrequests[i].pfp = requesterbody.pfp;
+                                    })
+                                }
+                            })
+                        }
                         setMembers(body.members);
                         setJoinRequests(body.joinrequests);
                         setSubmissions(body.submissions);
@@ -151,7 +216,7 @@ export default function TeamPage({ params }) {
                         <IconAlertCircle></IconAlertCircle>
                     </div>
                     <div>
-                        <h4 className="alert-heading">{failedBannerText}&hellip;</h4>
+                        <h4 className="alert-heading">{failedBannerText}</h4>
                         <div className="alert-description">{failedBannerSubtext}</div>
                     </div>
                 </div>
@@ -163,7 +228,7 @@ export default function TeamPage({ params }) {
                         <IconAlertCircle></IconAlertCircle>
                     </div>
                     <div>
-                        <h4 className="alert-heading">{okBannerText}&hellip;</h4>
+                        <h4 className="alert-heading">{okBannerText}</h4>
                     </div>
                 </div>
                 : <></>
@@ -255,12 +320,27 @@ export default function TeamPage({ params }) {
                     : <></>
                 }
             </div>
-            {joinRequests.length > 0
+            {joinRequests.length > 0 && (isAdmin || (viewerUid == ownerId && viewerProvider == ownerProvider))
                 ? <div className="row w-100 mt-5">
                     <div className="col">
                         <h1 className={`${styles.subheader} ${styles.centeralign}`}>Join Requests</h1>
                         <table className="table">
                             <tbody>
+                                {
+                                    joinRequests.map(request => (
+                                        <tr key={request.uid}>
+                                            <td>
+                                                <button className="btn" onClick={() => window.location.href = `/user/${request.uid}/${request.provider}`}>
+                                                    <span className="avatar avatar-sm" style={{ backgroundImage: `url(${request.pfp})` }}></span>
+                                                    &nbsp;&nbsp;
+                                                    <span className={styles.membername}>{request.name}</span>
+                                                </button>
+                                                <button className={`btn btn-success ${styles.lmbtn}`}><IconCheck onClick={() => AcceptJoinRequest(request.uid, request.provider)}></IconCheck></button>
+                                                <button className={`btn btn-danger ${styles.lmbtn}`}><IconX onClick={() => RejectJoinRequest(request.uid, request.provider)}></IconX></button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                }
                             </tbody>
                         </table>
                     </div>

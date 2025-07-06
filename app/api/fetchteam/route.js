@@ -26,6 +26,9 @@ export async function POST(req) {
         return new Response("team not found", { status: 404 });
     }
     else {
+        if(payload.uid != team.owner.uid || payload.provider != team.owner.provider){
+            team.joinrequests = null;
+        }
         return new Response(JSON.stringify(team), { status: 200 });
     }
 }
