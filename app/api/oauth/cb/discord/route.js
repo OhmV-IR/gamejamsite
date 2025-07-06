@@ -59,8 +59,8 @@ export async function GET(req){
     const existinguser = await container.items.query(query).fetchAll();
     await createSession(user.userid, "discord");
     if(existinguser.resources.length != 0){
-        return NextResponse.redirect(req.headers.get('x-forwarded-proto') || 'http' + "://" + req.headers.get("host") + "/myteam");
+        return NextResponse.redirect(process.env.DOMAIN + "/dashboard");
     }
     container.items.create(user);
-    return NextResponse.redirect(req.headers.get('x-forwarded-proto') || 'http' + "://" + req.headers.get("host") + "/finishaccount");
+    return NextResponse.redirect(process.env.DOMAIN + "/finishaccount");
 }
