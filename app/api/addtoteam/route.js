@@ -1,5 +1,5 @@
 import { decrypt, GetIsAdmin } from "@/app/lib/session";
-import { IsPartOfTeam } from "@/app/lib/teams";
+import { IsPartOfTeam, RemoveAllJoinRequests } from "@/app/lib/teams";
 import { CosmosClient } from "@azure/cosmos";
 import { cookies } from "next/headers";
 const sqlstring = require('sqlstring');
@@ -35,13 +35,12 @@ export async function POST(req){
     if(team == null){
         return new Response("team not found", {status: 404});
     }
-    if(rqindex != -1){
-        team.joinrequests.splice(rqindex, 1);
-    }
     team.members.push({
         uid: incomingbody.uid,
         provider: incomingbody.provider
     });
-    container.item(team.id, team.id).replace(team);
+    // Must be awaited to avoid a race con where this is replaced after RemoveAllJoinRequests pulls the file, which then causes the member add to be overwritten
+    await container.item(team.id, team.id).replace(team);
+    RemoveAllJoinRequests(incomingbody.uid, incomingbody.provider);
     return new Response("added person to team", {status: 200});
 }

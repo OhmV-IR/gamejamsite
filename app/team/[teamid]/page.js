@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from "react";
-import { IconAlertCircle, IconCheck, IconMail, IconPlus, IconX } from "@tabler/icons-react";
+import { IconAlertCircle, IconCheck, IconDoorExit, IconMail, IconPlus, IconX } from "@tabler/icons-react";
 import React from "react";
 import styles from './page.module.css';
 
@@ -43,7 +43,7 @@ export default function TeamPage({ params }) {
             if (res.ok) {
                 setOkBannerDisplay(true);
                 setOkBannerText("Requested to join team. Waiting for response from team owner.");
-                setTimeout(() => setOkBannerDisplay(false), 7000);
+                setTimeout(() => window.location.reload(), 2000);
             }
             else {
                 setFailedBannerDisplay(true);
@@ -67,7 +67,7 @@ export default function TeamPage({ params }) {
             if (res.ok) {
                 setOkBannerDisplay(true);
                 setOkBannerText("Added person to the team successfully.");
-                setTimeout(() => setOkBannerDisplay(false), 7000);
+                setTimeout(() => window.location.reload(), 2000);
             }
             else {
                 setFailedBannerDisplay(true);
@@ -90,8 +90,8 @@ export default function TeamPage({ params }) {
         }).then(res => {
             if(res.ok){
                 setOkBannerDisplay(true);
-                setOkBannerText("Added to team, refresh to see changes");
-                setTimeout(() => setOkBannerDisplay(false), 7000);
+                setOkBannerText("Added to team");
+                setTimeout(() => window.location.reload(), 2000);
             }
             else{
                 setFailedBannerDisplay(true);
@@ -114,12 +114,34 @@ export default function TeamPage({ params }) {
         }).then(res => {
             if(res.ok){
                 setOkBannerDisplay(true);
-                setOkBannerText("Deleted join request, refresh to see changes");
-                setTimeout(() => setOkBannerDisplay(false), 7000);
+                setOkBannerText("Deleted join request");
+                setTimeout(() => window.location.reload(), 2000);
             }
             else{
                 setFailedBannerDisplay(true);
                 setFailedBannerText("Failed to delete join request");
+                res.text().then(text => setFailedBannerSubtext(text));
+                setTimeout(() => setFailedBannerDisplay(false), 7000);
+            }
+        })
+    }
+
+    function LeaveTeam(){
+        fetch("/api/leaveteam", {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify({
+                tid: teamId
+            })
+        }).then(res => {
+            if(res.ok){
+                setOkBannerDisplay(true);
+                setOkBannerText("Left team successfully");
+                setTimeout(() => window.location.reload(), 2000);
+            }
+            else{
+                setFailedBannerDisplay(true);
+                setFailedBannerText("Failed to leave team.");
                 res.text().then(text => setFailedBannerSubtext(text));
                 setTimeout(() => setFailedBannerDisplay(false), 7000);
             }
@@ -242,9 +264,9 @@ export default function TeamPage({ params }) {
                 </button>
             </div>
             {!joinRequests.some(val => {
-                return val.uid == viewerUid;
+                return val.uid == viewerUid && val.provider == viewerProvider;
             }) && viewerUid != "" && !members.some(val => {
-                return val.uid == viewerUid
+                return val.uid == viewerUid && val.provider == viewerProvider
             })
                 ? <button className="btn btn-primary" onClick={RequestToJoinTeam}>
                     <IconMail></IconMail>
@@ -258,6 +280,15 @@ export default function TeamPage({ params }) {
                     Add person to team
                 </button>
                 : <></>
+            }
+            {members.some(val => {
+                return val.uid == viewerUid && val.provider == viewerProvider
+            })
+            ? <button className="btn btn-danger" onClick={LeaveTeam}>
+                <IconDoorExit></IconDoorExit>
+                Leave team
+            </button>
+            : <></>
             }
             <div className="modal" id="addToTeamModal" tabIndex={-1}>
                 <div className="modal-dialog" role="document">

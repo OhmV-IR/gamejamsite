@@ -2,7 +2,6 @@ import { CosmosClient } from "@azure/cosmos";
 import { cookies } from "next/headers";
 import { decrypt } from "@/app/lib/session"
 import { container } from "googleapis/build/src/apis/container";
-import { RemoveAllJoinRequests } from "@/app/lib/teams";
 const dotenv = require('dotenv')
 dotenv.config();
 const sqlstring = require('sqlstring');
@@ -17,8 +16,8 @@ const teamcontainer = (await database.containers.createIfNotExists({ id: process
 
 export async function POST(req){
     const incomingbody = await req.json();
-    if(incomingbody.uid == null || incomingbody.provider == null || incomingbody.tid == null){
-        return new Response("missing rq details", {status: 400});
+    if(incomingbody.tid == null){
+        return new Response("missing data", {status: 400});
     }
     const session = (await cookies()).get("session")?.value;
     const payload = await decrypt(session);
@@ -26,13 +25,19 @@ export async function POST(req){
         return new Response("no session", {status: 401});
     }
     const team = (await teamcontainer.items.query({
-        query: sqlstring.format('SELECT * FROM c WHERE c.id=?', [incomingbody.tid])
+        query: sqlstring.format('SELECT * from c WHERE c.id=?', [incomingbody.tid])
     }).fetchAll()).resources[0];
     if(team == null){
         return new Response("team not found", {status: 404});
     }
-    team.members.push({uid: incomingbody.uid, provider: incomingbody.provider});
-    await teamcontainer.item(team.id, team.id).replace(team);
-    RemoveAllJoinRequests(incomingbody.uid, incomingbody.provider);
-    return new Response("added to team", {status: 200});
+    if(team.members.splice({uid: payload.uid, provider: payload.provider}) == null){
+        return new Response("not part of team", {status: 403});
+    }
+    if(team.members.length > 0){
+        teamcontainer.item(team.id, team.id).replace(team);
+    }
+    else{
+        teamcontainer.item(team.id, team.id).delete();
+    }
+    return new Response("left team successfully", {status: 200});
 }
