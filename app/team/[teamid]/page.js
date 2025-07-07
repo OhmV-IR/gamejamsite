@@ -224,6 +224,7 @@ export default function TeamPage({ params }) {
                                     res.json().then(memberbody => {
                                         body.members[i].name = memberbody.name;
                                         body.members[i].pfp = memberbody.pfp;
+                                        setMembers(body.members);
                                     })
                                 }
                             })
@@ -241,12 +242,11 @@ export default function TeamPage({ params }) {
                                     res.json().then(requesterbody => {
                                         body.joinrequests[i].name = requesterbody.name;
                                         body.joinrequests[i].pfp = requesterbody.pfp;
+                                        setJoinRequests(body.joinrequests);
                                     })
                                 }
                             })
                         }
-                        setMembers(body.members);
-                        setJoinRequests(body.joinrequests);
                         setSubmissions(body.submissions);
                     })
                 }
