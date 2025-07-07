@@ -17,7 +17,6 @@ export default function RootLayout({ children }) {
         <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/@tabler/core@1.3.2/dist/css/tabler.min.css" />
         <Script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.3.2/dist/js/tabler.min.js"/>
-        <Script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></Script>
       </head>
       <body>
       <Analytics></Analytics>

@@ -167,8 +167,8 @@ export default function TeamPage({ params }) {
 
     function LeaveTeam() {
         if (viewerUid == ownerId && viewerProvider == ownerProvider) {
-            const modal = new bootstrap.Modal(document.getElementById('dangerTeamDeleteModalLeave'));
-            modal.show();
+            // HACK: importing boostrapjs breaks a whole bunch of stuff, so using an invisible button to trigger the modal.
+            document.getElementById('dangerTeamDeleteModalLeaveBtn').click();
         }
         else {
             LeaveTeamUnsafe(false);
@@ -177,8 +177,8 @@ export default function TeamPage({ params }) {
 
     function KickFromTeam(uid, provider) {
         if (uid == ownerId && provider == ownerProvider) {
-            const modal = new bootstrap.Modal(document.getElementById('dangerTeamDeleteModalKick'));
-            modal.show();
+            // HACK: importing boostrapjs breaks a whole bunch of stuff, so using an invisible button to trigger the modal.
+            document.getElementById("dangerTeamDeleteModalKickBtn").click();
             document.getElementById("dangerModalKickConfirm").onclick = () => KickFromTeamUnsafe(uid, provider, true);
         }
         else {
@@ -350,6 +350,8 @@ export default function TeamPage({ params }) {
 
     return (
         <div>
+            <button id="dangerTeamDeleteModalLeaveBtn" type="button" className="d-none" data-bs-toggle="modal" data-bs-target="#dangerTeamDeleteModalLeave"></button>
+            <button id="dangerTeamDeleteModalKickBtn" type="button" className="d-none" data-bs-toggle="modal" data-bs-target="#dangerTeamDeleteModalKick"></button>
             {failedBannerDisplay
                 ? <div className="alert alert-danger" role="alert">
                     <div className="alert-icon">
