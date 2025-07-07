@@ -20,7 +20,7 @@ export async function POST(req){
     }
     var term = incomingurl.searchParams.get("term") + "%";
     const query = {
-        query: sqlstring.format('SELECT * from c WHERE LOWER(c.name) LIKE LOWER(?) OFFSET 0 LIMIT 10', [term])
+        query: sqlstring.format('SELECT * from c WHERE LOWER(c.name) LIKE LOWER(?) AND IS_DEFINED(c.experiencelevel) OFFSET 0 LIMIT 10', [term])
     }
     const users = (await container.items.query(query).fetchAll()).resources;
     const filteredusers = [];

@@ -1,6 +1,7 @@
 import { CosmosClient } from "@azure/cosmos";
 import { decrypt, refreshSession } from "@/app/lib/session";
 import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 const sqlstring = require('sqlstring');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -44,5 +45,9 @@ export async function POST(req){
         return new Response(JSON.stringify(user.resources[0], {status: 200}));
     }
     refreshSession();
+    // user has not finished setup
+    if(items.resources[0].experiencelevel == null){
+        return new Response(process.env.DOMAIN + "/finishaccount", {status: 307});
+    }
     return new Response(JSON.stringify(items.resources[0]), {status: 200});
 }
