@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from "react";
-import { IconAlertCircle, IconCheck, IconDoorExit, IconKarate, IconMail, IconMinus, IconPlus, IconX } from "@tabler/icons-react";
+import { IconAlertCircle, IconCheck, IconDeviceFloppy, IconDoorExit, IconKarate, IconMail, IconMinus, IconPencil, IconPlus, IconX } from "@tabler/icons-react";
 import React from "react";
 import styles from './page.module.css';
 
@@ -172,6 +172,28 @@ export default function TeamPage({ params }) {
         })
     }
 
+    function RenameTeam(){
+        fetch("/api/renameteam", {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify({
+                tid: teamId,
+                name: teamName
+            })
+        }).then(res => {
+            if (res.ok) {
+                setOkBannerDisplay(true);
+                setOkBannerText("Renamed team successfully.");
+            }
+            else {
+                setFailedBannerDisplay(true);
+                setFailedBannerText("Failed to rename team.");
+                res.text().then(text => setFailedBannerSubtext(text));
+                setTimeout(() => setFailedBannerDisplay(false), 7000);
+            }
+        })
+    }
+
     useEffect(() => {
         fetch("/api/fetchuserinfo", {
             method: "POST",
@@ -252,7 +274,7 @@ export default function TeamPage({ params }) {
                 }
             });
         }))
-    }, [teamName, teamId]);
+    }, [teamId]);
 
     return (
         <div>
@@ -279,7 +301,34 @@ export default function TeamPage({ params }) {
                 </div>
                 : <></>
             }
-            <h1 className={`w-100 ${styles.teamname} ${styles.centeralign} mt-5`}>{teamName}</h1>
+            <h1 className={`w-100 ${styles.teamname} ${styles.centeralign} mt-5`}>{teamName}&nbsp;&nbsp;
+            {isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)
+            ? <button className="btn" data-bs-toggle="modal" data-bs-target="#renameTeamModal"><IconPencil></IconPencil></button>
+            : <></>
+            }</h1>
+            <div className="modal" tabIndex={-1} id="renameTeamModal">
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">Rename team</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                            <form>
+                                <label className="form-label">Team name</label>
+                                <input type="text" className="form-control" name="teamname" placeholder="Your team name(keep it appropriate please)" value={teamName} onChange={evt => setTeamName(evt.target.value)}></input>
+                            </form>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button className="btn btn-primary" data-bs-dismiss="modal" onClick={RenameTeam}>
+                                <IconDeviceFloppy></IconDeviceFloppy>
+                                Rename team
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div className={`w-100 ${styles.centeralign} ${styles.ownertext} mt-3`}>
                 Owned by:&nbsp;&nbsp;
                 <button className="btn" onClick={() => window.location.href = `/user/${ownerId}/${ownerProvider}`}>
