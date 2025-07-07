@@ -30,7 +30,7 @@ export async function POST(req){
     if(team == null){
         return new Response("team not found", {status: 404});
     }
-    const index = team.joinrequests.indexOf(jr => jr.uid == incomingbody.uid && jr.provider == incomingbody.provider);
+    const index = team.joinrequests.findIndex(jr => jr.uid == incomingbody.uid && jr.provider == incomingbody.provider);
     if(index == -1){
         return new Response("jr not found", {status: 400});
     }

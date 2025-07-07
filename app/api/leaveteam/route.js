@@ -35,12 +35,11 @@ export async function POST(req){
         return new Response("not part of team", {status: 400});
     }
     team.members.splice(index, 1);
-    if(team.members.length > 0){
-        teamcontainer.item(team.id, team.id).replace(team);
-    }
-    else{
+    if(team.members.length == 0 || (payload.uid == team.owner.uid && payload.provider == team.owner.provider)){
         teamcontainer.item(team.id, team.id).delete();
     }
-    team.delete()
+    else{
+        teamcontainer.item(team.id, team.id).replace(team);
+    }
     return new Response("left team successfully", {status: 200});
 }

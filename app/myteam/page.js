@@ -18,7 +18,10 @@ export default function Dashboard() {
             })
         }).then(res => {
             if (res.ok) {
-                setTimeout(() => window.location.reload(), 1000);
+                res.text().then(id => {
+                    setIsInTeam(true);
+                    setTeamId(id);
+                })
             }
         });
     }

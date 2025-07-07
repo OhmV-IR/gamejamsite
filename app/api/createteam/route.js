@@ -43,6 +43,6 @@ export async function POST(req){
             }
         ]
     }
-    container.items.create(team);
-    return new Response("team created", {status: 200});
+    const res = await container.items.create(team);
+    return new Response(res.resource.id, {status: 200});
 }

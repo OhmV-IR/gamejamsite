@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from "react";
-import { IconAlertCircle, IconCheck, IconDeviceFloppy, IconDoorExit, IconKarate, IconMail, IconMinus, IconPencil, IconPlus, IconX } from "@tabler/icons-react";
+import { IconAlertCircle, IconAlertTriangle, IconBrandBootstrap, IconCheck, IconDeviceFloppy, IconDoorExit, IconKarate, IconMail, IconMinus, IconPencil, IconPlus, IconX } from "@tabler/icons-react";
 import React from "react";
 import styles from './page.module.css';
 
@@ -14,6 +14,7 @@ export default function TeamPage({ params }) {
         teamId = params
     }
     const [teamName, setTeamName] = useState("");
+    const [tmpTeamName, setTmpTeamName] = useState("");
     const [ownerId, setOwnerId] = useState("");
     const [ownerProvider, setOwnerProvider] = useState("");
     const [ownerName, setOwnerName] = useState("");
@@ -43,7 +44,19 @@ export default function TeamPage({ params }) {
             if (res.ok) {
                 setOkBannerDisplay(true);
                 setOkBannerText("Requested to join team. Waiting for response from team owner.");
-                setTimeout(() => window.location.reload(), 2000);
+                fetch("/api/fetchbasicuserinfo", {
+                    method: "POST",
+                    credentials: "include",
+                    body: JSON.stringify({
+                        uid: viewerUid,
+                        provider: viewerProvider
+                    })
+                }).then(res => {
+                    res.json().then(body => {
+                        setJoinRequests(joinRequests.concat([{ uid: viewerUid, provider: viewerProvider, name: body.name, pfp: body.pfp }]));
+                    })
+                });
+                setTimeout(() => setOkBannerDisplay(false), 7000);
             }
             else {
                 setFailedBannerDisplay(true);
@@ -67,7 +80,19 @@ export default function TeamPage({ params }) {
             if (res.ok) {
                 setOkBannerDisplay(true);
                 setOkBannerText("Added person to the team successfully.");
-                setTimeout(() => window.location.reload(), 2000);
+                fetch("/api/fetchbasicuserinfo", {
+                    method: "POST",
+                    credentials: "include",
+                    body: JSON.stringify({
+                        uid: uidToAdd,
+                        provider: providerToAdd
+                    })
+                }).then(res => {
+                    res.json().then(body => {
+                        members.push({ uid: uidToAdd, provider: providerToAdd, name: body.name, pfp: body.pfp })
+                    })
+                });
+                setTimeout(() => setOkBannerDisplay(false), 7000);
             }
             else {
                 setFailedBannerDisplay(true);
@@ -91,7 +116,20 @@ export default function TeamPage({ params }) {
             if (res.ok) {
                 setOkBannerDisplay(true);
                 setOkBannerText("Added to team");
-                setTimeout(() => window.location.reload(), 2000);
+                fetch("/api/fetchbasicuserinfo", {
+                    method: "POST",
+                    credentials: "include",
+                    body: JSON.stringify({
+                        uid: uid,
+                        provider: provider
+                    })
+                }).then(res => {
+                    res.json().then(body => {
+                        setMembers(members.concat([{ uid: uid, provider: provider, name: body.name, pfp: body.pfp }]));
+                    })
+                });
+                setJoinRequests(joinRequests.filter(jr => jr.uid != uid || jr.provider != provider));
+                setTimeout(() => setOkBannerDisplay(false), 7000);
             }
             else {
                 setFailedBannerDisplay(true);
@@ -115,7 +153,8 @@ export default function TeamPage({ params }) {
             if (res.ok) {
                 setOkBannerDisplay(true);
                 setOkBannerText("Deleted join request");
-                setTimeout(() => window.location.reload(), 2000);
+                setJoinRequests(joinRequests.filter(jr => jr.uid != uid || jr.provider != provider));
+                setTimeout(() => setOkBannerDisplay(false), 7000);
             }
             else {
                 setFailedBannerDisplay(true);
@@ -127,6 +166,27 @@ export default function TeamPage({ params }) {
     }
 
     function LeaveTeam() {
+        if (viewerUid == ownerId && viewerProvider == ownerProvider) {
+            const modal = new bootstrap.Modal(document.getElementById('dangerTeamDeleteModalLeave'));
+            modal.show();
+        }
+        else {
+            LeaveTeamUnsafe(false);
+        }
+    }
+
+    function KickFromTeam(uid, provider) {
+        if (uid == ownerId && provider == ownerProvider) {
+            const modal = new bootstrap.Modal(document.getElementById('dangerTeamDeleteModalKick'));
+            modal.show();
+            document.getElementById("dangerModalKickConfirm").onclick = () => KickFromTeamUnsafe(uid, provider, true);
+        }
+        else {
+            KickFromTeamUnsafe(uid, provider, false);
+        }
+    }
+
+    function LeaveTeamUnsafe(isdelete) {
         fetch("/api/leaveteam", {
             method: "POST",
             credentials: "include",
@@ -135,9 +195,15 @@ export default function TeamPage({ params }) {
             })
         }).then(res => {
             if (res.ok) {
-                setOkBannerDisplay(true);
-                setOkBannerText("Left team successfully");
-                setTimeout(() => window.location.reload(), 2000);
+                if (isdelete) {
+                    window.location.reload();
+                }
+                else {
+                    setOkBannerDisplay(true);
+                    setOkBannerText("Left team successfully");
+                    setMembers(members.filter(member => member.uid != viewerUid || member.provider != viewerProvider));
+                    setTimeout(() => setOkBannerDisplay(false), 7000);
+                }
             }
             else {
                 setFailedBannerDisplay(true);
@@ -148,7 +214,7 @@ export default function TeamPage({ params }) {
         })
     }
 
-    function KickFromTeam(uid, provider) {
+    function KickFromTeamUnsafe(uid, provider, isdelete) {
         fetch("/api/teamkick", {
             method: "POST",
             credentials: "include",
@@ -159,9 +225,15 @@ export default function TeamPage({ params }) {
             })
         }).then(res => {
             if (res.ok) {
-                setOkBannerDisplay(true);
-                setOkBannerText("Kicked from team successfully.");
-                setTimeout(() => window.location.reload(), 2000);
+                if (isdelete) {
+                    window.location.reload();
+                }
+                else {
+                    setOkBannerDisplay(true);
+                    setOkBannerText("Kicked from team successfully.");
+                    setMembers(members.filter(member => member.uid != uid || member.provider != provider));
+                    setTimeout(() => setOkBannerDisplay(false), 7000);
+                }
             }
             else {
                 setFailedBannerDisplay(true);
@@ -172,13 +244,13 @@ export default function TeamPage({ params }) {
         })
     }
 
-    function RenameTeam(){
+    function RenameTeam() {
         fetch("/api/renameteam", {
             method: "POST",
             credentials: "include",
             body: JSON.stringify({
                 tid: teamId,
-                name: teamName
+                name: tmpTeamName
             })
         }).then(res => {
             if (res.ok) {
@@ -302,10 +374,10 @@ export default function TeamPage({ params }) {
                 : <></>
             }
             <h1 className={`w-100 ${styles.teamname} ${styles.centeralign} mt-5`}>{teamName}&nbsp;&nbsp;
-            {isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)
-            ? <button className="btn" data-bs-toggle="modal" data-bs-target="#renameTeamModal"><IconPencil></IconPencil></button>
-            : <></>
-            }</h1>
+                {isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)
+                    ? <button className="btn" data-bs-toggle="modal" data-bs-target="#renameTeamModal"><IconPencil></IconPencil></button>
+                    : <></>
+                }</h1>
             <div className="modal" tabIndex={-1} id="renameTeamModal">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
@@ -316,7 +388,7 @@ export default function TeamPage({ params }) {
                         <div className="modal-body">
                             <form>
                                 <label className="form-label">Team name</label>
-                                <input type="text" className="form-control" name="teamname" placeholder="Your team name(keep it appropriate please)" value={teamName} onChange={evt => setTeamName(evt.target.value)}></input>
+                                <input type="text" className="form-control" name="teamname" placeholder="Your team name(keep it appropriate please)" value={tmpTeamName} onChange={evt => setTmpTeamName(evt.target.value)}></input>
                             </form>
                         </div>
                         <div className="modal-footer">
@@ -386,6 +458,64 @@ export default function TeamPage({ params }) {
                                 <IconPlus></IconPlus>
                                 Add to team
                             </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="modal" id="dangerTeamDeleteModalLeave" tabIndex={-1}>
+                <div className="modal-dialog modal-lg" role="document">
+                    <div className="modal-content">
+                        <button type="button" className="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                        <div className="modal-status bg-danger"></div>
+                        <div className="modal-body text-center py-4">
+                            <IconAlertTriangle></IconAlertTriangle>
+                            <h3>Are you sure?</h3>
+                            <div className="text-secondary">
+                                This will delete your team, irreversibly and permanently.
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <div className="w-100">
+                                <div className="row">
+                                    <div className="col">
+                                        <a href="#" className="btn w-100" data-bs-dismiss="modal"> Cancel </a>
+                                    </div>
+                                    <div className="col">
+                                        <a href="#" className="btn btn-danger w-100" data-bs-dismiss="modal" onClick={() => LeaveTeamUnsafe(true)}>
+                                            Delete my team FOREVER </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="modal" id="dangerTeamDeleteModalKick" tabIndex={-1}>
+                <div className="modal-dialog modal-lg" role="document">
+                    <div className="modal-content">
+                        <button type="button" className="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                        <div className="modal-status bg-danger"></div>
+                        <div className="modal-body text-center py-4">
+                            <IconAlertTriangle></IconAlertTriangle>
+                            <h3>Are you sure?</h3>
+                            <div className="text-secondary">
+                                This will delete your team, irreversibly and permanently.
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <div className="w-100">
+                                <div className="row">
+                                    <div className="col">
+                                        <a href="#" className="btn w-100" data-bs-dismiss="modal"> Cancel </a>
+                                    </div>
+                                    <div className="col">
+                                        <a href="#" className="btn btn-danger w-100" data-bs-dismiss="modal" id="dangerModalKickConfirm">
+                                            Delete my team FOREVER </a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
