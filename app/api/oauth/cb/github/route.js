@@ -56,7 +56,7 @@ export async function GET(req){
     const existinguser = await container.items.query(query).fetchAll();
     await createSession(user.userid, "github");
     if(existinguser.resources.length != 0){
-        return NextResponse.redirect(process.env.DOMAIN + "/dashboard");
+        return NextResponse.redirect(process.env.DOMAIN + "/myteam");
     }
     container.items.create(user);
     return NextResponse.redirect(process.env.DOMAIN + "/finishaccount");

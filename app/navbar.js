@@ -110,12 +110,12 @@ export default function Navbar() {
                 <span className="nav-link-title"> Event Details </span>
               </Link>
             </li>
-            <li className="nav-item" id="/dashboard">
-              <Link className="nav-link" href="/dashboard">
+            <li className="nav-item" id="/myteam">
+              <Link className="nav-link" href="/myteam">
                 <span className="nav-link-icon">
                   <IconLayoutDashboard></IconLayoutDashboard>
                 </span>
-                <span className="nav-link-title"> Contestant Dashboard </span>
+                <span className="nav-link-title"> My Team </span>
               </Link>
             </li>
             <li className="nav-item" id="/teamfinder">
@@ -124,6 +124,14 @@ export default function Navbar() {
                   <IconUserSearch></IconUserSearch>
                 </span>
                 <span className="nav-link-title"> Team Finder </span>
+              </Link>
+            </li>
+            <li className="nav-item" id="/userfinder">
+              <Link className="nav-link" href="/userfinder">
+                <span className="nav-link-icon">
+                  <IconUserSearch></IconUserSearch>
+                </span>
+                <span className="nav-link-title"> User Finder </span>
               </Link>
             </li>
             {isSignedIn
