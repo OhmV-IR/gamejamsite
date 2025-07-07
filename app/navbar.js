@@ -202,7 +202,7 @@ export default function Navbar() {
               <IconAlertTriangle className="text-danger"></IconAlertTriangle>
               <h3 className="text-danger mt-3 mb-3">Are you sure?</h3>
               <div className="text-secondary">
-                Do you really want to delete your account? This CANNOT be undone and is <strong>PERMANENT</strong>.
+                Do you really want to delete your account? This CANNOT be undone and is <strong>PERMANENT</strong>. This will also delete any teams of which you are the owner or the sole member <strong>PERMANENTLY</strong>.
               </div>
             </div>
             <div className="modal-footer">
