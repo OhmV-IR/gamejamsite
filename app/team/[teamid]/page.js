@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from "react";
-import { IconAlertCircle, IconCheck, IconDoorExit, IconMail, IconPlus, IconX } from "@tabler/icons-react";
+import { IconAlertCircle, IconCheck, IconDoorExit, IconKarate, IconMail, IconMinus, IconPlus, IconX } from "@tabler/icons-react";
 import React from "react";
 import styles from './page.module.css';
 
@@ -78,7 +78,7 @@ export default function TeamPage({ params }) {
         })
     }
 
-    function AcceptJoinRequest(uid, provider){
+    function AcceptJoinRequest(uid, provider) {
         fetch("/api/acceptjoinrequest", {
             method: "POST",
             credentials: "include",
@@ -88,12 +88,12 @@ export default function TeamPage({ params }) {
                 tid: teamId
             })
         }).then(res => {
-            if(res.ok){
+            if (res.ok) {
                 setOkBannerDisplay(true);
                 setOkBannerText("Added to team");
                 setTimeout(() => window.location.reload(), 2000);
             }
-            else{
+            else {
                 setFailedBannerDisplay(true);
                 setFailedBannerText("Failed to add to team");
                 res.text().then(text => setFailedBannerSubtext(text));
@@ -102,7 +102,7 @@ export default function TeamPage({ params }) {
         })
     }
 
-    function RejectJoinRequest(uid, provider){
+    function RejectJoinRequest(uid, provider) {
         fetch("/api/rejectjoinrequest", {
             method: "POST",
             credentials: "include",
@@ -112,12 +112,12 @@ export default function TeamPage({ params }) {
                 tid: teamId
             })
         }).then(res => {
-            if(res.ok){
+            if (res.ok) {
                 setOkBannerDisplay(true);
                 setOkBannerText("Deleted join request");
                 setTimeout(() => window.location.reload(), 2000);
             }
-            else{
+            else {
                 setFailedBannerDisplay(true);
                 setFailedBannerText("Failed to delete join request");
                 res.text().then(text => setFailedBannerSubtext(text));
@@ -126,7 +126,7 @@ export default function TeamPage({ params }) {
         })
     }
 
-    function LeaveTeam(){
+    function LeaveTeam() {
         fetch("/api/leaveteam", {
             method: "POST",
             credentials: "include",
@@ -134,14 +134,38 @@ export default function TeamPage({ params }) {
                 tid: teamId
             })
         }).then(res => {
-            if(res.ok){
+            if (res.ok) {
                 setOkBannerDisplay(true);
                 setOkBannerText("Left team successfully");
                 setTimeout(() => window.location.reload(), 2000);
             }
-            else{
+            else {
                 setFailedBannerDisplay(true);
                 setFailedBannerText("Failed to leave team.");
+                res.text().then(text => setFailedBannerSubtext(text));
+                setTimeout(() => setFailedBannerDisplay(false), 7000);
+            }
+        })
+    }
+
+    function KickFromTeam(uid, provider) {
+        fetch("/api/teamkick", {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify({
+                tid: teamId,
+                uid: uid,
+                provider: provider
+            })
+        }).then(res => {
+            if (res.ok) {
+                setOkBannerDisplay(true);
+                setOkBannerText("Kicked from team successfully.");
+                setTimeout(() => window.location.reload(), 2000);
+            }
+            else {
+                setFailedBannerDisplay(true);
+                setFailedBannerText("Failed to kick from team.");
                 res.text().then(text => setFailedBannerSubtext(text));
                 setTimeout(() => setFailedBannerDisplay(false), 7000);
             }
@@ -284,11 +308,11 @@ export default function TeamPage({ params }) {
             {members.some(val => {
                 return val.uid == viewerUid && val.provider == viewerProvider
             })
-            ? <button className="btn btn-danger" onClick={LeaveTeam}>
-                <IconDoorExit></IconDoorExit>
-                Leave team
-            </button>
-            : <></>
+                ? <button className="btn btn-danger" onClick={LeaveTeam}>
+                    <IconDoorExit></IconDoorExit>
+                    Leave team
+                </button>
+                : <></>
             }
             <div className="modal" id="addToTeamModal" tabIndex={-1}>
                 <div className="modal-dialog" role="document">
@@ -332,6 +356,10 @@ export default function TeamPage({ params }) {
                                                     &nbsp;&nbsp;
                                                     <span className={styles.membername}>{member.name}</span>
                                                 </button>
+                                                {isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)
+                                                    ? <button className={`btn btn-danger ${styles.lmbtn}`} onClick={() => KickFromTeam(member.uid, member.provider)}><IconKarate></IconKarate>&nbsp;Kick</button>
+                                                    : <></>
+                                                }
                                             </td>
                                         </tr>
                                     ))

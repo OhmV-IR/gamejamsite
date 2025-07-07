@@ -1,7 +1,8 @@
 import { CosmosClient } from "@azure/cosmos";
 import { cookies } from "next/headers";
-import { decrypt } from "@/app/lib/session"
+import { decrypt, GetIsAdmin } from "@/app/lib/session"
 import { container } from "googleapis/build/src/apis/container";
+import { RemoveAllJoinRequests } from "@/app/lib/teams";
 const dotenv = require('dotenv')
 dotenv.config();
 const sqlstring = require('sqlstring');
@@ -17,7 +18,7 @@ const teamcontainer = (await database.containers.createIfNotExists({ id: process
 export async function POST(req){
     const incomingbody = await req.json();
     if(incomingbody.uid == null || incomingbody.provider == null || incomingbody.tid == null){
-        return new Response("missing rq details", {status: 400});
+        return new Response("missing info", {status: 400});
     }
     const session = (await cookies()).get("session")?.value;
     const payload = await decrypt(session);
@@ -30,11 +31,14 @@ export async function POST(req){
     if(team == null){
         return new Response("team not found", {status: 404});
     }
-    const index = team.joinrequests.indexOf(jr => jr.uid == incomingbody.uid && jr.provider == incomingbody.provider);
-    if(index == -1){
-        return new Response("jr not found", {status: 400});
+    if(!GetIsAdmin(session) && (payload.uid != team.owner.uid || payload.provider != team.owner.provider)){
+        return new Response("not enough rights", {status: 403});
     }
-    team.joinrequests.splice(index, 1);
+    const index = team.members.findIndex(member => member.uid == incomingbody.uid && member.provider == incomingbody.provider);
+    if(index == -1){
+        return new Response("not a member of team", {status: 400});
+    }
+    team.members.splice(index, 1);
     teamcontainer.item(team.id, team.id).replace(team);
-    return new Response("removed join rq", {status: 200});
+    return new Response("Removed from team", {status: 200});
 }

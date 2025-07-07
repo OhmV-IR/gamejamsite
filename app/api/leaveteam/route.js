@@ -30,14 +30,17 @@ export async function POST(req){
     if(team == null){
         return new Response("team not found", {status: 404});
     }
-    if(team.members.splice({uid: payload.uid, provider: payload.provider}) == null){
-        return new Response("not part of team", {status: 403});
+    const index = team.members.findIndex(member => member.uid == payload.uid && member.provider == payload.provider);
+    if(index == -1){
+        return new Response("not part of team", {status: 400});
     }
+    team.members.splice(index, 1);
     if(team.members.length > 0){
         teamcontainer.item(team.id, team.id).replace(team);
     }
     else{
         teamcontainer.item(team.id, team.id).delete();
     }
+    team.delete()
     return new Response("left team successfully", {status: 200});
 }
