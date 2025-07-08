@@ -18,7 +18,7 @@ export default function EventDetails() {
             <ul>
                 <li className={styles.answertext}>A prompt will be announced at the start of the game jam which participant games should be based on.</li>
                 <li className={styles.answertext}>Games can be made in any engine or programming language, and can be 2D or 3D.</li>
-                <li className={styles.answertext}>Participants can choose to either work alone or as a team. Teams can either be formed ahead of time or at the event using the team finder feature on the website.</li>
+                <li className={styles.answertext}>Teams can be created using the Team Finder feature on the website. Teams of four are recommended, however groups of any size — including solo participants — are welcome.</li>
                 <li className={styles.answertext}>Seniors will be given 48 hours (2 days) to create and refine their game before submission.</li>
                 <li className={styles.answertext}>All games submitted within the time limit will be reviewed by our team who will assess them based on a set of criteria and decide winners.</li>
                 <li className={styles.answertext}>If you are a winner, you will be displayed as such on the website, and will additionally be sent a newsletter notification if you had opted into email communications.</li>
