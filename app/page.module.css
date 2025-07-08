@@ -66,15 +66,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+    width: 100vw;
 }
 
 .lefttext {
-    margin-left: 2vw;
+    margin-left: 1vw;
     text-align: left;
 }
 
 .righttext {
-    margin-right: 2vw;
+    margin-right: 1vw;
     text-align: right;
 }

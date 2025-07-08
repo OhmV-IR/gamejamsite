@@ -43,8 +43,13 @@
     margin-left: 25vw;
 }
 
+.cardtextpadding {
+    margin-left: 1vw;
+}
+
 .emaillink {
     color: blue;
+    text-decoration: underline;
 }
 
 .personcard {
