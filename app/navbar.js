@@ -74,10 +74,9 @@ export default function Navbar() {
           setIsSignedIn(true);
         });
       } else if(res.status == 307){
-        res.text().then(text => {
-          if(window.location.href != text){
-            window.location.href = text;
-          }});
+        if(!usePathname().includes("finishaccount")){
+          window.location.href = "/finishaccount";
+        }
       }
     })
   }, [path]);
