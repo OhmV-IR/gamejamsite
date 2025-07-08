@@ -47,6 +47,10 @@ export default function FinishAccount() {
             DisplayErrorBadge("Must agree to Privacy Policy to continue");
             return;
         }
+        if(!document.getElementById("emailbox").checked){
+            DisplayErrorBadge("Must agree to email being used for communication relevant to the event.");
+            return;
+        }
         fetch("/api/updateaccountpreferences", {
             method: 'POST',
             body: JSON.stringify({
@@ -175,6 +179,10 @@ export default function FinishAccount() {
                 <label className="form-check">
                     <input className="form-check-input" id="privacybox" type="checkbox"></input>
                     <span className="form-check-label">I have read and agree to the <a href="/privacy">Privacy Policy</a></span>
+                </label>
+                <label className="form-check">
+                    <input className="form-check-input" id="emailbox" type="checkbox"></input>
+                    <span className="form-check-label">I agree to my email being used for communication relevant to the event.</span>
                 </label>
                 {
                     errorBadgeVisible
