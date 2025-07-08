@@ -62,7 +62,7 @@ export async function POST(req) {
         }
         var userdata = items.resources[0];
         const data = await req.json();
-        if (!data.role || !data.attendeetype || !data.experiencelevel || !data.lookingforteam || !data.bracket) {
+        if (!data.role || !data.attendeetype || !data.experiencelevel || data.lookingforteam == null || !data.bracket) {
             return new Response("Bad body", { status: 400 });
         }
         userdata.role = data.role;
