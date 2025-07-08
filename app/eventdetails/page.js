@@ -4,29 +4,49 @@ import styles from './page.module.css';
 export default function EventDetails() {
     return (
         <div>
-            <h1 className={styles.centertext}>Event Details</h1>
+            <h1 className={styles.header}>Event Details</h1>
+            <h2 className={styles.subheader}>Basic Information</h2>
+            <p className={styles.answertext}>Date: August 2025 (exact date and time to be determined)</p>
+            <p className={styles.answertext}>Location: online (Senior), in-person (Junior)</p>
+
             <h2 className={styles.subheader}>Competition Brackets</h2>
             <p className={styles.answertext}>Junior: 11-14 years old (middle school)</p>
             <p className={styles.answertext}>Senior: 14-18 years old (high school)</p>
-            <h2 className={styles.subheader}>Date</h2>
-            <p className={styles.answertext}>August 2025</p>
-            <h2 className={styles.subheader}>What to Bring</h2>
+
+
+            <h1 className={styles.header}>Senior Event Information</h1>
             <ul>
-                <li className={styles.answertext}>Your own device</li>
-                <li className={styles.answertext}>Device charger</li>
-                <li className={styles.answertext}>Any software you might need to create your game (ex. Scratch, VSCode, Blender)</li>
-                <li className={styles.answertext}>Food and water</li>
-            </ul>
-            <h2 className={styles.subheader}>Competition Format</h2>
-            <ul>
-                <li className={styles.answertext}>The Junior and Senior groups will each be given a prompt released on the first day of the event from which they will create a game.</li>
-                <li className={styles.answertext}>Games can be made in any engine or programming language, and can be 2D or 3D, but must be submitted before the gamejam deadline to qualify for judging.</li>
+                <li className={styles.answertext}>A prompt will be announced at the start of the game jam which participant games should be based on.</li>
+                <li className={styles.answertext}>Games can be made in any engine or programming language, and can be 2D or 3D.</li>
                 <li className={styles.answertext}>Participants can choose to either work alone or as a team. Teams can either be formed ahead of time or at the event using the team finder feature on the website.</li>
-                <li className={styles.answertext}>Juniors will submit their creation at the end of the day, while Seniors will be given 48 hours (2 days), including workshop time, to create and refine their game before submission.</li>
-                <li className={styles.answertext}>All games submitted within the time limit will then be reviewed by our team who will assess them based on a set of criteria and decide winners.</li>
+                <li className={styles.answertext}>Seniors will be given 48 hours (2 days) to create and refine their game before submission.</li>
+                <li className={styles.answertext}>All games submitted within the time limit will be reviewed by our team who will assess them based on a set of criteria and decide winners.</li>
                 <li className={styles.answertext}>If you are a winner, you will be displayed as such on the website, and will additionally be sent a newsletter notification if you had opted into email communications.</li>
             </ul>
-            <p className={styles.normaltext}>Note: Junior attendees are required to be present in-person to take part in the competition, whereas in-person presence is optional for Senior attendees.</p>
+
+
+            <h1 className={styles.header}>Junior Event Information</h1>
+            <ul>
+                <li className={styles.answertext}>Full day, in-person event</li>
+                <li className={styles.answertext}>Location to be determined (within the Kitchener-Waterloo Region)</li>
+                <li className={styles.answertext}>Parental supervision recommended but not required</li>
+            </ul>
+
+            <h2 className={styles.subheader}>Topics taught:</h2>
+            <ul>
+                <li className={styles.answertext}>Scratch Essentials</li>
+                <li className={styles.answertext}>Advanced Scratch</li>
+                <li className={styles.answertext}>Introduction to PyGame</li>
+            </ul>
+
+            <h2 className={styles.subheader}>What to Bring:</h2>
+            <ul>
+                <li className={styles.answertext}>Your own device (preferrably a personal computer)</li>
+                <li className={styles.answertext}>Device charger</li>
+                <li className={styles.answertext}>A set-up Scratch and Google account</li>
+                <li className={styles.answertext}>Food and water (no nuts please!)</li>
+                <li className={styles.answertext}>Any required medication</li>
+            </ul>
         </div>
     )
 }
