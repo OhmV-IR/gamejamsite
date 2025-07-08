@@ -73,7 +73,7 @@ export default function Navbar() {
           setIsSignedIn(true);
         });
       } else if(res.status == 307){
-        if(!path.includes("finishaccount")){
+        if(!path.includes("finishaccount") && !path.includes("tos") && !path.includes("privacy")){
           window.location.href = "/finishaccount";
         }
       }
