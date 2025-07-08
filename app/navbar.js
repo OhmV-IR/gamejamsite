@@ -13,7 +13,6 @@ export default function Navbar() {
   const [role, setRole] = useState("");
   const [hasRole, setHasRole] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
-  const pathname = usePathname();
 
   function Capitalize(str) {
     return String(str).charAt(0).toUpperCase() + String(str).slice(1);
@@ -51,7 +50,6 @@ export default function Navbar() {
 
   const path = usePathname();
   useEffect(() => {
-    console.log(path);
     var navitems = document.getElementsByClassName("nav-item");
     for (let i = 0; i < navitems.length; i++) {
       navitems[i].classList.remove("active");
@@ -75,7 +73,7 @@ export default function Navbar() {
           setIsSignedIn(true);
         });
       } else if(res.status == 307){
-        if(!pathname.includes("finishaccount")){
+        if(!path.includes("finishaccount")){
           window.location.href = "/finishaccount";
         }
       }
