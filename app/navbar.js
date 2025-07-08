@@ -13,6 +13,7 @@ export default function Navbar() {
   const [role, setRole] = useState("");
   const [hasRole, setHasRole] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const pathname = usePathname();
 
   function Capitalize(str) {
     return String(str).charAt(0).toUpperCase() + String(str).slice(1);
@@ -74,7 +75,7 @@ export default function Navbar() {
           setIsSignedIn(true);
         });
       } else if(res.status == 307){
-        if(!usePathname().includes("finishaccount")){
+        if(!pathname.includes("finishaccount")){
           window.location.href = "/finishaccount";
         }
       }
