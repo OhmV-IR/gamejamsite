@@ -16,7 +16,7 @@ const teamcontainer = (await database.containers.createIfNotExists({ id: process
 
 export async function POST(req){
     const incomingbody = await req.json();
-    if(incomingbody.tid == null || incomingbody.name == null || incomingbody.name.length > 30){
+    if(incomingbody.tid == null || incomingbody.name == null || incomingbody.name.length > 30 || incomingbody.name == ""){
         return new Response("missing data", {status: 400});
     }
     const session = (await cookies()).get("session")?.value;
