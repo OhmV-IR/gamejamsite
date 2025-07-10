@@ -15,7 +15,9 @@ const { container } = await database.containers.createIfNotExists({id: process.e
 
 export async function POST(req){
     const incomingbody = await req.json();
-
+    if(incomingbody.teamName == null || incomingbody.teamName.length > 30){
+        return new Response("missing / invalid data", {status: 400});
+    }
     const session = (await cookies()).get("session")?.value
     if(!session){
         return new Response("No session", {status: 401});

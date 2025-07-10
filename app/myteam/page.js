@@ -66,7 +66,7 @@ export default function Dashboard() {
                         <div className="modal-body">
                             <form>
                                 <label className="form-label">Team name</label>
-                                <input type="text" className="form-control" name="teamname" placeholder="Your team name(keep it appropriate please)" value={teamName} onChange={evt => setTeamName(evt.target.value)}></input>
+                                <input type="text" className="form-control" name="teamname" placeholder="Your team name(keep it appropriate please)" value={teamName} onChange={evt => {if(evt.target.value.length <= 30){setTeamName(evt.target.value)}}}></input>
                             </form>
                         </div>
                         <div className="modal-footer">

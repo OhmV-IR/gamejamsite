@@ -277,6 +277,7 @@ export default function TeamPage({ params }) {
             if (res.ok) {
                 setOkBannerDisplay(true);
                 setOkBannerText("Renamed team successfully.");
+                setTeamName(tmpTeamName);
                 setTimeout(() => setOkBannerDisplay(false), 7000);
             }
             else {
@@ -464,7 +465,7 @@ export default function TeamPage({ params }) {
                         <div className="modal-body">
                             <form>
                                 <label className="form-label">Team name</label>
-                                <input type="text" className="form-control" name="teamname" placeholder="Your team name(keep it appropriate please)" value={tmpTeamName} onChange={evt => setTmpTeamName(evt.target.value)}></input>
+                                <input type="text" className="form-control" name="teamname" placeholder="Your team name(keep it appropriate please)" value={tmpTeamName} onChange={evt => {if(evt.target.value.length <= 30){setTmpTeamName(evt.target.value)}}}></input>
                             </form>
                         </div>
                         <div className="modal-footer">
