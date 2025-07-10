@@ -48,9 +48,7 @@ export default function UserPage({ params }) {
                     setEmail(body.email);
                     setRole(body.role);
                     setPfp(body.pfp);
-                    setAttendeetype(body.attendeetype);
                     setBracket(body.bracket);
-                    setIsLookingForTeam(body.lookingforteam);
                     setExperienceLevel(body.experiencelevel);
                     setIsAdmin(body.permissions == "admin");
                     setIsUserAdmin(body.containsprivate);

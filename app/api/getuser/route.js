@@ -45,9 +45,7 @@ export async function POST(req) {
             role: users[0].role,
             email: users[0].email,
             provider: users[0].provider,
-            attendeetype: users[0].attendeetype,
             experiencelevel: users[0].experiencelevel,
-            lookingforteam: users[0].lookingforteam,
             bracket: users[0].bracket,
             permissions: users[0].permissions,
             containsprivate: isadmin

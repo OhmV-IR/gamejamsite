@@ -79,9 +79,6 @@ export default function FinishAccount() {
                     if (body.role) {
                         document.getElementById(body.role).checked = true;
                     }
-                    if (body.lookingforteam) {
-                        document.getElementById("lookingforteam").checked = body.lookingforteam;
-                    }
                     if (body.bracket) {
                         document.getElementById(body.bracket).checked = true;
                     }
