@@ -470,10 +470,16 @@ export default function TeamPage({ params }) {
                         </div>
                         <div className="modal-footer">
                             <button className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button className="btn btn-primary" data-bs-dismiss="modal" onClick={RenameTeam}>
+                            {tmpTeamName.length > 0
+                            ? <button className="btn btn-primary" data-bs-dismiss="modal" onClick={RenameTeam}>
                                 <IconDeviceFloppy></IconDeviceFloppy>
                                 Rename team
                             </button>
+                            : <button className="btn btn-primary" disabled>
+                                <IconDeviceFloppy></IconDeviceFloppy>
+                                Rename team
+                            </button>
+                            }
                         </div>
                     </div>
                 </div>

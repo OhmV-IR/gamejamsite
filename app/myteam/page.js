@@ -71,10 +71,13 @@ export default function Dashboard() {
                         </div>
                         <div className="modal-footer">
                             <button className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button className="btn btn-primary" data-bs-dismiss="modal" onClick={CreateTeam}>
+                            { teamName.length > 0
+                            ? <button className="btn btn-primary" data-bs-dismiss="modal" onClick={CreateTeam}>
                                 <IconPlus></IconPlus>
                                 Create new team
                             </button>
+                            : <button className="btn btn-primary" disabled><IconPlus></IconPlus>Create new team</button>
+                            }
                         </div>
                     </div>
                 </div>
