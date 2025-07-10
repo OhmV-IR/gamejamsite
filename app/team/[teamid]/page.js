@@ -53,7 +53,13 @@ export default function TeamPage({ params }) {
                     })
                 }).then(res => {
                     res.json().then(body => {
-                        setJoinRequests(joinRequests.concat([{ uid: viewerUid, provider: viewerProvider, name: body.name, pfp: body.pfp }]));
+                        setJoinRequests(prev => {
+                            if (!prev.some(jr => jr.uid == viewerUid && jr.provider == viewerProvider)) {
+                                return [...prev, { uid: viewerUid, provider: viewerProvider, name: body.name, pfp: body.pfp }]
+                            } else {
+                                return prev;
+                            }
+                        });
                     })
                 });
                 setTimeout(() => setOkBannerDisplay(false), 7000);
@@ -89,7 +95,15 @@ export default function TeamPage({ params }) {
                     })
                 }).then(res => {
                     res.json().then(body => {
-                        members.push({ uid: uidToAdd, provider: providerToAdd, name: body.name, pfp: body.pfp })
+                        setMembers(prev => {
+                            if (!prev.some(member => member.uid == uidToAdd && member.provider == providerToAdd)) {
+                                return [...prev, { uid: uidToAdd, provider: providerToAdd, name: body.name, pfp: body.pfp }];
+                            }
+                            else {
+                                return prev;
+                            }
+                        }
+                        )
                     })
                 });
                 setTimeout(() => setOkBannerDisplay(false), 7000);
@@ -125,7 +139,14 @@ export default function TeamPage({ params }) {
                     })
                 }).then(res => {
                     res.json().then(body => {
-                        setMembers(members.concat([{ uid: uid, provider: provider, name: body.name, pfp: body.pfp }]));
+                        setMembers(prev => {
+                            if (!prev.some(member => member.uid == uidToAdd && member.provider == providerToAdd)) {
+                                return [...prev, { uid: uidToAdd, provider: providerToAdd, name: body.name, pfp: body.pfp }]
+                            }
+                            else {
+                                return prev;
+                            }
+                        });
                     })
                 });
                 setJoinRequests(joinRequests.filter(jr => jr.uid != uid || jr.provider != provider));
@@ -316,9 +337,14 @@ export default function TeamPage({ params }) {
                             }).then(res => {
                                 if (res.ok) {
                                     res.json().then(memberbody => {
-                                        body.members[i].name = memberbody.name;
-                                        body.members[i].pfp = memberbody.pfp;
-                                        setMembers(body.members);
+                                        setMembers(prev => {
+                                            if (!prev.some(member => member.uid == body.members[i].uid && member.provider == body.members[i].provider)) {
+                                                return [...prev, { uid: body.members[i].uid, provider: body.members[i].provider, name: memberbody.name, pfp: memberbody.pfp }];
+                                            }
+                                            else {
+                                                return prev;
+                                            }
+                                        })
                                     })
                                 }
                             })
@@ -336,7 +362,14 @@ export default function TeamPage({ params }) {
                                     res.json().then(requesterbody => {
                                         body.joinrequests[i].name = requesterbody.name;
                                         body.joinrequests[i].pfp = requesterbody.pfp;
-                                        setJoinRequests(body.joinrequests);
+                                        setJoinRequests(prev => {
+                                            if (!prev.some(jr => jr.uid == body.joinrequests[i].uid && jr.provider == body.joinrequests[i].provider)) {
+                                                return [...prev, body.joinrequests[i]];
+                                            }
+                                            else {
+                                                return prev;
+                                            }
+                                        });
                                     })
                                 }
                             })
