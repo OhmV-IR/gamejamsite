@@ -29,10 +29,6 @@ export default function FinishAccount() {
             return;
         }
         const selectedBracketText = selectedBracket.id;
-        var lookingforteam = false;
-        if (document.getElementById("lookingforteam").checked) {
-            lookingforteam = true;
-        }
         if (!document.getElementById("tosbox").checked) {
             DisplayErrorBadge("Must agree to Terms of Service to continue");
             return;
@@ -50,7 +46,6 @@ export default function FinishAccount() {
             body: JSON.stringify({
                 role: selectedRoleText,
                 experiencelevel: document.getElementById('proficiencyrange').value,
-                lookingforteam: lookingforteam,
                 bracket: selectedBracketText
             }),
             credentials: 'include'
@@ -147,10 +142,6 @@ export default function FinishAccount() {
                         <span>10</span>
                     </div>
                 </div>
-                <label className="form-check">
-                    <input className="form-check-input" type="checkbox" id="lookingforteam"></input>
-                    <span className="form-check-label">I am looking for a team</span>
-                </label>
                 <label className="form-check">
                     <input className="form-check-input" id="tosbox" type="checkbox"></input>
                     <span className="form-check-label">I have read and agree to the <a href="/tos">Terms of Service</a></span>

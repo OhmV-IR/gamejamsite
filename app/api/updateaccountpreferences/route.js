@@ -38,12 +38,11 @@ export async function POST(req) {
         }
         var userdata = user.resources[0];
         const data = await req.json();
-        if(!data.role || !data.experiencelevel || data.lookingforteam == null || !data.bracket || !data.email || !data.name || !data.pfp || !data.permissions){
+        if(!data.role || !data.experiencelevel || !data.bracket || !data.email || !data.name || !data.pfp || !data.permissions){
             return new Response("missing data", {status: 400});
         }
         userdata.role = data.role;
         userdata.experiencelevel = data.experiencelevel;
-        userdata.lookingforteam = data.lookingforteam;
         userdata.bracket = data.bracket;
         userdata.email = data.email;
         userdata.name = data.name;
@@ -61,12 +60,11 @@ export async function POST(req) {
         }
         var userdata = items.resources[0];
         const data = await req.json();
-        if (!data.role || !data.experiencelevel || data.lookingforteam == null || !data.bracket) {
+        if (!data.role || !data.experiencelevel || !data.bracket) {
             return new Response("Bad body", { status: 400 });
         }
         userdata.role = data.role;
         userdata.experiencelevel = data.experiencelevel;
-        userdata.lookingforteam = data.lookingforteam;
         userdata.bracket = data.bracket;
         container.item(userdata.id, userdata.userid).replace(userdata);
     }
