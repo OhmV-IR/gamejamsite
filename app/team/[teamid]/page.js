@@ -362,7 +362,14 @@ export default function TeamPage({ params }) {
                                     res.json().then(requesterbody => {
                                         body.joinrequests[i].name = requesterbody.name;
                                         body.joinrequests[i].pfp = requesterbody.pfp;
-                                        setJoinRequests(body.joinrequests);
+                                        setJoinRequests(prev => {
+                                            if (!prev.some(jr => jr.uid == body.joinrequests[i].uid && jr.provider == body.joinrequests[i].provider)) {
+                                                return [...prev, body.joinrequests[i]];
+                                            }
+                                            else {
+                                                return prev;
+                                            }
+                                        });
                                     })
                                 }
                             })
