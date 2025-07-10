@@ -23,12 +23,6 @@ export default function FinishAccount() {
             return;
         }
         const selectedRoleText = selectedRole.id;
-        const selectedAttendee = document.querySelector('input[name="attendancetype"]:checked');
-        if (!selectedAttendee || selectedAttendee.disabled) {
-            DisplayErrorBadge("Attendance type not selected");
-            return;
-        }
-        const selectedAttendeeText = selectedAttendee.id;
         const selectedBracket = document.querySelector('input[name="bracket"]:checked');
         if (!selectedBracket) {
             DisplayErrorBadge("Must select a competition bracket");
@@ -55,7 +49,6 @@ export default function FinishAccount() {
             method: 'POST',
             body: JSON.stringify({
                 role: selectedRoleText,
-                attendeetype: selectedAttendeeText,
                 experiencelevel: document.getElementById('proficiencyrange').value,
                 lookingforteam: lookingforteam,
                 bracket: selectedBracketText
@@ -90,9 +83,6 @@ export default function FinishAccount() {
                 res.json().then((body) => {
                     if (body.role) {
                         document.getElementById(body.role).checked = true;
-                    }
-                    if (body.attendeetype) {
-                        document.getElementById(body.attendeetype).checked = true;
                     }
                     if (body.lookingforteam) {
                         document.getElementById("lookingforteam").checked = body.lookingforteam;
@@ -161,17 +151,6 @@ export default function FinishAccount() {
                     <input className="form-check-input" type="checkbox" id="lookingforteam"></input>
                     <span className="form-check-label">I am looking for a team</span>
                 </label>
-                <label className="form-label mt-5 mb-3">How will you be attending?</label>
-                <div className="mb-3">
-                    <label className="form-check">
-                        <input className="form-check-input" id="inperson" type="radio" name="attendancetype"></input>
-                        <span className="form-check-label">In-Person</span>
-                    </label>
-                    <label className="form-check">
-                        <input className="form-check-input" id="online" type="radio" name="attendancetype" disabled={onlineDisabled}></input>
-                        <span className="form-check-label">Online</span>
-                    </label>
-                </div>
                 <label className="form-check">
                     <input className="form-check-input" id="tosbox" type="checkbox"></input>
                     <span className="form-check-label">I have read and agree to the <a href="/tos">Terms of Service</a></span>
