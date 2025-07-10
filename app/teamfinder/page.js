@@ -102,6 +102,7 @@ export default function TeamFinder() {
             <div className="hr-text">Browse teams</div>
             {
                 browseTeams.map(team => (
+                    <a key={team.id} href={`/team/${team.id}`}>
                     <div className="card" key={team.id}>
                         <div className="card-body">
                             <h3 className="card-title">{team.name}</h3>
@@ -112,6 +113,7 @@ export default function TeamFinder() {
                             </p>
                         </div>
                     </div>
+                    </a>
                 ))
             }
             {browsePage > 0
