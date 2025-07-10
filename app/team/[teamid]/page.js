@@ -53,7 +53,13 @@ export default function TeamPage({ params }) {
                     })
                 }).then(res => {
                     res.json().then(body => {
-                        setJoinRequests(prev => [...prev, { uid: viewerUid, provider: viewerProvider, name: body.name, pfp: body.pfp }]);
+                        setJoinRequests(prev => {
+                            if (!prev.some(jr => jr.uid == viewerUid && jr.provider == viewerProvider)) {
+                                return [...prev, { uid: viewerUid, provider: viewerProvider, name: body.name, pfp: body.pfp }]
+                            } else {
+                                return prev;
+                            }
+                        });
                     })
                 });
                 setTimeout(() => setOkBannerDisplay(false), 7000);
@@ -89,7 +95,15 @@ export default function TeamPage({ params }) {
                     })
                 }).then(res => {
                     res.json().then(body => {
-                        setMembers(prev => [...prev, { uid: uidToAdd, provider: providerToAdd, name: body.name, pfp: body.pfp }])
+                        setMembers(prev => {
+                            if (!prev.some(member => member.uid == uidToAdd && member.provider == providerToAdd)) {
+                                return [...prev, { uid: uidToAdd, provider: providerToAdd, name: body.name, pfp: body.pfp }];
+                            }
+                            else {
+                                return prev;
+                            }
+                        }
+                        )
                     })
                 });
                 setTimeout(() => setOkBannerDisplay(false), 7000);
@@ -125,7 +139,14 @@ export default function TeamPage({ params }) {
                     })
                 }).then(res => {
                     res.json().then(body => {
-                        setMembers(prev => [...prev, { uid: uidToAdd, provider: providerToAdd, name: body.name, pfp: body.pfp }]);
+                        setMembers(prev => {
+                            if (!prev.some(member => member.uid == uidToAdd && member.provider == providerToAdd)) {
+                                return [...prev, { uid: uidToAdd, provider: providerToAdd, name: body.name, pfp: body.pfp }]
+                            }
+                            else {
+                                return prev;
+                            }
+                        });
                     })
                 });
                 setJoinRequests(joinRequests.filter(jr => jr.uid != uid || jr.provider != provider));
@@ -316,7 +337,14 @@ export default function TeamPage({ params }) {
                             }).then(res => {
                                 if (res.ok) {
                                     res.json().then(memberbody => {
-                                        setMembers(prev => [...prev, {uid: body.members[i].uid, provider: body.members[i].provider, name: memberbody.name, pfp: memberbody.pfp}]);
+                                        setMembers(prev => {
+                                            if (!prev.some(member => member.uid == body.members[i].uid && member.provider == body.members[i].provider)) {
+                                                return [...prev, { uid: body.members[i].uid, provider: body.members[i].provider, name: memberbody.name, pfp: memberbody.pfp }];
+                                            }
+                                            else {
+                                                return prev;
+                                            }
+                                        })
                                     })
                                 }
                             })

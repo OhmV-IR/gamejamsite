@@ -69,7 +69,14 @@ export default function TeamFinder() {
                                 res.json().then(userbody => {
                                     body.teams[i].ownerName = userbody.name;
                                     body.teams[i].ownerPfp = userbody.pfp;
-                                    setBrowseTeams(body.teams);
+                                    setBrowseTeams(prev => {
+                                        if(!prev.some(team => body.teams[i].id)){
+                                            return [...prev, body.teams[i]];
+                                        }
+                                        else{
+                                            return prev;
+                                        }
+                                    })
                                 })
                             }
                         })
