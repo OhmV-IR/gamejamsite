@@ -29,6 +29,9 @@ export async function POST(req){
     if(team == null){
         return new Response("team not found", {status: 404});
     }
+    if(!team.members.some(member => member.uid == incomingbody.uid && member.provider == incomingbody.provider)){
+        return new Response("new owner must already be a member of the team", {status: 403});
+    }
     if(!(await GetIsAdmin(session)) && (payload.uid != team.owner.uid || payload.provider != team.owner.provider)){
         return new Response("not enough rights", {status: 403});
     }
