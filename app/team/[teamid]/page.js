@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from "react";
-import { IconAlertCircle, IconAlertTriangle, IconBrandBootstrap, IconCheck, IconDeviceFloppy, IconDoorExit, IconKarate, IconMail, IconMinus, IconPencil, IconPlus, IconX } from "@tabler/icons-react";
+import { IconAlertCircle, IconAlertTriangle, IconBrandBootstrap, IconCheck, IconChevronUp, IconDeviceFloppy, IconDoorExit, IconKarate, IconMail, IconMinus, IconPencil, IconPlus, IconX } from "@tabler/icons-react";
 import React from "react";
 import styles from './page.module.css';
 
@@ -277,10 +277,51 @@ export default function TeamPage({ params }) {
             if (res.ok) {
                 setOkBannerDisplay(true);
                 setOkBannerText("Renamed team successfully.");
+                setTimeout(() => setOkBannerDisplay(false), 7000);
             }
             else {
                 setFailedBannerDisplay(true);
                 setFailedBannerText("Failed to rename team.");
+                res.text().then(text => setFailedBannerSubtext(text));
+                setTimeout(() => setFailedBannerDisplay(false), 7000);
+            }
+        })
+    }
+
+    function TransferOwnership(uid, provider){
+        fetch("/api/transferownership", {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify({
+                tid: teamId,
+                uid: uid,
+                provider: provider
+            })
+        }).then(res => {
+            if (res.ok) {
+                setOkBannerDisplay(true);
+                setOkBannerText("Transferred ownership successfully.");
+                setOwnerId(uid);
+                setOwnerProvider(provider);
+                fetch("/api/fetchbasicuserinfo", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        uid: uid,
+                        provider: provider
+                    })
+                }).then(res => {
+                    if(res.ok){
+                        res.json().then(body => {
+                            setOwnerName(body.name);
+                            setOwnerPfp(body.pfp);
+                        })
+                    }
+                })
+                setTimeout(() => setOkBannerDisplay(false), 7000);
+            }
+            else {
+                setFailedBannerDisplay(true);
+                setFailedBannerText("Failed to transfer ownership.");
                 res.text().then(text => setFailedBannerSubtext(text));
                 setTimeout(() => setFailedBannerDisplay(false), 7000);
             }
@@ -574,6 +615,40 @@ export default function TeamPage({ params }) {
                                                     ? <button className={`btn btn-danger ${styles.lmbtn}`} onClick={() => KickFromTeam(member.uid, member.provider)}><IconKarate></IconKarate>&nbsp;Kick</button>
                                                     : <></>
                                                 }
+                                                {(isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)) && (member.uid != ownerId || member.provider != ownerProvider)
+                                                    ? <button className={`btn btn-warning ${styles.lmbtn}`} data-bs-toggle="modal" data-bs-target={`#${member.uid}PromoteModal`}><IconChevronUp></IconChevronUp>Promote to Owner</button>
+                                                    : <></>
+                                                }
+                                                <div className="modal" id={`${member.uid}PromoteModal`}>
+                                                    <div className="modal-dialog" role="document">
+                                                        <div className="modal-content">
+                                                            <div className="modal-header">
+                                                                <h5 className="modal-title">Promote {member.name} to Owner</h5>
+                                                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div className="modal-status bg-danger"></div>
+                                                            <div className="modal-body text-center py-4">
+                                                                <IconAlertTriangle className="text-danger" size={64}></IconAlertTriangle>
+                                                                <h3>Are you sure?</h3>
+                                                                <div className="text-secondary">
+                                                                    Do you really want to promote {member.name} to Owner? This cannot be undone and they will gain full control of the team, effective immediately.
+                                                                </div>
+                                                            </div>
+                                                            <div className="modal-footer">
+                                                                <div className="w-100">
+                                                                    <div className="row">
+                                                                        <div className="col">
+                                                                            <button className="btn btn-ghost w-100" data-bs-dismiss="modal">Cancel</button>
+                                                                        </div>
+                                                                        <div className="col">
+                                                                            <button className="btn btn-danger w-100" data-bs-dismiss="modal" onClick={() => TransferOwnership(member.uid, member.provider)}> Transfer Ownership </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))
