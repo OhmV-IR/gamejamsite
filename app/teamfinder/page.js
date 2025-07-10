@@ -70,7 +70,7 @@ export default function TeamFinder() {
                                     body.teams[i].ownerName = userbody.name;
                                     body.teams[i].ownerPfp = userbody.pfp;
                                     setBrowseTeams(prev => {
-                                        if(!prev.some(team => body.teams[i].id)){
+                                        if(!prev.some(team => team.id == body.teams[i].id)){
                                             return [...prev, body.teams[i]];
                                         }
                                         else{
