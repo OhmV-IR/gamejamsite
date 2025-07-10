@@ -17,7 +17,6 @@ export default function UserFinder() {
             }).then((res) => {
                 if (res.ok) {
                     res.json().then((body) => {
-                        setUsers([]);
                         setUsers(body.users);
                     });
                 }
