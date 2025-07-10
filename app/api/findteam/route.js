@@ -20,7 +20,7 @@ export async function POST(req){
     }
     var term = incomingurl.searchParams.get("term") + "%";
     const query = {
-        query: sqlstring.format('SELECT * from c WHERE c.name LIKE ? OFFSET 0 LIMIT 10', [term])
+        query: sqlstring.format('SELECT * from c WHERE LOWER(c.name) LIKE LOWER(?) OFFSET 0 LIMIT 10', [term])
     }
     const teams = (await container.items.query(query).fetchAll()).resources;
     for(let i = 0; i < teams.length; i++){
