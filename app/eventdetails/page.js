@@ -8,7 +8,7 @@ export default function EventDetails() {
             <h2 className={styles.subheader}>Basic Information</h2>
             <p className={styles.answertext}>Date: August 2025 (exact date and time to be determined)</p>
             <p className={styles.answertext}>Location: online (Senior), in-person (Junior)</p>
-            <p className={styles.answertext}>Signup: create an account on <a href="/">this website</a> (by clicking the "Login/Register" button at the top right of the page)</p>
+            <p className={styles.answertext}>Signup: create an account on <a href="https://jambytes.ca/">this website</a> (by clicking the "Login/Register" button at the top right of the page)</p>
             <ul>
                 <li className={styles.answertext}>Junior registrants, please also sign up via Google Forms (<a href="https://forms.gle/Z6U9KK6FJvuaMkG68">https://forms.gle/Z6U9KK6FJvuaMkG68</a>)</li>
             </ul>
