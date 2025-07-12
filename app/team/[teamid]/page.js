@@ -1,8 +1,9 @@
 "use client"
 import { useState, useEffect } from "react";
-import { IconAlertCircle, IconAlertTriangle, IconBrandBootstrap, IconCheck, IconChevronUp, IconDeviceFloppy, IconDoorExit, IconKarate, IconMail, IconMinus, IconPencil, IconPlus, IconX } from "@tabler/icons-react";
+import { IconAlertCircle, IconAlertTriangle, IconBrandBootstrap, IconCheck, IconChevronUp, IconDeviceFloppy, IconDoorExit, IconKarate, IconMail, IconMinus, IconPencil, IconPlus, IconUpload, IconX } from "@tabler/icons-react";
 import React from "react";
 import styles from './page.module.css';
+const { BlobServiceClient, ContainerClient, StorageSharedKeyCredential } = require("@azure/storage-blob");
 
 export default function TeamPage({ params }) {
     let teamId = "";
@@ -329,6 +330,28 @@ export default function TeamPage({ params }) {
         })
     }
 
+    function UploadSubmission(){
+        const file = document.getElementById("submissionFile").files[0];
+        file.arrayBuffer().then(buf => {
+            fetch("/api/startsubmission", {
+                method: "POST",
+                credentials: "include",
+            }).then(res => {
+                if(res.ok){
+                    res.json().then(body => {
+                        console.log(body);
+                        if(body.url == null || body.id == null) return;
+                        const submissionContainer = new ContainerClient(body.url);
+                        const blob = submissionContainer.getBlockBlobClient(body.id);
+                        blob.uploadData(buf).then(res => {
+                            console.log("uploaded successfully");
+                        })
+                    })
+                }
+            })
+        })
+    }
+
     useEffect(() => {
         fetch("/api/fetchuserinfo", {
             method: "POST",
@@ -518,6 +541,28 @@ export default function TeamPage({ params }) {
                 </button>
                 : <></>
             }
+            {isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)
+            ? <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#submitModal"><IconUpload></IconUpload>Upload submission</button>
+            : <></>
+            }
+            <div className="modal" id="submitModal" tabIndex={-1}>
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">Upload submission</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                            <label className="form-label">Upload your file, for folders compress to a .zip first.</label>
+                            <input type="file" id="submissionFile"></input>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button className="btn btn-primary ms-auto" data-bs-dismiss="modal" onClick={UploadSubmission}><IconUpload></IconUpload>Upload</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div className="modal" id="addToTeamModal" tabIndex={-1}>
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
