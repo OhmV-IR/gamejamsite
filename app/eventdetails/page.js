@@ -1,5 +1,6 @@
 "use client"
 import styles from './page.module.css';
+import Link from 'next/link';
 
 export default function EventDetails() {
     return (
@@ -8,6 +9,10 @@ export default function EventDetails() {
             <h2 className={styles.subheader}>Basic Information</h2>
             <p className={styles.answertext}>Date: August 2025 (exact date and time to be determined)</p>
             <p className={styles.answertext}>Location: online (Senior), in-person (Junior)</p>
+            <p className={styles.answertext}>Signup: create an account on <Link href="/">jambytes.ca</Link> (this website) by clicking the &quot;Login/Register&quot; button at the top right of the page</p>
+            <ul>
+                <li className={styles.answertext}>Junior registrants, please also sign up via Google Forms (<a href="https://forms.gle/Z6U9KK6FJvuaMkG68">https://forms.gle/Z6U9KK6FJvuaMkG68</a>)</li>
+            </ul>
 
             <h2 className={styles.subheader}>Competition Brackets</h2>
             <p className={styles.answertext}>Junior: 11-14 years old (middle school)</p>

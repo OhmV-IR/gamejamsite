@@ -1,4 +1,5 @@
 import styles from "./page.module.css";
+import Link from "next/link";
 
 export default function Footer() {
     return (
@@ -9,7 +10,7 @@ export default function Footer() {
                 <div className={styles.footercontent}>
                     <a href="mailto:jambytesteam@gmail.com" className={styles.lefttext}>jambytesteam@gmail.com</a>
                     <div className={styles.righttext}>
-                        <a href="/tos">Terms of Service</a> | <a href="/privacy">Privacy Policy</a>
+                        <Link href="/tos">Terms of Service</Link> | <Link href="/privacy">Privacy Policy</Link>
                     </div>
                 </div>
             </div>
