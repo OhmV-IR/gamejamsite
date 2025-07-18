@@ -22,25 +22,25 @@ export default function Home() {
         <div className={`carousel slide ${styles.bgcarousel}`} id="bgcarousel" data-bs-ride="carousel" data-bs-interval="5000" data-bs-pause="false">
           <div className="carousel-inner">
             <div className="carousel-item active">
-              <Image width={0} height={0} className={`d-block ${styles.carouselimg}`} sizes="100vw" alt="" src="/carouselslide1.png"></Image>
+              <Image width={0} height={0} className={`d-block ${styles.carouselimg}`} sizes="100vw" alt="What is JamBytes?" loading="eager" src="/carouselslide1.png"></Image>
             </div>
             <div className="carousel-item">
-              <Image width={0} height={0} className={`d-block ${styles.carouselimg}`} sizes="100vw" alt="" src="/carouselslide2.png"></Image>
+              <Image width={0} height={0} className={`d-block ${styles.carouselimg}`} sizes="100vw" alt="Seniors (age 14-18) will have an online senior gamejam and Juniors (age 11-14) will have an in-person Junior Gamejam in Scratch" loading="eager" src="/carouselslide2.png"></Image>
             </div>
             <div className="carousel-item">
-              <Image width={0} height={0} className={`d-block ${styles.carouselimg}`} sizes="100vw" alt="" src="/carouselslide3.png"></Image>
+              <Image width={0} height={0} className={`d-block ${styles.carouselimg}`} sizes="100vw" alt="All participants will make games in the specified time frame which will then be judged by the JamBytes judges" loading="eager" src="/carouselslide3.png"></Image>
             </div>
             <div className="carousel-item">
-              <Image width={0} height={0} className={`d-block ${styles.carouselimg}`} sizes="100vw" alt="" src="/carouselslide4.png"></Image>
+              <Image width={0} height={0} className={`d-block ${styles.carouselimg}`} sizes="100vw" alt="The senior game jam will have teams chosen by the participants while the juniors will work independently" loading="eager" src="/carouselslide4.png"></Image>
             </div>
             <div className="carousel-item">
-              <Image width={0} height={0} className={`d-block ${styles.carouselimg}`} sizes="100vw" alt="" src="/carouselslide5.png"></Image>
+              <Image width={0} height={0} className={`d-block ${styles.carouselimg}`} sizes="100vw" alt="the Junior gamejam will last for a day in person while the Senior game jam will be 2 days online" loading="eager" src="/carouselslide5.png"></Image>
             </div>
             <div className="carousel-item">
-              <Image width={0} height={0} className={`d-block ${styles.carouselimg}`} sizes="100vw" alt="" src="/carouselslide6.png"></Image>
+              <Image width={0} height={0} className={`d-block ${styles.carouselimg}`} sizes="100vw" alt="There is no entrance fee for anyone to participate in either the Junior or Senior game jams" loading="eager" src="/carouselslide6.png"></Image>
             </div>
             <div className="carousel-item">
-              <Image width={0} height={0} className={`d-block ${styles.carouselimg}`} sizes="100vw" alt="" src="/carouselslide7.png"></Image>
+              <Image width={0} height={0} className={`d-block ${styles.carouselimg}`} sizes="100vw" alt="Sign up for JamBytes today" loading="eager" src="/carouselslide7.png"></Image>
             </div>
           </div>
         </div>
