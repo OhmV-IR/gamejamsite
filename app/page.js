@@ -9,7 +9,7 @@ export default function Home() {
       const carousel = document.getElementById('bgcarousel');
       if (carousel) {
         new bootstrap.Carousel(carousel, {
-          interval: 3000,
+          interval: 7500,
           ride: 'carousel',
           pause: false,
         });
@@ -19,7 +19,7 @@ export default function Home() {
   return (
     <div id="homepageroot">
       <div className={styles.bg}>
-        <div className={`carousel slide ${styles.bgcarousel}`} id="bgcarousel" data-bs-ride="carousel" data-bs-interval="5000" data-bs-pause="false">
+        <div className={`carousel slide ${styles.bgcarousel}`} id="bgcarousel">
           <div className="carousel-inner">
             <div className="carousel-item active">
               <Image width={0} height={0} className={`d-block ${styles.carouselimg}`} sizes="100vw" alt="What is JamBytes?" loading="eager" src="/carouselslide1.png"></Image>
