@@ -7,6 +7,7 @@ export default function EventDetails() {
         <div>
             <h1 className={styles.header}>Event Details</h1>
             <h2 className={styles.subheader}>Basic Information</h2>
+            <p className={styles.answertext}>Cost: Free!</p> 
             <p className={styles.answertext}>Date: August 2025 (exact date and time to be determined)</p>
             <p className={styles.answertext}>Location: online (Senior), in-person (Junior)</p>
             <p className={styles.answertext}>Signup: create an account on <Link href="/">jambytes.ca</Link> (this website) by clicking the &quot;Login/Register&quot; button at the top right of the page</p>
