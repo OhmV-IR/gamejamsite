@@ -33,8 +33,7 @@ export default function Home() {
       </div>
       <div className={styles.titlebox}>
         <h1 className={styles.jamtitle}>JamBytes</h1>
-        <h2 className={styles.jamdetails}>A game jam for learners and experienced developers alike</h2>
-        <h2 className={styles.jamdetails}>Details to be announced at a later date</h2>
+        <h2 className={styles.jamdetails}>A free-to-participate game jam for learners and experienced developers alike</h2>
       </div>
     </div>
   );
