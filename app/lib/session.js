@@ -83,10 +83,13 @@ export async function deleteSession() {
 }
 
 export async function GetIsAdmin(session) {
-    if (!session) {
+    if (session == null) {
         return false;
     }
     const payload = await decrypt(session);
+    if(payload == null || payload.uid == null || payload.provider == null){
+        return false;
+    }
     const query = {
         query: sqlstring.format("SELECT * from c WHERE c.userid=? AND c.provider=?", [payload.uid, payload.provider])
     }
