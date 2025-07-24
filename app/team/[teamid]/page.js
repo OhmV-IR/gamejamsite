@@ -4,7 +4,7 @@ import { flushSync } from "react-dom";
 import { IconAlertCircle, IconAlertTriangle, IconBrandBootstrap, IconCheck, IconChevronUp, IconDeviceFloppy, IconDoorExit, IconKarate, IconMail, IconMinus, IconPencil, IconPlus, IconUpload, IconX } from "@tabler/icons-react";
 import React from "react";
 import styles from './page.module.css';
-const { BlobServiceClient, ContainerClient, StorageSharedKeyCredential } = require("@azure/storage-blob");
+const { ContainerClient} = require("@azure/storage-blob");
 
 export default function TeamPage({ params }) {
     let teamId = "";
@@ -36,6 +36,7 @@ export default function TeamPage({ params }) {
     const [failedBannerSubtext, setFailedBannerSubtext] = useState("");
     const [canUploadCurFile, setCanUploadCurFile] = useState(false);
     const [cannotUploadReason, setCannotUploadReason] = useState("Please select a file.");
+    const [isUploading, setUploading] = useState(false);
 
     function RequestToJoinTeam() {
         fetch("/api/requesttojoin", {
@@ -358,12 +359,14 @@ export default function TeamPage({ params }) {
     function UploadSubmission() {
         const file = document.getElementById("submissionFile").files[0];
         file.arrayBuffer().then(buf => {
+            const t1 = Date.now();
             fetch("/api/startsubmission", {
                 method: "POST",
                 credentials: "include",
             }).then(res => {
                 if (res.ok) {
                     res.json().then(body => {
+                        const t2 = Date.now();
                         if (body.url == null || body.id == null) return;
                         const submissionContainer = new ContainerClient(body.url);
                         const blob = submissionContainer.getBlockBlobClient(body.id);
@@ -373,6 +376,7 @@ export default function TeamPage({ params }) {
                             setTimeout(() => setOkBannerDisplay(false), 7000);
                             document.getElementById('closeSubmissionModal').click();
                             console.log("uploaded successfully");
+                            setUploading(false);
                         }, (err) => {
                             setFailedBannerDisplay(true);
                             setFailedBannerText("Failed to upload submission.");
@@ -380,11 +384,13 @@ export default function TeamPage({ params }) {
                             setTimeout(() => setFailedBannerDisplay(false), 7000);
                             console.error("failed to upload: ");
                             console.error(err);
+                            setUploading(false);
                         })
                     })
                 }
             })
-        })
+        });
+        setUploading(true);
     }
 
     useEffect(() => {
@@ -609,7 +615,7 @@ export default function TeamPage({ params }) {
                             <button className="d-none" data-bs-dismiss="modal" id="closeSubmissionModal"></button>
                             <button className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                             {canUploadCurFile
-                                ? <button className="btn btn-primary ms-auto" onClick={UploadSubmission}><IconUpload></IconUpload>Upload</button>
+                                ? <button className="btn btn-primary ms-auto" onClick={UploadSubmission}>{isUploading ? <div className="spinner-border text-white"></div> : <IconUpload></IconUpload>}&nbsp;&nbsp;Upload</button>
                                 : <button className="btn btn-primary ms-auto disabled" disabled><IconUpload></IconUpload>Upload</button>
                             }
                         </div>
