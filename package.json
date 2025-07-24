@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@azure/cosmos": "^4.4.1",
+    "@azure/cosmos": "^4.5.0",
     "@tabler/icons-react": "^3.34.1",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
