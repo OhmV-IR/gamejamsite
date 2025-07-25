@@ -18,6 +18,10 @@ const { database } = await dbclient.databases.createIfNotExists({ id: process.en
 const { container } = await database.containers.createIfNotExists({ id: process.env.USERCONTAINER_ID });
 const teamcontainer = (await database.containers.createIfNotExists({ id: process.env.TEAMSCONTAINER_ID })).container;
 
+const { BlobServiceClient, ContainerSASPermissions } = require("@azure/storage-blob");
+const blobClient = BlobServiceClient.fromConnectionString(process.env.BLOB_CONNSTR);
+const blobContainer = blobClient.getContainerClient(process.env.BLOB_CONTAINER_NAME);
+
 export async function GET(req) {
     const session = (await cookies()).get("session")?.value;
     if (!session) {
@@ -48,6 +52,9 @@ async function PerformDelete(payload, items){
     for (let i = 0; i < memberteams.length; i++) {
         memberteams[i].members = memberteams[i].members.filter(member => member.uid != payload.uid || member.provider != payload.provider);
         if (memberteams[i].members.length == 0 || (memberteams[i].owner.uid == payload.uid && memberteams[i].owner.provider == payload.provider)) {
+            blobContainer.getBlobClient(memberteams[i].id).deleteIfExists({
+                deleteSnapshots: "include"
+            });
             teamcontainer.item(memberteams[i].id, memberteams[i].id).delete();
         }
         else {

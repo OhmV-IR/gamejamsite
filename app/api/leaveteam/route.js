@@ -14,6 +14,10 @@ const dbclient = new CosmosClient({
 const { database } = await dbclient.databases.createIfNotExists({ id: process.env.DB_ID });
 const teamcontainer = (await database.containers.createIfNotExists({ id: process.env.TEAMSCONTAINER_ID })).container;
 
+const { BlobServiceClient, ContainerSASPermissions } = require("@azure/storage-blob");
+const blobClient = BlobServiceClient.fromConnectionString(process.env.BLOB_CONNSTR);
+const blobContainer = blobClient.getContainerClient(process.env.BLOB_CONTAINER_NAME);
+
 export async function POST(req){
     const incomingbody = await req.json();
     if(incomingbody.tid == null){
@@ -36,6 +40,9 @@ export async function POST(req){
     }
     team.members.splice(index, 1);
     if(team.members.length == 0 || (payload.uid == team.owner.uid && payload.provider == team.owner.provider)){
+        blobContainer.getBlobClient(team.id).deleteIfExists({
+            deleteSnapshots: "include"
+        });
         teamcontainer.item(team.id, team.id).delete();
     }
     else{
