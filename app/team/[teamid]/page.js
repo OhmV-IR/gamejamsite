@@ -389,6 +389,7 @@ export default function TeamPage({ params }) {
                             document.getElementById('closeSubmissionModal').click();
                             console.log("uploaded successfully");
                             setUploading(false);
+                            setSubmission({state: 1, filename: file.name, url: blob.url, uploadtime: (new Date()).toISOString(), size: file.size})
                         }, (err) => {
                             setFailedBannerDisplay(true);
                             setFailedBannerText("Failed to upload submission.");
