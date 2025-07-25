@@ -16,9 +16,6 @@ const maxfilesize = 750 * 1024 * 1024; // 750MB
 
 export async function POST(req) {
     const body = await req.json();
-    if (req.headers.get("hookkey") != process.env.WEBHOOK_KEY) {
-        return new Response("Unauthorized", { status: 401 });
-    }
     // Event subscription set up to only send 1 event at a time, could upgrade that later.
     const event = body[0];
     if (event.eventType == 'Microsoft.EventGrid.SubscriptionValidationEvent') {
@@ -27,7 +24,11 @@ export async function POST(req) {
             JSON.stringify({ validationResponse: validationCode }),
             { status: 200, headers: { 'Content-Type': 'application/json' } }
         );
-    } else if (event.eventType == 'Microsoft.Storage.BlobCreated') {
+    }
+    if (req.headers.get("hookkey") != process.env.WEBHOOK_KEY) {
+        return new Response("Unauthorized", { status: 401 });
+    }
+    if (event.eventType == 'Microsoft.Storage.BlobCreated') {
         const blobname = new URL(event.data.url).pathname.split("/").slice(2).join("/");
         if (event.data.contentLength > maxfilesize) {
             // Ban user(TODO) and delete the upload
