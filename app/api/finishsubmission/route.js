@@ -33,7 +33,7 @@ export async function POST(req){
         }, {status: 200, headers: { 'Content-Type': 'application/json' }}));
     } else if (event.eventType == 'Microsoft.Storage.BlobCreated'){
         const blobname = new URL(event.data.url).pathname.split("/").slice(2).join("/");
-        if(body.data.contentLength > maxfilesize){
+        if(event.data.contentLength > maxfilesize){
             // Ban user(TODO) and delete the upload
             const blob = new BlobClient(process.env.BLOB_CONNSTR, process.env.BLOB_CONTAINER_NAME, blobname);
             blob.deleteIfExists({
@@ -54,6 +54,7 @@ export async function POST(req){
         team.submissions[subindex].state = 1;
         team.submissions[subindex].url = event.data.url;
         team.submissions[subindex].uploadtime = event.eventTime;
+        team.submissions[subindex].size = event.data.contentLength;
         teamcontainer.item(team.id, team.id).replace(team);
         return new Response("Handled SubmissionCreated event", {status: 200});
     } else {
