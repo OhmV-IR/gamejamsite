@@ -37,6 +37,13 @@ export default function TeamPage({ params }) {
     const [canUploadCurFile, setCanUploadCurFile] = useState(false);
     const [cannotUploadReason, setCannotUploadReason] = useState("Please select a file.");
     const [isUploading, setUploading] = useState(false);
+    const [uploadedBytes, setUploadedBytes] = useState(0);
+    const [uploadFileSize, setUploadFileSize] = useState(0);
+    const [percentUploaded, setPercentUploaded] = useState(0.0);
+
+    useEffect(() => {
+        setPercentUploaded(Math.round(uploadedBytes / uploadFileSize * 100))
+    }, [uploadedBytes, uploadFileSize]);
 
     function RequestToJoinTeam() {
         fetch("/api/requesttojoin", {
@@ -378,10 +385,14 @@ export default function TeamPage({ params }) {
                         if (body.url == null) return;
                         const submissionContainer = new ContainerClient(body.url);
                         const blob = submissionContainer.getBlockBlobClient(teamId);
+                        setUploadFileSize(file.size);
+                        setUploading(true);
                         blob.uploadData(buf, {
-                            blobHTTPHeaders: {
-                                blobContentDisposition: 'attachment; filename="' + file.name + '"'
-                            }
+                            onProgress: (evt) => {
+                                setUploadedBytes(evt.loadedBytes);
+                            },
+                            blockSize: 16 * 1024 * 1024, // 16MB blocks
+                            maxSingleShotSize: 25 * 1024 * 1024 // force to use blocks for files > 25MB
                         }).then(res => {
                             setOkBannerDisplay(true);
                             setOkBannerText("Uploaded submission successfully");
@@ -403,7 +414,6 @@ export default function TeamPage({ params }) {
                 }
             })
         });
-        setUploading(true);
     }
 
     function DownloadUrlToName(url, filename) {
@@ -671,6 +681,10 @@ export default function TeamPage({ params }) {
                             {canUploadCurFile
                                 ? <button className="btn btn-primary ms-auto" onClick={UploadSubmission}>{isUploading ? <div className="spinner-border text-white"></div> : <IconUpload></IconUpload>}&nbsp;&nbsp;Upload</button>
                                 : <button className="btn btn-primary ms-auto disabled" disabled><IconUpload></IconUpload>Upload</button>
+                            }
+                            {isUploading
+                            ? <div className="text-secondary">{uploadedBytes/1000000}MB/{uploadFileSize/1000000}MB uploaded({percentUploaded}%)</div>
+                            : <></>
                             }
                         </div>
                     </div>
