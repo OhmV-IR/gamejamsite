@@ -35,7 +35,7 @@ export async function POST(req) {
             // Ban user(TODO) and delete the upload
             const blob = new BlobClient(process.env.BLOB_CONNSTR, process.env.BLOB_CONTAINER_NAME, blobname);
             blob.deleteIfExists({
-                deleteSnapshots: true
+                deleteSnapshots: "include"
             });
             return new Response("Handled SubmissionCreated event", { status: 200 });
         }
@@ -44,7 +44,7 @@ export async function POST(req) {
             // Ban user(TODO) and delete the upload
             const blob = new BlobClient(process.env.BLOB_CONNSTR, process.env.BLOB_CONTAINER_NAME, blobname);
             blob.deleteIfExists({
-                deleteSnapshots: true
+                deleteSnapshots: "include"
             });
             return new Response("handled evt", { status: 200 });
         }

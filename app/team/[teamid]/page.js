@@ -334,6 +334,13 @@ export default function TeamPage({ params }) {
         })
     }
 
+    function CloseSubmitDanger() {
+        const closeDangerSubmitBtn = document.getElementById('dangerSubmitModalBtn');
+        closeDangerSubmitBtn.click();
+        const openSubmitBtn = document.getElementById('submitModalBtn');
+        openSubmitBtn.click();
+    }
+
     const maxfilesize = 750 * 1024 * 1024; // 750MB
 
     function HandleFile(filevt) {
@@ -602,10 +609,36 @@ export default function TeamPage({ params }) {
                 </button>
                 : <></>
             }
-            {isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)
+            {ownerId == viewerUid && ownerProvider == viewerProvider && submission.size == null
                 ? <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#submitModal"><IconUpload></IconUpload>Upload submission</button>
                 : <></>
             }
+            {ownerId == viewerUid && ownerProvider == viewerProvider && submission.size != null
+                ? <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#dangerSubmitModal"><IconUpload></IconUpload>Upload submission</button>
+                : <></>
+            }
+            <button className="d-none" data-bs-toggle="modal" data-bs-target="#submitModal" id="submitModalBtn"></button>
+            <button className="d-none" data-bs-toggle="modal" data-bs-target="#dangerSubmitModal" id="dangerSubmitModalBtn"></button>
+            <div className="modal" id="dangerSubmitModal" tabIndex={-1}>
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <button type="button" className="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                        <div className="modal-status bg-danger"></div>
+                        <div className="modal-body text-center py-4">
+                            <IconAlertTriangle className="text-danger"></IconAlertTriangle>
+                            <h3>Are you sure?</h3>
+                            <div className="text-secondary">
+                                Uploading another file will overwrite your old submission. The old submission will be permanently deleted and cannot be recovered.
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-success" data-bs-dismiss="modal">Cancel</button>
+                            <button className="btn btn-danger ms-auto" onClick={CloseSubmitDanger}>Continue</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div className="modal" id="submitModal" tabIndex={-1}>
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
