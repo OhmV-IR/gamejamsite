@@ -16,7 +16,7 @@ const maxfilesize = 750 * 1024 * 1024; // 750MB
 
 export async function POST(req){
     const body = await req.json();
-    if(req.headers.get("HOOK_KEY") != process.env.WEBHOOK_KEY){
+    if(req.headers.get("hookkey") != process.env.WEBHOOK_KEY){
         return new Response("Unauthorized", {status: 401});
     }
     // Event subscription set up to only send 1 event at a time, could upgrade that later.
