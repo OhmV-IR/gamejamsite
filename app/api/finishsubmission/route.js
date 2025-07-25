@@ -9,41 +9,41 @@ const dbclient = new CosmosClient({
 });
 
 const { database } = await dbclient.databases.createIfNotExists({ id: process.env.DB_ID });
-const teamcontainer = (await database.containers.createIfNotExists({id: process.env.TEAMSCONTAINER_ID})).container;
+const teamcontainer = (await database.containers.createIfNotExists({ id: process.env.TEAMSCONTAINER_ID })).container;
 const { BlobClient } = require("@azure/storage-blob");
 
 const maxfilesize = 750 * 1024 * 1024; // 750MB
 
-export async function POST(req){
+export async function POST(req) {
     const body = await req.json();
-    if(req.headers.get("hookkey") != process.env.WEBHOOK_KEY){
-        return new Response("Unauthorized", {status: 401});
+    if (req.headers.get("hookkey") != process.env.WEBHOOK_KEY) {
+        return new Response("Unauthorized", { status: 401 });
     }
     // Event subscription set up to only send 1 event at a time, could upgrade that later.
     const event = body[0];
-    if(event.eventType == 'Microsoft.EventGrid.SubscriptionValidationEvent'){
+    if (event.eventType == 'Microsoft.EventGrid.SubscriptionValidationEvent') {
         const validationCode = event.data.validationCode;
         return new Response(JSON.stringify({
             validationResponse: validationCode
-        }, {status: 200, headers: { 'Content-Type': 'application/json' }}));
-    } else if (event.eventType == 'Microsoft.Storage.BlobCreated'){
+        }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    } else if (event.eventType == 'Microsoft.Storage.BlobCreated') {
         const blobname = new URL(event.data.url).pathname.split("/").slice(2).join("/");
-        if(event.data.contentLength > maxfilesize){
+        if (event.data.contentLength > maxfilesize) {
             // Ban user(TODO) and delete the upload
             const blob = new BlobClient(process.env.BLOB_CONNSTR, process.env.BLOB_CONTAINER_NAME, blobname);
             blob.deleteIfExists({
                 deleteSnapshots: true
             });
-            return new Response("Handled SubmissionCreated event", {status: 200});
+            return new Response("Handled SubmissionCreated event", { status: 200 });
         }
         const team = (await teamcontainer.items.query(sqlstring.format("SELECT * FROM c WHERE ARRAY_CONTAINS(c.submissions, {'id':?, 'state': 0})", blobname)).fetchAll()).resources[0];
-        if(team == null){
+        if (team == null) {
             // Ban user(TODO) and delete the upload
             const blob = new BlobClient(process.env.BLOB_CONNSTR, process.env.BLOB_CONTAINER_NAME, blobname);
             blob.deleteIfExists({
                 deleteSnapshots: true
             });
-            return new Response("handled evt", {status: 200});
+            return new Response("handled evt", { status: 200 });
         }
         const subindex = team.submissions.findIndex(submission => submission.id == blobname && submission.state == 0);
         team.submissions[subindex].state = 1;
@@ -51,9 +51,9 @@ export async function POST(req){
         team.submissions[subindex].uploadtime = event.eventTime;
         team.submissions[subindex].size = event.data.contentLength;
         teamcontainer.item(team.id, team.id).replace(team);
-        return new Response("Handled SubmissionCreated event", {status: 200});
+        return new Response("Handled SubmissionCreated event", { status: 200 });
     } else {
-        return new Response("Unrecognized event", {status: 404});
+        return new Response("Unrecognized event", { status: 404 });
     }
 }
 
