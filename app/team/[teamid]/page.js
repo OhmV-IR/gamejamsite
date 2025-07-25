@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from "react";
 import { flushSync } from "react-dom";
-import { IconAlertCircle, IconAlertTriangle, IconBrandBootstrap, IconCheck, IconChevronUp, IconDeviceFloppy, IconDoorExit, IconDownload, IconKarate, IconMail, IconMinus, IconPencil, IconPlus, IconUpload, IconX } from "@tabler/icons-react";
+import { IconAlertCircle, IconAlertTriangle, IconBrandBootstrap, IconCheck, IconChevronUp, IconDeviceFloppy, IconDoorExit, IconDownload, IconKarate, IconMail, IconMinus, IconPencil, IconPlus, IconTrash, IconUpload, IconX } from "@tabler/icons-react";
 import React from "react";
 import styles from './page.module.css';
 const { ContainerClient } = require("@azure/storage-blob");
@@ -431,6 +431,31 @@ export default function TeamPage({ params }) {
         });
     }
 
+    function DeleteSubmission(){
+        fetch("/api/deletesubmission", {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify({
+                tid: teamId
+            })
+        }).then(res => {
+            if(res.ok){
+                setSubmission({});
+                setOkBannerDisplay(true);
+                setOkBannerText("Deleted submission successfully");
+                setTimeout(() => setOkBannerDisplay(false), 7000);
+            }
+            else {
+                res.text().then(reason => {
+                    setFailedBannerDisplay(true);
+                    setFailedBannerText("Failed to delete submission.");
+                    setFailedBannerSubtext(reason);
+                    setTimeout(() => setFailedBannerDisplay(false), 7000);
+                })
+            }
+        })
+    }
+
     useEffect(() => {
         fetch("/api/fetchuserinfo", {
             method: "POST",
@@ -775,6 +800,26 @@ export default function TeamPage({ params }) {
                     </div>
                 </div>
             </div>
+            <div className="modal" id="deleteSubmissionWarning" tabIndex={-1}>
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <button type="button" className="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                        <div className="modal-status bg-danger"></div>
+                        <div className="modal-body text-center py-4">
+                            <IconAlertTriangle className="text-danger"></IconAlertTriangle>
+                            <h3>Are you sure?</h3>
+                            <div className="text-secondary">
+                                This will delete your submission permanently and irreversibly.
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-success" data-bs-dismiss="modal">Cancel</button>
+                            <button className="btn btn-danger ms-auto" data-bs-dismiss="modal" onClick={DeleteSubmission}><IconTrash></IconTrash>Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div className="row w-100 mt-5">
                 <div className="col">
                     <h1 className={`${styles.subheader} ${styles.centeralign}`}>Members</h1>
@@ -846,6 +891,10 @@ export default function TeamPage({ params }) {
                                     <th>Upload time</th>
                                     <th>Size</th>
                                     <th className="w-1"></th>
+                                    {isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)
+                                    ? <th className="w-1"></th>
+                                    : <></>
+                                    }
                                 </tr>
                             </thead>
                             <tbody>
@@ -854,6 +903,10 @@ export default function TeamPage({ params }) {
                                     <td className="text-secondary">{(new Date(submission.uploadtime)).toLocaleString()}</td>
                                     <td className="text-secondary">{submission.size / 1000000}MB</td>
                                     <td><button className="btn btn-primary" onClick={() => DownloadUrlToName(submission.url, submission.filename)}><IconDownload></IconDownload>Download</button></td>
+                                    {isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)
+                                    ? <td><button className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteSubmissionWarning"><IconTrash></IconTrash>Delete</button></td>
+                                    : <></>
+                                    }
                                 </tr>
                             </tbody>
                         </table>
