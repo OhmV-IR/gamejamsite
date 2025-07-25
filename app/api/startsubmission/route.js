@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { decrypt } from "@/app/lib/session";
+import { decrypt, GetIsAdmin } from "@/app/lib/session";
 import { CosmosClient } from "@azure/cosmos";
 const dotenv = require('dotenv')
 dotenv.config();
@@ -22,6 +22,9 @@ export async function POST(req) {
     const payload = await decrypt(session);
     if (payload == null) {
         return new Response("bad session", { status: 401 });
+    }
+    if((await GetIsAdmin(session)) == false){
+        return new Response("feat not available yet", {status: 403});
     }
     const team = (await teamcontainer.items.query({
         query: sqlstring.format("SELECT * FROM c WHERE c.owner.uid=? AND c.owner.provider=?", [payload.uid, payload.provider])

@@ -609,11 +609,11 @@ export default function TeamPage({ params }) {
                 </button>
                 : <></>
             }
-            {ownerId == viewerUid && ownerProvider == viewerProvider && submission.size == null
+            {isAdmin && ownerId == viewerUid && ownerProvider == viewerProvider && submission.size == null
                 ? <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#submitModal"><IconUpload></IconUpload>Upload submission</button>
                 : <></>
             }
-            {ownerId == viewerUid && ownerProvider == viewerProvider && submission.size != null
+            {isAdmin && ownerId == viewerUid && ownerProvider == viewerProvider && submission.size != null
                 ? <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#dangerSubmitModal"><IconUpload></IconUpload>Upload submission</button>
                 : <></>
             }
