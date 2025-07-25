@@ -18,6 +18,7 @@ const blobClient = BlobServiceClient.fromConnectionString(process.env.BLOB_CONNS
 const blobContainer = blobClient.getContainerClient(process.env.BLOB_CONTAINER_NAME);
 
 export async function POST(req) {
+    const incomingbody = await req.json();
     const session = (await cookies()).get("session")?.value;
     const payload = await decrypt(session);
     if (payload == null) {
@@ -30,7 +31,10 @@ export async function POST(req) {
         return new Response("not owner of a team");
     }
     const id = randomUUID();
-    team.submissions.push({id: id, state: 0});
+    // Cleanup unfinished submissions
+    team.submissions.filter(submission => submission.state != 0);
+    // Create new submission
+    team.submissions.push({id: id, filename: incomingbody.filename, state: 0});
     teamcontainer.item(team.id, team.id).replace(team);
     return new Response(JSON.stringify({
         url: await blobContainer.generateSasUrl({

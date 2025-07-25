@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from "react";
 import { flushSync } from "react-dom";
-import { IconAlertCircle, IconAlertTriangle, IconBrandBootstrap, IconCheck, IconChevronUp, IconDeviceFloppy, IconDoorExit, IconKarate, IconMail, IconMinus, IconPencil, IconPlus, IconUpload, IconX } from "@tabler/icons-react";
+import { IconAlertCircle, IconAlertTriangle, IconBrandBootstrap, IconCheck, IconChevronUp, IconDeviceFloppy, IconDoorExit, IconDownload, IconKarate, IconMail, IconMinus, IconPencil, IconPlus, IconUpload, IconX } from "@tabler/icons-react";
 import React from "react";
 import styles from './page.module.css';
 const { ContainerClient} = require("@azure/storage-blob");
@@ -359,14 +359,15 @@ export default function TeamPage({ params }) {
     function UploadSubmission() {
         const file = document.getElementById("submissionFile").files[0];
         file.arrayBuffer().then(buf => {
-            const t1 = Date.now();
             fetch("/api/startsubmission", {
                 method: "POST",
                 credentials: "include",
+                body: JSON.stringify({
+                    filename: file.name
+                })
             }).then(res => {
                 if (res.ok) {
                     res.json().then(body => {
-                        const t2 = Date.now();
                         if (body.url == null || body.id == null) return;
                         const submissionContainer = new ContainerClient(body.url);
                         const blob = submissionContainer.getBlockBlobClient(body.id);
@@ -480,7 +481,7 @@ export default function TeamPage({ params }) {
                                 }
                             })
                         }
-                        setSubmissions(body.submissions);
+                        setSubmissions(body.submissions.filter(submission => submission.state != 0));
                     })
                 }
             });
@@ -772,7 +773,23 @@ export default function TeamPage({ params }) {
                     ? <div className="col">
                         <h1 className={`${styles.subheader} ${styles.centeralign}`}>Submissions</h1>
                         <table className="table">
+                            <thead>
+                                <tr>
+                                    <th>Filename</th>
+                                    <th>Upload time</th>
+                                    <th className="w-1"></th>
+                                </tr>
+                            </thead>
                             <tbody>
+                                {
+                                    submissions.map(submission => (
+                                        <tr key={submission.id}>
+                                            <td>{submission.filename}</td>
+                                            <td className="text-secondary">{(new Date(submission.uploadtime)).toLocaleString()}</td>
+                                            <td><a className="btn btn-primary" href={submission.url}><IconDownload></IconDownload>Download</a></td>
+                                        </tr>
+                                    ))
+                                }
                             </tbody>
                         </table>
                     </div>
