@@ -371,7 +371,11 @@ export default function TeamPage({ params }) {
                         if (body.url == null) return;
                         const submissionContainer = new ContainerClient(body.url);
                         const blob = submissionContainer.getBlockBlobClient(teamId);
-                        blob.uploadData(buf).then(res => {
+                        blob.uploadData(buf, {
+                            blobHTTPHeaders: {
+                                blobContentDisposition: 'attachment; filename="' + file.name + '"'
+                            }
+                        }).then(res => {
                             setOkBannerDisplay(true);
                             setOkBannerText("Uploaded submission successfully");
                             setTimeout(() => setOkBannerDisplay(false), 7000);
@@ -392,6 +396,21 @@ export default function TeamPage({ params }) {
             })
         });
         setUploading(true);
+    }
+
+    function DownloadUrlToName(url, filename) {
+        fetch(url).then(res => {
+            res.blob().then(blob => {
+                const blobUrl = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(blobUrl);
+            })
+        });
     }
 
     useEffect(() => {
@@ -786,7 +805,7 @@ export default function TeamPage({ params }) {
                                     <td>{submission.filename}</td>
                                     <td className="text-secondary">{(new Date(submission.uploadtime)).toLocaleString()}</td>
                                     <td className="text-secondary">{submission.size / 1000000}MB</td>
-                                    <td><a className="btn btn-primary" href={submission.url}><IconDownload></IconDownload>Download</a></td>
+                                    <td><button className="btn btn-primary" onClick={() => DownloadUrlToName(submission.url, submission.filename)}><IconDownload></IconDownload>Download</button></td>
                                 </tr>
                             </tbody>
                         </table>
