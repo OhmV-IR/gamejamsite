@@ -1,10 +1,7 @@
-import { cookies } from "next/headers";
-import { decrypt } from "@/app/lib/session";
 import { CosmosClient } from "@azure/cosmos";
 const dotenv = require('dotenv')
 dotenv.config();
 const sqlstring = require('sqlstring');
-const { randomUUID } = require('crypto');
 
 const dbclient = new CosmosClient({
     endpoint: process.env.DB_ENDPOINT,
@@ -13,9 +10,7 @@ const dbclient = new CosmosClient({
 
 const { database } = await dbclient.databases.createIfNotExists({ id: process.env.DB_ID });
 const teamcontainer = (await database.containers.createIfNotExists({id: process.env.TEAMSCONTAINER_ID})).container;
-const { BlobServiceClient, BlobClient } = require("@azure/storage-blob");
-const blobClient = BlobServiceClient.fromConnectionString(process.env.BLOB_CONNSTR);
-const blobContainer = blobClient.getContainerClient(process.env.BLOB_CONTAINER_NAME);
+const { BlobClient } = require("@azure/storage-blob");
 
 const maxfilesize = 750 * 1024 * 1024; // 750MB
 
