@@ -15,6 +15,7 @@ const { BlobClient } = require("@azure/storage-blob");
 const maxfilesize = 750 * 1024 * 1024; // 750MB
 
 export async function POST(req) {
+    // TODO: Run these submissions through VirusTotal to avoid malicious data being uploaded
     const body = await req.json();
     // Event subscription set up to only send 1 event at a time, could upgrade that later.
     const event = body[0];
@@ -38,7 +39,7 @@ export async function POST(req) {
             });
             return new Response("Handled SubmissionCreated event", { status: 200 });
         }
-        const team = (await teamcontainer.items.query(sqlstring.format("SELECT * FROM c WHERE ARRAY_CONTAINS(c.submissions, {'id':?, 'state': 0})", blobname)).fetchAll()).resources[0];
+        const team = (await teamcontainer.items.query(sqlstring.format("SELECT * FROM c WHERE c.id=?", blobname)).fetchAll()).resources[0];
         if (team == null) {
             // Ban user(TODO) and delete the upload
             const blob = new BlobClient(process.env.BLOB_CONNSTR, process.env.BLOB_CONTAINER_NAME, blobname);
@@ -47,11 +48,10 @@ export async function POST(req) {
             });
             return new Response("handled evt", { status: 200 });
         }
-        const subindex = team.submissions.findIndex(submission => submission.id == blobname && submission.state == 0);
-        team.submissions[subindex].state = 1;
-        team.submissions[subindex].url = event.data.url;
-        team.submissions[subindex].uploadtime = event.eventTime;
-        team.submissions[subindex].size = event.data.contentLength;
+        team.submission.state = 1;
+        team.submission.url = event.data.url;
+        team.submission.uploadtime = event.eventTime;
+        team.submission.size = event.data.contentLength;
         teamcontainer.item(team.id, team.id).replace(team);
         return new Response("Handled SubmissionCreated event", { status: 200 });
     } else {

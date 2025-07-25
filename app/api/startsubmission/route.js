@@ -4,7 +4,6 @@ import { CosmosClient } from "@azure/cosmos";
 const dotenv = require('dotenv')
 dotenv.config();
 const sqlstring = require('sqlstring');
-const { randomUUID } = require('crypto');
 
 const dbclient = new CosmosClient({
     endpoint: process.env.DB_ENDPOINT,
@@ -30,11 +29,10 @@ export async function POST(req) {
     if (team == null) {
         return new Response("not owner of a team");
     }
-    const id = randomUUID();
-    // Cleanup unfinished submissions
-    team.submissions.filter(submission => submission.state != 0);
-    // Create new submission
-    team.submissions.push({id: id, filename: incomingbody.filename, state: 0});
+    team.submission = {
+        state: 0,
+        filename: incomingbody.filename
+    }
     teamcontainer.item(team.id, team.id).replace(team);
     return new Response(JSON.stringify({
         url: await blobContainer.generateSasUrl({
@@ -42,7 +40,6 @@ export async function POST(req) {
             permissions: ContainerSASPermissions.parse("cw"),
             startsOn: new Date(),
             expiresOn: new Date(Date.now() + 7200 * 1000)
-        }),
-        id: id
+        })
     }), { status: 200 });
 }

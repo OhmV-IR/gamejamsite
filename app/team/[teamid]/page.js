@@ -4,7 +4,7 @@ import { flushSync } from "react-dom";
 import { IconAlertCircle, IconAlertTriangle, IconBrandBootstrap, IconCheck, IconChevronUp, IconDeviceFloppy, IconDoorExit, IconDownload, IconKarate, IconMail, IconMinus, IconPencil, IconPlus, IconUpload, IconX } from "@tabler/icons-react";
 import React from "react";
 import styles from './page.module.css';
-const { ContainerClient} = require("@azure/storage-blob");
+const { ContainerClient } = require("@azure/storage-blob");
 
 export default function TeamPage({ params }) {
     let teamId = "";
@@ -22,7 +22,7 @@ export default function TeamPage({ params }) {
     const [ownerName, setOwnerName] = useState("");
     const [ownerPfp, setOwnerPfp] = useState("");
     const [members, setMembers] = useState([]);
-    const [submissions, setSubmissions] = useState([]);
+    const [submission, setSubmission] = useState({});
     const [joinRequests, setJoinRequests] = useState([]);
     const [viewerUid, setViewerUid] = useState("");
     const [viewerProvider, setViewerProvider] = useState("");
@@ -368,9 +368,9 @@ export default function TeamPage({ params }) {
             }).then(res => {
                 if (res.ok) {
                     res.json().then(body => {
-                        if (body.url == null || body.id == null) return;
+                        if (body.url == null) return;
                         const submissionContainer = new ContainerClient(body.url);
-                        const blob = submissionContainer.getBlockBlobClient(body.id);
+                        const blob = submissionContainer.getBlockBlobClient(teamId);
                         blob.uploadData(buf).then(res => {
                             setOkBannerDisplay(true);
                             setOkBannerText("Uploaded submission successfully");
@@ -481,7 +481,7 @@ export default function TeamPage({ params }) {
                                 }
                             })
                         }
-                        setSubmissions(body.submissions.filter(submission => submission.state != 0));
+                        setSubmission(body.submission);
                     })
                 }
             });
@@ -769,9 +769,9 @@ export default function TeamPage({ params }) {
                         </table>
                     </div>
                 </div>
-                {submissions.length > 0
+                {submission.size != null
                     ? <div className="col">
-                        <h1 className={`${styles.subheader} ${styles.centeralign}`}>Submissions</h1>
+                        <h1 className={`${styles.subheader} ${styles.centeralign}`}>Submission</h1>
                         <table className="table">
                             <thead>
                                 <tr>
@@ -782,16 +782,12 @@ export default function TeamPage({ params }) {
                                 </tr>
                             </thead>
                             <tbody>
-                                {
-                                    submissions.map(submission => (
-                                        <tr key={submission.id}>
-                                            <td>{submission.filename}</td>
-                                            <td className="text-secondary">{(new Date(submission.uploadtime)).toLocaleString()}</td>
-                                            <td className="text-secondary">{submission.size / 1000000}MB</td>
-                                            <td><a className="btn btn-primary" href={submission.url}><IconDownload></IconDownload>Download</a></td>
-                                        </tr>
-                                    ))
-                                }
+                                <tr key={submission.id}>
+                                    <td>{submission.filename}</td>
+                                    <td className="text-secondary">{(new Date(submission.uploadtime)).toLocaleString()}</td>
+                                    <td className="text-secondary">{submission.size / 1000000}MB</td>
+                                    <td><a className="btn btn-primary" href={submission.url}><IconDownload></IconDownload>Download</a></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
