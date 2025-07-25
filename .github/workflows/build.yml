@@ -40,7 +40,10 @@ jobs:
                 printf 'USERCONTAINER_ID=${{secrets.USERCONTAINER_ID}}\n' >> .env
                 printf 'TEAMSCONTAINER_ID=${{secrets.TEAMSCONTAINER_ID}}\n' >> .env
                 printf 'DOMAIN=${{secrets.DOMAIN}}\n' >> .env
+                printf 'BLOB_CONNSTR=${{secrets.BLOB_CONNSTR}}\n' >> .env
+                printf 'BLOB_CONTAINER_NAME=${{secrets.BLOB_CONTAINER_NAME}}\n' >> .env
                 printf 'COOKIE_SECRET=${{secrets.COOKIE_SECRET}}\n' >> .env
+                printf 'WEBHOOK_KEY=${{secrets.WEBHOOK_KEY}}\n' >> .env
 
             - name: Build site
               run: npm run build

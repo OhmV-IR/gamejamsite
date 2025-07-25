@@ -1,8 +1,10 @@
 "use client"
 import { useState, useEffect } from "react";
-import { IconAlertCircle, IconAlertTriangle, IconBrandBootstrap, IconCheck, IconChevronUp, IconDeviceFloppy, IconDoorExit, IconKarate, IconMail, IconMinus, IconPencil, IconPlus, IconX } from "@tabler/icons-react";
+import { flushSync } from "react-dom";
+import { IconAlertCircle, IconAlertTriangle, IconBrandBootstrap, IconCheck, IconChevronUp, IconDeviceFloppy, IconDoorExit, IconDownload, IconKarate, IconMail, IconMinus, IconPencil, IconPlus, IconTrash, IconUpload, IconX } from "@tabler/icons-react";
 import React from "react";
 import styles from './page.module.css';
+const { ContainerClient } = require("@azure/storage-blob");
 
 export default function TeamPage({ params }) {
     let teamId = "";
@@ -20,7 +22,7 @@ export default function TeamPage({ params }) {
     const [ownerName, setOwnerName] = useState("");
     const [ownerPfp, setOwnerPfp] = useState("");
     const [members, setMembers] = useState([]);
-    const [submissions, setSubmissions] = useState([]);
+    const [submission, setSubmission] = useState({});
     const [joinRequests, setJoinRequests] = useState([]);
     const [viewerUid, setViewerUid] = useState("");
     const [viewerProvider, setViewerProvider] = useState("");
@@ -32,6 +34,16 @@ export default function TeamPage({ params }) {
     const [failedBannerDisplay, setFailedBannerDisplay] = useState(false);
     const [failedBannerText, setFailedBannerText] = useState("");
     const [failedBannerSubtext, setFailedBannerSubtext] = useState("");
+    const [canUploadCurFile, setCanUploadCurFile] = useState(false);
+    const [cannotUploadReason, setCannotUploadReason] = useState("Please select a file.");
+    const [isUploading, setUploading] = useState(false);
+    const [uploadedBytes, setUploadedBytes] = useState(0);
+    const [uploadFileSize, setUploadFileSize] = useState(0);
+    const [percentUploaded, setPercentUploaded] = useState(0.0);
+
+    useEffect(() => {
+        setPercentUploaded(Math.round(uploadedBytes / uploadFileSize * 100))
+    }, [uploadedBytes, uploadFileSize]);
 
     function RequestToJoinTeam() {
         fetch("/api/requesttojoin", {
@@ -289,7 +301,7 @@ export default function TeamPage({ params }) {
         })
     }
 
-    function TransferOwnership(uid, provider){
+    function TransferOwnership(uid, provider) {
         fetch("/api/transferownership", {
             method: "POST",
             credentials: "include",
@@ -311,7 +323,7 @@ export default function TeamPage({ params }) {
                         provider: provider
                     })
                 }).then(res => {
-                    if(res.ok){
+                    if (res.ok) {
                         res.json().then(body => {
                             setOwnerName(body.name);
                             setOwnerPfp(body.pfp);
@@ -325,6 +337,121 @@ export default function TeamPage({ params }) {
                 setFailedBannerText("Failed to transfer ownership.");
                 res.text().then(text => setFailedBannerSubtext(text));
                 setTimeout(() => setFailedBannerDisplay(false), 7000);
+            }
+        })
+    }
+
+    function CloseSubmitDanger() {
+        const closeDangerSubmitBtn = document.getElementById('dangerSubmitModalBtn');
+        closeDangerSubmitBtn.click();
+        const openSubmitBtn = document.getElementById('submitModalBtn');
+        openSubmitBtn.click();
+    }
+
+    const maxfilesize = 750 * 1024 * 1024; // 750MB
+
+    function HandleFile(filevt) {
+        if (filevt.target.files.length < 1) {
+            setCanUploadCurFile(false);
+            setCannotUploadReason("Please select a file.");
+            return;
+        }
+        if (filevt.target.files.length > 1) {
+            setCanUploadCurFile(false);
+            setCannotUploadReason("Only 1 file at a time. (compress folders to .zip files)");
+            return;
+        }
+        const file = filevt.target.files[0];
+        if (file.size > maxfilesize) {
+            setCanUploadCurFile(false);
+            setCannotUploadReason("File is too large, try compressing it to under 750MB using .zip or a similar format (or contact us for support)");
+            return;
+        }
+        setCanUploadCurFile(true);
+    }
+
+    function UploadSubmission() {
+        const file = document.getElementById("submissionFile").files[0];
+        file.arrayBuffer().then(buf => {
+            fetch("/api/startsubmission", {
+                method: "POST",
+                credentials: "include",
+                body: JSON.stringify({
+                    filename: file.name
+                })
+            }).then(res => {
+                if (res.ok) {
+                    res.json().then(body => {
+                        if (body.url == null) return;
+                        const submissionContainer = new ContainerClient(body.url);
+                        const blob = submissionContainer.getBlockBlobClient(teamId);
+                        setUploadFileSize(file.size);
+                        setUploading(true);
+                        blob.uploadData(buf, {
+                            onProgress: (evt) => {
+                                setUploadedBytes(evt.loadedBytes);
+                            },
+                            blockSize: 16 * 1024 * 1024, // 16MB blocks
+                            maxSingleShotSize: 25 * 1024 * 1024 // force to use blocks for files > 25MB
+                        }).then(res => {
+                            setOkBannerDisplay(true);
+                            setOkBannerText("Uploaded submission successfully");
+                            setTimeout(() => setOkBannerDisplay(false), 7000);
+                            document.getElementById('closeSubmissionModal').click();
+                            console.log("uploaded successfully");
+                            setUploading(false);
+                            setSubmission({state: 1, filename: file.name, url: blob.url, uploadtime: (new Date()).toISOString(), size: file.size})
+                        }, (err) => {
+                            setFailedBannerDisplay(true);
+                            setFailedBannerText("Failed to upload submission.");
+                            setFailedBannerSubtext(err);
+                            setTimeout(() => setFailedBannerDisplay(false), 7000);
+                            console.error("failed to upload: ");
+                            console.error(err);
+                            setUploading(false);
+                        })
+                    })
+                }
+            })
+        });
+    }
+
+    function DownloadUrlToName(url, filename) {
+        fetch(url).then(res => {
+            res.blob().then(blob => {
+                const blobUrl = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(blobUrl);
+            })
+        });
+    }
+
+    function DeleteSubmission(){
+        fetch("/api/deletesubmission", {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify({
+                tid: teamId
+            })
+        }).then(res => {
+            if(res.ok){
+                setSubmission({});
+                setOkBannerDisplay(true);
+                setOkBannerText("Deleted submission successfully");
+                setTimeout(() => setOkBannerDisplay(false), 7000);
+            }
+            else {
+                res.text().then(reason => {
+                    setFailedBannerDisplay(true);
+                    setFailedBannerText("Failed to delete submission.");
+                    setFailedBannerSubtext(reason);
+                    setTimeout(() => setFailedBannerDisplay(false), 7000);
+                })
             }
         })
     }
@@ -416,7 +543,7 @@ export default function TeamPage({ params }) {
                                 }
                             })
                         }
-                        setSubmissions(body.submissions);
+                        setSubmission(body.submission);
                     })
                 }
             });
@@ -465,20 +592,20 @@ export default function TeamPage({ params }) {
                         <div className="modal-body">
                             <form>
                                 <label className="form-label">Team name</label>
-                                <input type="text" className="form-control" name="teamname" placeholder="Your team name(keep it appropriate please)" value={tmpTeamName} onChange={evt => {if(evt.target.value.length <= 30){setTmpTeamName(evt.target.value)}}}></input>
+                                <input type="text" className="form-control" name="teamname" placeholder="Your team name(keep it appropriate please)" value={tmpTeamName} onChange={evt => { if (evt.target.value.length <= 30) { setTmpTeamName(evt.target.value) } }}></input>
                             </form>
                         </div>
                         <div className="modal-footer">
                             <button className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                             {tmpTeamName.length > 0
-                            ? <button className="btn btn-primary" data-bs-dismiss="modal" onClick={RenameTeam}>
-                                <IconDeviceFloppy></IconDeviceFloppy>
-                                Rename team
-                            </button>
-                            : <button className="btn btn-primary" disabled>
-                                <IconDeviceFloppy></IconDeviceFloppy>
-                                Rename team
-                            </button>
+                                ? <button className="btn btn-primary" data-bs-dismiss="modal" onClick={RenameTeam}>
+                                    <IconDeviceFloppy></IconDeviceFloppy>
+                                    Rename team
+                                </button>
+                                : <button className="btn btn-primary" disabled>
+                                    <IconDeviceFloppy></IconDeviceFloppy>
+                                    Rename team
+                                </button>
                             }
                         </div>
                     </div>
@@ -518,6 +645,76 @@ export default function TeamPage({ params }) {
                 </button>
                 : <></>
             }
+            {isAdmin && ownerId == viewerUid && ownerProvider == viewerProvider && submission.size == null
+                ? <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#submitModal"><IconUpload></IconUpload>Upload submission</button>
+                : <></>
+            }
+            {isAdmin && ownerId == viewerUid && ownerProvider == viewerProvider && submission.size != null
+                ? <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#dangerSubmitModal"><IconUpload></IconUpload>Upload submission</button>
+                : <></>
+            }
+            <button className="d-none" data-bs-toggle="modal" data-bs-target="#submitModal" id="submitModalBtn"></button>
+            <button className="d-none" data-bs-toggle="modal" data-bs-target="#dangerSubmitModal" id="dangerSubmitModalBtn"></button>
+            <div className="modal" id="dangerSubmitModal" tabIndex={-1}>
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <button type="button" className="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                        <div className="modal-status bg-danger"></div>
+                        <div className="modal-body text-center py-4">
+                            <IconAlertTriangle className="text-danger"></IconAlertTriangle>
+                            <h3>Are you sure?</h3>
+                            <div className="text-secondary">
+                                Uploading another file will overwrite your old submission. The old submission will be permanently deleted and cannot be recovered.
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-success" data-bs-dismiss="modal">Cancel</button>
+                            <button className="btn btn-danger ms-auto" onClick={CloseSubmitDanger}>Continue</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="modal" id="submitModal" tabIndex={-1}>
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">Upload submission</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                            <label className="form-label">Upload your file, for folders compress to a .zip first.</label>
+                            <input type="file" id="submissionFile" onChange={evt => HandleFile(evt)}></input>
+                        </div>
+                        <div className="modal-footer">
+                            {canUploadCurFile
+                                ? <></>
+                                : <div className="alert alert-danger w-100" role="alert">
+                                    <div className="alert-icon">
+                                        <IconAlertCircle className="icon alert-icon icon-2"></IconAlertCircle>
+                                    </div>
+                                    <div>
+                                        <h4 className="alert-heading">Upload restricted until the following issue is resolved:</h4>
+                                        <div className="alert-description">
+                                            {cannotUploadReason}
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <button className="d-none" data-bs-dismiss="modal" id="closeSubmissionModal"></button>
+                            <button className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            {canUploadCurFile
+                                ? <button className="btn btn-primary ms-auto" onClick={UploadSubmission}>{isUploading ? <div className="spinner-border text-white"></div> : <IconUpload></IconUpload>}&nbsp;&nbsp;Upload</button>
+                                : <button className="btn btn-primary ms-auto disabled" disabled><IconUpload></IconUpload>Upload</button>
+                            }
+                            {isUploading
+                            ? <div className="text-secondary">{uploadedBytes/1000000}MB/{uploadFileSize/1000000}MB uploaded({percentUploaded}%)</div>
+                            : <></>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div className="modal" id="addToTeamModal" tabIndex={-1}>
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
@@ -603,6 +800,26 @@ export default function TeamPage({ params }) {
                     </div>
                 </div>
             </div>
+            <div className="modal" id="deleteSubmissionWarning" tabIndex={-1}>
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <button type="button" className="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                        <div className="modal-status bg-danger"></div>
+                        <div className="modal-body text-center py-4">
+                            <IconAlertTriangle className="text-danger"></IconAlertTriangle>
+                            <h3>Are you sure?</h3>
+                            <div className="text-secondary">
+                                This will delete your submission permanently and irreversibly.
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-success" data-bs-dismiss="modal">Cancel</button>
+                            <button className="btn btn-danger ms-auto" data-bs-dismiss="modal" onClick={DeleteSubmission}><IconTrash></IconTrash>Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div className="row w-100 mt-5">
                 <div className="col">
                     <h1 className={`${styles.subheader} ${styles.centeralign}`}>Members</h1>
@@ -664,11 +881,33 @@ export default function TeamPage({ params }) {
                         </table>
                     </div>
                 </div>
-                {submissions.length > 0
+                {submission.size != null
                     ? <div className="col">
-                        <h1 className={`${styles.subheader} ${styles.centeralign}`}>Submissions</h1>
+                        <h1 className={`${styles.subheader} ${styles.centeralign}`}>Submission</h1>
                         <table className="table">
+                            <thead>
+                                <tr>
+                                    <th>Filename</th>
+                                    <th>Upload time</th>
+                                    <th>Size</th>
+                                    <th className="w-1"></th>
+                                    {isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)
+                                    ? <th className="w-1"></th>
+                                    : <></>
+                                    }
+                                </tr>
+                            </thead>
                             <tbody>
+                                <tr key={submission.id}>
+                                    <td>{submission.filename}</td>
+                                    <td className="text-secondary">{(new Date(submission.uploadtime)).toLocaleString()}</td>
+                                    <td className="text-secondary">{submission.size / 1000000}MB</td>
+                                    <td><button className="btn btn-primary" onClick={() => DownloadUrlToName(submission.url, submission.filename)}><IconDownload></IconDownload>Download</button></td>
+                                    {isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)
+                                    ? <td><button className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteSubmissionWarning"><IconTrash></IconTrash>Delete</button></td>
+                                    : <></>
+                                    }
+                                </tr>
                             </tbody>
                         </table>
                     </div>
