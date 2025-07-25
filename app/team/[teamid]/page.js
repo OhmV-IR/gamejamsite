@@ -649,7 +649,7 @@ export default function TeamPage({ params }) {
                 ? <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#submitModal"><IconUpload></IconUpload>Upload submission</button>
                 : <></>
             }
-            {isAdmin && ownerId == viewerUid && ownerProvider == viewerProvider && submission.size != null
+            {isAdmin && ownerId == viewerUid && ownerProvider == viewerProvider && submission.state == 1
                 ? <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#dangerSubmitModal"><IconUpload></IconUpload>Upload submission</button>
                 : <></>
             }
@@ -881,7 +881,7 @@ export default function TeamPage({ params }) {
                         </table>
                     </div>
                 </div>
-                {submission.size != null
+                {submission.state == 1
                     ? <div className="col">
                         <h1 className={`${styles.subheader} ${styles.centeralign}`}>Submission</h1>
                         <table className="table">
