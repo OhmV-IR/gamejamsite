@@ -23,9 +23,10 @@ export async function POST(req) {
     const event = body[0];
     if (event.eventType == 'Microsoft.EventGrid.SubscriptionValidationEvent') {
         const validationCode = event.data.validationCode;
-        return new Response(JSON.stringify({
-            validationResponse: validationCode
-        }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        return new Response(
+            JSON.stringify({ validationResponse: validationCode }),
+            { status: 200, headers: { 'Content-Type': 'application/json' } }
+        );
     } else if (event.eventType == 'Microsoft.Storage.BlobCreated') {
         const blobname = new URL(event.data.url).pathname.split("/").slice(2).join("/");
         if (event.data.contentLength > maxfilesize) {
