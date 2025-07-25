@@ -36,7 +36,7 @@ export async function POST(req){
             uid: payload.uid,
             provider: payload.provider
         },
-        submissions: [],
+        submission: {},
         joinrequests: [],
         members: [
             {
