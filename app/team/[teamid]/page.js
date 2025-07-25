@@ -777,6 +777,7 @@ export default function TeamPage({ params }) {
                                 <tr>
                                     <th>Filename</th>
                                     <th>Upload time</th>
+                                    <th>Size</th>
                                     <th className="w-1"></th>
                                 </tr>
                             </thead>
@@ -786,6 +787,7 @@ export default function TeamPage({ params }) {
                                         <tr key={submission.id}>
                                             <td>{submission.filename}</td>
                                             <td className="text-secondary">{(new Date(submission.uploadtime)).toLocaleString()}</td>
+                                            <td className="text-secondary">{submission.size / 1000000}MB</td>
                                             <td><a className="btn btn-primary" href={submission.url}><IconDownload></IconDownload>Download</a></td>
                                         </tr>
                                     ))
