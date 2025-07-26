@@ -721,7 +721,7 @@ export default function TeamPage({ params }) {
                                 : <button className="btn btn-primary ms-auto disabled" disabled><IconUpload></IconUpload>Upload</button>
                             }
                             {isUploading
-                                ? <div className="text-secondary">{uploadedBytes / 1000000}MB/{uploadFileSize / 1000000}MB uploaded({percentUploaded}%)</div>
+                                ? <div className="text-secondary">{(uploadedBytes / 1000000).toFixed(2)}MB/{(uploadFileSize / 1000000).toFixed(2)}MB uploaded({percentUploaded}%)</div>
                                 : <></>
                             }
                         </div>
@@ -914,7 +914,7 @@ export default function TeamPage({ params }) {
                                 <tr key={submission.id}>
                                     <td>{submission.filename}</td>
                                     <td className="text-secondary">{(new Date(submission.uploadtime)).toLocaleString()}</td>
-                                    <td className="text-secondary">{submission.size / 1000000}MB</td>
+                                    <td className="text-secondary">{(submission.size / 1000000).toFixed(2)}MB</td>
                                     <td><button className="btn btn-primary" onClick={() => DownloadUrlToName(submission.url, submission.filename)}><IconDownload></IconDownload>Download</button></td>
                                     {isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)
                                         ? <td><button className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteSubmissionWarning"><IconTrash></IconTrash>Delete</button></td>
