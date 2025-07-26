@@ -400,7 +400,9 @@ export default function TeamPage({ params }) {
                             document.getElementById('closeSubmissionModal').click();
                             console.log("uploaded successfully");
                             setUploading(false);
-                            setSubmission({state: 1, filename: file.name, url: blob.url, uploadtime: (new Date()).toISOString(), size: file.size})
+                            setSubmission({ state: 1, filename: file.name, url: blob.url, uploadtime: (new Date()).toISOString(), size: file.size });
+                            setUploadFileSize(0);
+                            setUploadedBytes(0);
                         }, (err) => {
                             setFailedBannerDisplay(true);
                             setFailedBannerText("Failed to upload submission.");
@@ -431,7 +433,7 @@ export default function TeamPage({ params }) {
         });
     }
 
-    function DeleteSubmission(){
+    function DeleteSubmission() {
         fetch("/api/deletesubmission", {
             method: "POST",
             credentials: "include",
@@ -439,7 +441,7 @@ export default function TeamPage({ params }) {
                 tid: teamId
             })
         }).then(res => {
-            if(res.ok){
+            if (res.ok) {
                 setSubmission({});
                 setOkBannerDisplay(true);
                 setOkBannerText("Deleted submission successfully");
@@ -545,6 +547,8 @@ export default function TeamPage({ params }) {
                         }
                         setSubmission(body.submission);
                     })
+                } else if(res.status == 404){
+                    window.location.href = "/404";
                 }
             });
         }))
@@ -680,11 +684,17 @@ export default function TeamPage({ params }) {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title">Upload submission</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            {isUploading
+                                ? <></>
+                                : <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            }
                         </div>
                         <div className="modal-body">
                             <label className="form-label">Upload your file, for folders compress to a .zip first.</label>
-                            <input type="file" id="submissionFile" onChange={evt => HandleFile(evt)}></input>
+                            {isUploading
+                                ? <input type="file" id="submissionFile" disabled></input>
+                                : <input type="file" id="submissionFile" onChange={evt => HandleFile(evt)}></input>
+                            }
                         </div>
                         <div className="modal-footer">
                             {canUploadCurFile
@@ -702,14 +712,17 @@ export default function TeamPage({ params }) {
                                 </div>
                             }
                             <button className="d-none" data-bs-dismiss="modal" id="closeSubmissionModal"></button>
-                            <button className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            {isUploading
+                                ? <></>
+                                : <button className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            }
                             {canUploadCurFile
                                 ? <button className="btn btn-primary ms-auto" onClick={UploadSubmission}>{isUploading ? <div className="spinner-border text-white"></div> : <IconUpload></IconUpload>}&nbsp;&nbsp;Upload</button>
                                 : <button className="btn btn-primary ms-auto disabled" disabled><IconUpload></IconUpload>Upload</button>
                             }
                             {isUploading
-                            ? <div className="text-secondary">{uploadedBytes/1000000}MB/{uploadFileSize/1000000}MB uploaded({percentUploaded}%)</div>
-                            : <></>
+                                ? <div className="text-secondary">{uploadedBytes / 1000000}MB/{uploadFileSize / 1000000}MB uploaded({percentUploaded}%)</div>
+                                : <></>
                             }
                         </div>
                     </div>
@@ -892,8 +905,8 @@ export default function TeamPage({ params }) {
                                     <th>Size</th>
                                     <th className="w-1"></th>
                                     {isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)
-                                    ? <th className="w-1"></th>
-                                    : <></>
+                                        ? <th className="w-1"></th>
+                                        : <></>
                                     }
                                 </tr>
                             </thead>
@@ -904,8 +917,8 @@ export default function TeamPage({ params }) {
                                     <td className="text-secondary">{submission.size / 1000000}MB</td>
                                     <td><button className="btn btn-primary" onClick={() => DownloadUrlToName(submission.url, submission.filename)}><IconDownload></IconDownload>Download</button></td>
                                     {isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)
-                                    ? <td><button className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteSubmissionWarning"><IconTrash></IconTrash>Delete</button></td>
-                                    : <></>
+                                        ? <td><button className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteSubmissionWarning"><IconTrash></IconTrash>Delete</button></td>
+                                        : <></>
                                     }
                                 </tr>
                             </tbody>
