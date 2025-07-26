@@ -45,7 +45,7 @@ export async function POST(req) {
             // Create and write
             permissions: ContainerSASPermissions.parse("cw"),
             startsOn: new Date(),
-            expiresOn: new Date(Date.now() + 7200 * 1000)
+            expiresOn: new Date(Date.now() + 14400 * 1000)
         })
     }), { status: 200 });
 }
