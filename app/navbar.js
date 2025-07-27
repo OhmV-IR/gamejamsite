@@ -151,7 +151,7 @@ export default function Navbar() {
                     </div>
                   </a>
                   <div className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <a href="/finishaccount" className="dropdown-item">Account Details</a>
+                    <Link href="/finishaccount" className="dropdown-item">Account Details</Link>
                     <div className="dropdown-divider"></div>
                     <button className="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteaccountmodal">Delete my account</button>
                     <a href="/api/logout" className="dropdown-item text-danger">Logout</a>

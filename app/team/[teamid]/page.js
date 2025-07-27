@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from "react";
 import { flushSync } from "react-dom";
-import { IconAlertCircle, IconAlertTriangle, IconBrandBootstrap, IconCheck, IconChevronUp, IconDeviceFloppy, IconDoorExit, IconDownload, IconKarate, IconMail, IconMinus, IconPencil, IconPlus, IconTrash, IconUpload, IconX } from "@tabler/icons-react";
+import { IconAlertCircle, IconAlertTriangle, IconBrandBootstrap, IconCheck, IconChevronUp, IconDeviceFloppy, IconDoorExit, IconDownload, IconInfoCircle, IconKarate, IconMail, IconMinus, IconPencil, IconPlus, IconTrash, IconUpload, IconX } from "@tabler/icons-react";
 import React from "react";
 import styles from './page.module.css';
 const { ContainerClient } = require("@azure/storage-blob");
@@ -581,6 +581,18 @@ export default function TeamPage({ params }) {
                 </div>
                 : <></>
             }
+            {isUploading
+            ? <div className="alert alert-primary" role="alert">
+            <div className="alert-icon">
+                <IconInfoCircle></IconInfoCircle>
+            </div>
+            <div>
+                <h4 className="alert-heading">Uploading submission: {(uploadedBytes/1000000).toFixed(2)}MB / {(uploadFileSize/1000000).toFixed(2)}MB ({percentUploaded}%)</h4>
+                <div className="alert-description">Please do not leave the site until the upload completes.</div>
+            </div>
+            </div>
+            : <></>
+            }
             <h1 className={`w-100 ${styles.teamname} ${styles.centeralign} mt-5`}>{teamName}&nbsp;&nbsp;
                 {isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)
                     ? <button className="btn" data-bs-toggle="modal" data-bs-target="#renameTeamModal"><IconPencil></IconPencil></button>
@@ -649,11 +661,11 @@ export default function TeamPage({ params }) {
                 </button>
                 : <></>
             }
-            {isAdmin && ownerId == viewerUid && ownerProvider == viewerProvider && submission.size == null
+            {isAdmin && ownerId == viewerUid && ownerProvider == viewerProvider && submission.size == null && !isUploading
                 ? <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#submitModal"><IconUpload></IconUpload>Upload submission</button>
                 : <></>
             }
-            {isAdmin && ownerId == viewerUid && ownerProvider == viewerProvider && submission.state == 1
+            {isAdmin && ownerId == viewerUid && ownerProvider == viewerProvider && submission.state == 1 && !isUploading
                 ? <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#dangerSubmitModal"><IconUpload></IconUpload>Upload submission</button>
                 : <></>
             }
@@ -684,17 +696,11 @@ export default function TeamPage({ params }) {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title">Upload submission</h5>
-                            {isUploading
-                                ? <></>
-                                : <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            }
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
                             <label className="form-label">Upload your file, for folders compress to a .zip first.</label>
-                            {isUploading
-                                ? <input type="file" id="submissionFile" disabled></input>
-                                : <input type="file" id="submissionFile" onChange={evt => HandleFile(evt)}></input>
-                            }
+                                <input type="file" id="submissionFile" onChange={evt => HandleFile(evt)}></input>
                         </div>
                         <div className="modal-footer">
                             {canUploadCurFile
@@ -712,12 +718,9 @@ export default function TeamPage({ params }) {
                                 </div>
                             }
                             <button className="d-none" data-bs-dismiss="modal" id="closeSubmissionModal"></button>
-                            {isUploading
-                                ? <></>
-                                : <button className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            }
+                                <button className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                             {canUploadCurFile
-                                ? <button className="btn btn-primary ms-auto" onClick={UploadSubmission}>{isUploading ? <div className="spinner-border text-white"></div> : <IconUpload></IconUpload>}&nbsp;&nbsp;Upload</button>
+                                ? <button className="btn btn-primary ms-auto" onClick={UploadSubmission} data-bs-dismiss="modal"><IconUpload></IconUpload>&nbsp;&nbsp;Upload</button>
                                 : <button className="btn btn-primary ms-auto disabled" disabled><IconUpload></IconUpload>Upload</button>
                             }
                             {isUploading
