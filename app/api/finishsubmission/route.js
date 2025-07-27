@@ -34,6 +34,7 @@ export async function POST(req) {
         if (event.data.contentLength > maxfilesize) {
             // Ban user(TODO) and delete the upload
             const blob = new BlobClient(process.env.BLOB_CONNSTR, process.env.BLOB_CONTAINER_NAME, blobname);
+            console.log("Deleted uploaded blob for being too large");
             blob.deleteIfExists({
                 deleteSnapshots: "include"
             });
@@ -43,6 +44,7 @@ export async function POST(req) {
         if (team == null) {
             // Ban user(TODO) and delete the upload
             const blob = new BlobClient(process.env.BLOB_CONNSTR, process.env.BLOB_CONTAINER_NAME, blobname);
+            console.log("Deleted blob for not being able to find associated team");
             blob.deleteIfExists({
                 deleteSnapshots: "include"
             });
@@ -55,6 +57,7 @@ export async function POST(req) {
         teamcontainer.item(team.id, team.id).replace(team);
         return new Response("Handled SubmissionCreated event", { status: 200 });
     } else {
+        console.warn("Unrecognized event");
         return new Response("Unrecognized event", { status: 404 });
     }
 }
