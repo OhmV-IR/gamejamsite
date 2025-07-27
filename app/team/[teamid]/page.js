@@ -404,13 +404,15 @@ export default function TeamPage({ params }) {
                             setUploadFileSize(0);
                             setUploadedBytes(0);
                         }, (err) => {
-                            setFailedBannerDisplay(true);
-                            setFailedBannerText("Failed to upload submission.");
-                            setFailedBannerSubtext(err);
-                            setTimeout(() => setFailedBannerDisplay(false), 7000);
-                            console.error("failed to upload: ");
-                            console.error(err);
-                            setUploading(false);
+                            if (err != 'AbortError') {
+                                setFailedBannerDisplay(true);
+                                setFailedBannerText("Failed to upload submission.");
+                                setFailedBannerSubtext(err);
+                                setTimeout(() => setFailedBannerDisplay(false), 7000);
+                                setUploading(false);
+                                setUploadFileSize(0);
+                                setUploadedBytes(0);
+                            }
                         })
                     })
                 }
@@ -547,7 +549,7 @@ export default function TeamPage({ params }) {
                         }
                         setSubmission(body.submission);
                     })
-                } else if(res.status == 404){
+                } else if (res.status == 404) {
                     window.location.href = "/404";
                 }
             });
@@ -582,16 +584,16 @@ export default function TeamPage({ params }) {
                 : <></>
             }
             {isUploading
-            ? <div className="alert alert-primary" role="alert">
-            <div className="alert-icon">
-                <IconInfoCircle></IconInfoCircle>
-            </div>
-            <div>
-                <h4 className="alert-heading">Uploading submission: {(uploadedBytes/1000000).toFixed(2)}MB / {(uploadFileSize/1000000).toFixed(2)}MB ({percentUploaded}%)</h4>
-                <div className="alert-description">Please do not leave the site until the upload completes.</div>
-            </div>
-            </div>
-            : <></>
+                ? <div className="alert alert-primary" role="alert">
+                    <div className="alert-icon">
+                        <IconInfoCircle></IconInfoCircle>
+                    </div>
+                    <div>
+                        <h4 className="alert-heading">Uploading submission: {(uploadedBytes / 1000000).toFixed(2)}MB / {(uploadFileSize / 1000000).toFixed(2)}MB ({percentUploaded}%)</h4>
+                        <div className="alert-description">Please do not leave this page until the upload completes.</div>
+                    </div>
+                </div>
+                : <></>
             }
             <h1 className={`w-100 ${styles.teamname} ${styles.centeralign} mt-5`}>{teamName}&nbsp;&nbsp;
                 {isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)
@@ -696,11 +698,11 @@ export default function TeamPage({ params }) {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title">Upload submission</h5>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
                             <label className="form-label">Upload your file, for folders compress to a .zip first.</label>
-                                <input type="file" id="submissionFile" onChange={evt => HandleFile(evt)}></input>
+                            <input type="file" id="submissionFile" onChange={evt => HandleFile(evt)}></input>
                         </div>
                         <div className="modal-footer">
                             {canUploadCurFile
@@ -718,7 +720,7 @@ export default function TeamPage({ params }) {
                                 </div>
                             }
                             <button className="d-none" data-bs-dismiss="modal" id="closeSubmissionModal"></button>
-                                <button className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                             {canUploadCurFile
                                 ? <button className="btn btn-primary ms-auto" onClick={UploadSubmission} data-bs-dismiss="modal"><IconUpload></IconUpload>&nbsp;&nbsp;Upload</button>
                                 : <button className="btn btn-primary ms-auto disabled" disabled><IconUpload></IconUpload>Upload</button>
