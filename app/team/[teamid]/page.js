@@ -391,6 +391,7 @@ export default function TeamPage({ params }) {
                             onProgress: (evt) => {
                                 setUploadedBytes(evt.loadedBytes);
                             },
+                            concurrency: 4, // Max 4 blocks at a time
                             blockSize: 16 * 1024 * 1024, // 16MB blocks
                             maxSingleShotSize: 25 * 1024 * 1024 // force to use blocks for files > 25MB
                         }).then(res => {
