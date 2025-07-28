@@ -421,7 +421,12 @@ export default function TeamPage({ params }) {
     }
 
     function DownloadUrlToName(url, filename) {
-        fetch(url).then(res => {
+        fetch(url, {
+            method: "GET",
+            mode: 'cors',
+            credentials: 'omit', 
+            headers: {}           
+        }).then(res => {
             res.blob().then(blob => {
                 const blobUrl = URL.createObjectURL(blob);
                 const a = document.createElement('a');
