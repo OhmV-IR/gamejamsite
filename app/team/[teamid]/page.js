@@ -400,7 +400,9 @@ export default function TeamPage({ params }) {
                             document.getElementById('closeSubmissionModal').click();
                             console.log("uploaded successfully");
                             setUploading(false);
-                            setSubmission({ state: 1, filename: file.name, url: blob.url, uploadtime: (new Date()).toISOString(), size: file.size });
+                            const blobUrl = new URL(blob.url);
+                            blobUrl.search = "";
+                            setSubmission({ state: 1, filename: file.name, url: blobUrl.toString(), uploadtime: (new Date()).toISOString(), size: file.size });
                             setUploadFileSize(0);
                             setUploadedBytes(0);
                         }, (err) => {
@@ -425,7 +427,6 @@ export default function TeamPage({ params }) {
             method: "GET",
             mode: 'cors',
             credentials: 'omit', 
-            headers: {}           
         }).then(res => {
             res.blob().then(blob => {
                 const blobUrl = URL.createObjectURL(blob);
