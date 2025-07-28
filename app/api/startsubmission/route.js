@@ -44,7 +44,7 @@ export async function POST(req) {
         url: await blobContainer.generateSasUrl({
             // Create and write
             permissions: ContainerSASPermissions.parse("cw"),
-            startsOn: new Date(),
+            startsOn: new Date(Date.now() - 5 * 60 * 1000),
             expiresOn: new Date(Date.now() + 14400 * 1000)
         })
     }), { status: 200 });
