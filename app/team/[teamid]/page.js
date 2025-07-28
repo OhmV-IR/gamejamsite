@@ -417,6 +417,11 @@ export default function TeamPage({ params }) {
                             }
                         })
                     })
+                } else {
+                    setFailedBannerDisplay(true);
+                    setFailedBannerText("Failed to upload file: ");
+                    res.text().then(reason => setFailedBannerSubtext(reason));
+                    setTimeout(() => setFailedBannerDisplay(false), 8000);
                 }
             })
         });
