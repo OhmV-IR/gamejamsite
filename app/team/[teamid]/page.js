@@ -40,10 +40,19 @@ export default function TeamPage({ params }) {
     const [uploadedBytes, setUploadedBytes] = useState(0);
     const [uploadFileSize, setUploadFileSize] = useState(0);
     const [percentUploaded, setPercentUploaded] = useState(0.0);
+    let leaseClient;
 
     useEffect(() => {
         setPercentUploaded(Math.round(uploadedBytes / uploadFileSize * 100))
     }, [uploadedBytes, uploadFileSize]);
+
+    window.addEventListener("beforeunload", async () => {
+        if (isUploading) {
+            leaseClient.releaseLease().then(success => { }, err => {
+                console.error(err);
+            })
+        }
+    });
 
     function RequestToJoinTeam() {
         fetch("/api/requesttojoin", {
@@ -370,6 +379,63 @@ export default function TeamPage({ params }) {
         setCanUploadCurFile(true);
     }
 
+    async function PerformUpload(blob, file, buf) {
+        leaseClient = blob.getBlobLeaseClient();
+        let leaseId;
+        try{
+        const leaseRes = await leaseClient.acquireLease(60);
+        leaseId = leaseRes.leaseId;
+        } catch(err){
+            setFailedBannerDisplay(true);
+            setFailedBannerText("Failed to get a lock on submission, try waiting 60s before trying again");
+            setFailedBannerSubtext(err.message);
+            setTimeout(() => setFailedBannerDisplay(false), 8000);
+            setUploading(false);
+            setUploadFileSize(0);
+            setUploadedBytes(0);
+            return;
+        }
+        const renewtask = setInterval(() => {
+            if (isUploading) {
+                leaseClient.renewLease();
+            } else {
+                clearInterval(renewtask);
+            }
+        }, 45 * 1000);
+        setUploadFileSize(file.size);
+        setUploading(true);
+        try{
+        await blob.uploadData(buf, {
+            onProgress: (evt) => {
+                setUploadedBytes(evt.loadedBytes);
+            },
+            conditions: { leaseId: leaseId },
+            concurrency: 4, // Max 4 blocks at a time
+            blockSize: 16 * 1024 * 1024, // 16MB blocks
+            maxSingleShotSize: 25 * 1024 * 1024 // force to use blocks for files > 25MB
+        })
+        await leaseClient.releaseLease();
+        setOkBannerDisplay(true);
+        setOkBannerText("Uploaded submission successfully");
+        setTimeout(() => setOkBannerDisplay(false), 7000);
+        setUploading(false);
+        const blobUrl = new URL(blob.url);
+        blobUrl.search = "";
+        setSubmission({ state: 1, filename: file.name, url: blobUrl.toString(), uploadtime: (new Date()).toISOString(), size: file.size });
+        setUploadFileSize(0);
+        setUploadedBytes(0);
+    } catch(err) {
+        setFailedBannerDisplay(true);
+        setFailedBannerText("Failed to upload");
+        setFailedBannerSubtext(err.message);
+        setTimeout(() => setFailedBannerDisplay(false), 8000);
+        setUploading(false);
+        setUploadFileSize(0);
+        setUploadedBytes(0);
+        return;
+    }
+    }
+
     function UploadSubmission() {
         const file = document.getElementById("submissionFile").files[0];
         file.arrayBuffer().then(buf => {
@@ -385,38 +451,15 @@ export default function TeamPage({ params }) {
                         if (body.url == null) return;
                         const submissionContainer = new ContainerClient(body.url);
                         const blob = submissionContainer.getBlockBlobClient(teamId);
-                        setUploadFileSize(file.size);
-                        setUploading(true);
-                        blob.uploadData(buf, {
-                            onProgress: (evt) => {
-                                setUploadedBytes(evt.loadedBytes);
-                            },
-                            concurrency: 4, // Max 4 blocks at a time
-                            blockSize: 16 * 1024 * 1024, // 16MB blocks
-                            maxSingleShotSize: 25 * 1024 * 1024 // force to use blocks for files > 25MB
-                        }).then(res => {
-                            setOkBannerDisplay(true);
-                            setOkBannerText("Uploaded submission successfully");
-                            setTimeout(() => setOkBannerDisplay(false), 7000);
-                            document.getElementById('closeSubmissionModal').click();
-                            console.log("uploaded successfully");
-                            setUploading(false);
-                            const blobUrl = new URL(blob.url);
-                            blobUrl.search = "";
-                            setSubmission({ state: 1, filename: file.name, url: blobUrl.toString(), uploadtime: (new Date()).toISOString(), size: file.size });
-                            setUploadFileSize(0);
-                            setUploadedBytes(0);
-                        }, (err) => {
-                            if (err != 'AbortError') {
-                                setFailedBannerDisplay(true);
-                                setFailedBannerText("Failed to upload submission.");
-                                setFailedBannerSubtext(err);
-                                setTimeout(() => setFailedBannerDisplay(false), 7000);
-                                setUploading(false);
-                                setUploadFileSize(0);
-                                setUploadedBytes(0);
+                        blob.exists().then(exists => {
+                            if (!exists) {
+                                blob.upload("", 0).then(() => {
+                                    PerformUpload(blob, file, buf);
+                                })
+                            } else {
+                                PerformUpload(blob, file, buf);
                             }
-                        })
+                        });
                     })
                 } else {
                     setFailedBannerDisplay(true);
@@ -432,7 +475,7 @@ export default function TeamPage({ params }) {
         fetch(url, {
             method: "GET",
             mode: 'cors',
-            credentials: 'omit', 
+            credentials: 'omit',
         }).then(res => {
             res.blob().then(blob => {
                 const blobUrl = URL.createObjectURL(blob);
