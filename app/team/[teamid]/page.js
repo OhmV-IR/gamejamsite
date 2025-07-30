@@ -45,6 +45,13 @@ export default function TeamPage({ params }) {
         setPercentUploaded(Math.round(uploadedBytes / uploadFileSize * 100))
     }, [uploadedBytes, uploadFileSize]);
 
+    
+    window.addEventListener("pagehide", async () => {
+        if(isUploading && leaseClient != null){
+            await leaseClient.releaseLease();
+        }
+    });
+
     function RequestToJoinTeam() {
         fetch("/api/requesttojoin", {
             method: "POST",
@@ -386,10 +393,12 @@ export default function TeamPage({ params }) {
             setUploadedBytes(0);
             return;
         }
-        const renewtask = setInterval(() => {
+        const renewtask = setInterval(async () => {
             if (isUploading) {
-                leaseClient.renewLease();
+                await leaseClient.renewLease();
             } else {
+                await leaseClient.releaseLease();
+                leaseClient = null;
                 clearInterval(renewtask);
             }
         }, 45 * 1000);
@@ -498,7 +507,7 @@ export default function TeamPage({ params }) {
             else {
                 res.text().then(reason => {
                     setFailedBannerDisplay(true);
-                    setFailedBannerText("Failed to delete submission.");
+                    setFailedBannerText("Failed to delete submission. Make sure nothing is currently uploading and wait 60s before retrying.");
                     setFailedBannerSubtext(reason);
                     setTimeout(() => setFailedBannerDisplay(false), 7000);
                 })
