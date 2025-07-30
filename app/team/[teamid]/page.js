@@ -418,6 +418,7 @@ export default function TeamPage({ params }) {
             setUploadFileSize(0);
             setUploadedBytes(0);
         } catch (err) {
+            await leaseClient.releaseLease();
             setFailedBannerDisplay(true);
             setFailedBannerText("Failed to upload");
             setFailedBannerSubtext(err.message);
