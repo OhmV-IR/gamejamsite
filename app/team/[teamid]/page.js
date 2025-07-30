@@ -373,10 +373,10 @@ export default function TeamPage({ params }) {
     async function PerformUpload(blob, file, buf) {
         leaseClient = blob.getBlobLeaseClient();
         let leaseId;
-        try{
-        const leaseRes = await leaseClient.acquireLease(60);
-        leaseId = leaseRes.leaseId;
-        } catch(err){
+        try {
+            const leaseRes = await leaseClient.acquireLease(60);
+            leaseId = leaseRes.leaseId;
+        } catch (err) {
             setFailedBannerDisplay(true);
             setFailedBannerText("Failed to get a lock on submission, try waiting 60s before trying again");
             setFailedBannerSubtext(err.message);
@@ -395,36 +395,36 @@ export default function TeamPage({ params }) {
         }, 45 * 1000);
         setUploadFileSize(file.size);
         setUploading(true);
-        try{
-        await blob.uploadData(buf, {
-            onProgress: (evt) => {
-                setUploadedBytes(evt.loadedBytes);
-            },
-            conditions: { leaseId: leaseId },
-            concurrency: 4, // Max 4 blocks at a time
-            blockSize: 16 * 1024 * 1024, // 16MB blocks
-            maxSingleShotSize: 25 * 1024 * 1024 // force to use blocks for files > 25MB
-        })
-        await leaseClient.releaseLease();
-        setOkBannerDisplay(true);
-        setOkBannerText("Uploaded submission successfully");
-        setTimeout(() => setOkBannerDisplay(false), 7000);
-        setUploading(false);
-        const blobUrl = new URL(blob.url);
-        blobUrl.search = "";
-        setSubmission({ state: 1, filename: file.name, url: blobUrl.toString(), uploadtime: (new Date()).toISOString(), size: file.size });
-        setUploadFileSize(0);
-        setUploadedBytes(0);
-    } catch(err) {
-        setFailedBannerDisplay(true);
-        setFailedBannerText("Failed to upload");
-        setFailedBannerSubtext(err.message);
-        setTimeout(() => setFailedBannerDisplay(false), 8000);
-        setUploading(false);
-        setUploadFileSize(0);
-        setUploadedBytes(0);
-        return;
-    }
+        try {
+            await blob.uploadData(buf, {
+                onProgress: (evt) => {
+                    setUploadedBytes(evt.loadedBytes);
+                },
+                conditions: { leaseId: leaseId },
+                concurrency: 4, // Max 4 blocks at a time
+                blockSize: 16 * 1024 * 1024, // 16MB blocks
+                maxSingleShotSize: 25 * 1024 * 1024 // force to use blocks for files > 25MB
+            })
+            await leaseClient.releaseLease();
+            setOkBannerDisplay(true);
+            setOkBannerText("Uploaded submission successfully");
+            setTimeout(() => setOkBannerDisplay(false), 7000);
+            setUploading(false);
+            const blobUrl = new URL(blob.url);
+            blobUrl.search = "";
+            setSubmission({ state: 1, filename: file.name, url: blobUrl.toString(), uploadtime: (new Date()).toISOString(), size: file.size });
+            setUploadFileSize(0);
+            setUploadedBytes(0);
+        } catch (err) {
+            setFailedBannerDisplay(true);
+            setFailedBannerText("Failed to upload");
+            setFailedBannerSubtext(err.message);
+            setTimeout(() => setFailedBannerDisplay(false), 8000);
+            setUploading(false);
+            setUploadFileSize(0);
+            setUploadedBytes(0);
+            return;
+        }
     }
 
     function UploadSubmission() {
