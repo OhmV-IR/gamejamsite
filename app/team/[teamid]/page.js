@@ -45,13 +45,6 @@ export default function TeamPage({ params }) {
         setPercentUploaded(Math.round(uploadedBytes / uploadFileSize * 100))
     }, [uploadedBytes, uploadFileSize]);
 
-    
-    window.addEventListener("pagehide", async () => {
-        if(isUploading && leaseClient != null){
-            await leaseClient.releaseLease();
-        }
-    });
-
     function RequestToJoinTeam() {
         fetch("/api/requesttojoin", {
             method: "POST",
