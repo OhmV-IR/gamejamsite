@@ -37,13 +37,10 @@ export async function POST(req) {
         filename: incomingbody.filename
     }
     teamcontainer.item(team.id, team.id).replace(team);
-    blobContainer.getBlobClient(team.id).deleteIfExists({
-        deleteSnapshots: "include"
-    });
     return new Response(JSON.stringify({
         url: await blobContainer.generateSasUrl({
             // Create and write
-            permissions: ContainerSASPermissions.parse("cw"),
+            permissions: ContainerSASPermissions.parse("rcw"),
             startsOn: new Date(Date.now() - 5 * 60 * 1000),
             expiresOn: new Date(Date.now() + 14400 * 1000)
         })
