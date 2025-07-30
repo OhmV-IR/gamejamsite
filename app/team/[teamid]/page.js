@@ -1,7 +1,6 @@
 "use client"
 import { useState, useEffect } from "react";
-import { flushSync } from "react-dom";
-import { IconAlertCircle, IconAlertTriangle, IconBrandBootstrap, IconCheck, IconChevronUp, IconDeviceFloppy, IconDoorExit, IconDownload, IconInfoCircle, IconKarate, IconMail, IconMinus, IconPencil, IconPlus, IconTrash, IconUpload, IconX } from "@tabler/icons-react";
+import { IconAlertCircle, IconAlertTriangle, IconCheck, IconChevronUp, IconDeviceFloppy, IconDoorExit, IconDownload, IconInfoCircle, IconKarate, IconMail, IconMinus, IconPencil, IconPlus, IconTrash, IconUpload, IconX } from "@tabler/icons-react";
 import React from "react";
 import styles from './page.module.css';
 const { ContainerClient } = require("@azure/storage-blob");
@@ -45,14 +44,6 @@ export default function TeamPage({ params }) {
     useEffect(() => {
         setPercentUploaded(Math.round(uploadedBytes / uploadFileSize * 100))
     }, [uploadedBytes, uploadFileSize]);
-
-    window.addEventListener("beforeunload", async () => {
-        if (isUploading) {
-            leaseClient.releaseLease().then(success => { }, err => {
-                console.error(err);
-            })
-        }
-    });
 
     function RequestToJoinTeam() {
         fetch("/api/requesttojoin", {
