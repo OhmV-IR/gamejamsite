@@ -403,7 +403,7 @@ export default function TeamPage({ params }) {
                     setUploadedBytes(evt.loadedBytes);
                 },
                 conditions: { leaseId: leaseId },
-                concurrency: 2, // Max 1 block at a time for smoother status updates
+                concurrency: 2, // Max 2 block at a time for smoother status updates
                 blockSize: 4 * 1024 * 1024, // 4MB blocks
                 maxSingleShotSize: 10 * 1024 * 1024 // force to use blocks for files > 10MB
             }).then(async () => {
