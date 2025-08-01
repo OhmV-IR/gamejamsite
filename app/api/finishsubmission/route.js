@@ -31,6 +31,9 @@ export async function POST(req) {
     }
     if (event.eventType == 'Microsoft.Storage.BlobCreated') {
         const blobname = new URL(event.data.url).pathname.split("/").slice(2).join("/");
+        if(event.data.contentLength == 0){
+            return new Response("handled empty file", {status: 200});
+        }
         if (event.data.contentLength > maxfilesize) {
             // Ban user(TODO) and delete the upload
             const blob = new BlobClient(process.env.BLOB_CONNSTR, process.env.BLOB_CONTAINER_NAME, blobname);
