@@ -374,7 +374,7 @@ export default function TeamPage({ params }) {
         leaseClient = blob.getBlobLeaseClient();
         let leaseId;
         try {
-            const leaseRes = await leaseClient.acquireLease(60);
+            const leaseRes = await leaseClient.acquireLease(30);
             leaseId = leaseRes.leaseId;
         } catch (err) {
             setFailedBannerDisplay(true);
@@ -394,7 +394,7 @@ export default function TeamPage({ params }) {
                 leaseClient = null;
                 clearInterval(renewtask);
             }
-        }, 45 * 1000);
+        }, 20 * 1000);
         setUploadFileSize(file.size);
         setUploading(true);
         try {
