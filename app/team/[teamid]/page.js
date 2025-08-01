@@ -407,11 +407,12 @@ export default function TeamPage({ params }) {
                 blockSize: 4 * 1024 * 1024, // 4MB blocks
                 maxSingleShotSize: 10 * 1024 * 1024 // force to use blocks for files > 10MB
             }).then(async () => {
-                await leaseClient.releaseLease();
+                console.log("uploadData finished");
+                try {leaseClient.releaseLease();} catch(err){};
+                setUploading(false);
                 setOkBannerDisplay(true);
                 setOkBannerText("Uploaded submission successfully");
                 setTimeout(() => setOkBannerDisplay(false), 7000);
-                setUploading(false);
                 const blobUrl = new URL(blob.url);
                 blobUrl.search = "";
                 setSubmission({ state: 1, filename: file.name, url: blobUrl.toString(), uploadtime: (new Date()).toISOString(), size: file.size });
@@ -419,7 +420,7 @@ export default function TeamPage({ params }) {
                 setUploadedBytes(0);
             });
         } catch (err) {
-            await leaseClient.releaseLease();
+            try{leaseClient.releaseLease();} catch(err){};
             setFailedBannerDisplay(true);
             setFailedBannerText("Failed to upload");
             setFailedBannerSubtext(err.message);
