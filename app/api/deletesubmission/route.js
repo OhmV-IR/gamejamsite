@@ -44,13 +44,12 @@ export async function POST(req) {
         } catch (err) {
             return new Response(err.message, { status: 500 });
         }
-        await blob.deleteIfExists({
+        await blob.delete({
             deleteSnapshots: "include"
         });
+    } else {
+        return new Response("submission not found", {status: 404});
     }
-    blobContainer.getBlobClient(team.id).deleteIfExists({
-        deleteSnapshots: "include"
-    });
     team.submission = {};
     teamcontainer.item(team.id, team.id).replace(team);
     return new Response("submission deleted");
