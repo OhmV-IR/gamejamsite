@@ -47,8 +47,6 @@ export async function POST(req) {
         await blob.delete({
             deleteSnapshots: "include"
         });
-    } else {
-        return new Response("submission not found", {status: 404});
     }
     team.submission = {};
     teamcontainer.item(team.id, team.id).replace(team);
