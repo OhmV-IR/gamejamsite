@@ -2,6 +2,7 @@
 import { IconSearch } from "@tabler/icons-react";
 import styles from './page.module.css';
 import { useState } from "react";
+import Link from "next/link";
 
 export default function UserFinder() {
     const [users, setUsers] = useState([]);
@@ -36,10 +37,10 @@ export default function UserFinder() {
                 </div>
                 {
                     users.map(user => (
-                        <a href={`/user/${user.id}/${user.provider}`} key={user.id} className="btn btn-dark w-50">
+                        <Link href={`/user/${user.id}/${user.provider}`} key={user.id} className="btn btn-dark w-50">
                             <span className="avatar" style={{ backgroundImage: `url(${user.pfp})` }}></span>
                             <span>{user.name}</span>
-                        </a>
+                        </Link>
                     ))
                 }
             </div>

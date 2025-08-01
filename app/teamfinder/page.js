@@ -2,6 +2,7 @@
 import { IconSearch } from "@tabler/icons-react";
 import styles from './page.module.css';
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function TeamFinder() {
     const [teams, setTeams] = useState([]);
@@ -98,18 +99,18 @@ export default function TeamFinder() {
                 </div>
                 {
                     teams.map(team => (
-                        <a href={`/team/${team.id}`} key={team.id} className="btn btn-dark w-50">
+                        <Link href={`/team/${team.id}`} key={team.id} className="btn btn-dark w-50">
                             <span>{team.name}, owned by &nbsp;&nbsp;</span>
                             <span className="avatar" style={{ backgroundImage: `url(${team.ownerPfp})` }}></span>
                             <span>{team.ownerName}</span>
-                        </a>
+                        </Link>
                     ))
                 }
             </div>
             <div className="hr-text">Browse teams</div>
             {
                 browseTeams.map(team => (
-                    <a key={team.id} href={`/team/${team.id}`}>
+                    <Link key={team.id} href={`/team/${team.id}`}>
                     <div className="card" key={team.id}>
                         <div className="card-body">
                             <h3 className="card-title">{team.name}</h3>
@@ -120,7 +121,7 @@ export default function TeamFinder() {
                             </p>
                         </div>
                     </div>
-                    </a>
+                    </Link>
                 ))
             }
             {browsePage > 0

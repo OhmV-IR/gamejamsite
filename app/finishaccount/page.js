@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import styles from './page.module.css';
 import { IconAlertCircle } from '@tabler/icons-react';
+import Link from "next/link";
 
 export default function FinishAccount() {
     const [errorBadgeVisible, setErrorBadgeVisible] = useState(false);
@@ -141,11 +142,11 @@ export default function FinishAccount() {
                 </div>
                 <label className="form-check">
                     <input className="form-check-input" id="tosbox" type="checkbox"></input>
-                    <span className="form-check-label">I have read and agree to the <a href="/tos">Terms of Service</a></span>
+                    <span className="form-check-label">I have read and agree to the <Link href="/tos">Terms of Service</Link></span>
                 </label>
                 <label className="form-check">
                     <input className="form-check-input" id="privacybox" type="checkbox"></input>
-                    <span className="form-check-label">I have read and agree to the <a href="/privacy">Privacy Policy</a></span>
+                    <span className="form-check-label">I have read and agree to the <Link href="/privacy">Privacy Policy</Link></span>
                 </label>
                 <label className="form-check">
                     <input className="form-check-input" id="emailbox" type="checkbox"></input>

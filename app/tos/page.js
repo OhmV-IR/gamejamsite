@@ -1,5 +1,6 @@
 "use client"
 import styles from './page.module.css';
+import Link from "next/link";
 
 export default function TOS() {
     return (
@@ -7,7 +8,7 @@ export default function TOS() {
             <h1 className={styles.pagetitle}>Terms of Service</h1>
             <h3 className={styles.maintext}><bold>Effective Date: June 23, 2025</bold></h3>
             <h3 className={styles.maintext}>Please read these Terms of Service (&quot;Terms&quot;) carefully before using the site.
-                By accessing or using <a href="https://jambytes.ca">jambytes.ca</a>, you agree to be bound by these Terms.
+                By accessing or using <Link href="/">jambytes.ca</Link>, you agree to be bound by these Terms.
                 If you do not agree, you may not use the site.</h3>
             <div className="hr-text">1. Use of the Site</div>
             <h3 className={styles.maintext}>JamBytes provides tools and resources to participate in and manage game jams, submit games, and interact with other creators.

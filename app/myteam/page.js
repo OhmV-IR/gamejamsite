@@ -3,6 +3,7 @@
 import { IconPlus } from "@tabler/icons-react";
 import { useEffect, useState } from "react"
 import TeamPage from "../team/[teamid]/page";
+import Link from "next/link";
 
 export default function Dashboard() {
     const [isInTeam, setIsInTeam] = useState(false);
@@ -51,7 +52,7 @@ export default function Dashboard() {
                             <button type="button" data-bs-toggle="modal" data-bs-target="#createTeamModal" className="btn btn-primary">Create a team</button>
                         </div>
                         <div className="col">
-                            <a href="/teamfinder" className="btn btn-primary">Find a team</a>
+                            <Link href="/teamfinder" className="btn btn-primary">Find a team</Link>
                         </div>
                     </div>
                 </div>
