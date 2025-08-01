@@ -387,9 +387,9 @@ export default function TeamPage({ params }) {
             return;
         }
         const renewtask = setInterval(async () => {
-            if (isUploading) {
+            try{
                 await leaseClient.renewLease();
-            } else {
+            } catch(err){
                 clearInterval(renewtask);
             }
         }, 15 * 1000);
@@ -405,7 +405,6 @@ export default function TeamPage({ params }) {
                 blockSize: 4 * 1024 * 1024, // 4MB blocks
                 maxSingleShotSize: 10 * 1024 * 1024 // force to use blocks for files > 10MB
             }).then(async () => {
-                console.log("uploadData finished");
                 try {leaseClient.releaseLease();} catch(err){};
                 setUploading(false);
                 setOkBannerDisplay(true);
