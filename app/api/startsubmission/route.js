@@ -11,7 +11,7 @@ const dbclient = new CosmosClient({
 });
 
 const { database } = await dbclient.databases.createIfNotExists({ id: process.env.DB_ID });
-const teamcontainer = (await database.containers.createIfNotExists({id: process.env.TEAMSCONTAINER_ID})).container;
+const teamcontainer = (await database.containers.createIfNotExists({ id: process.env.TEAMSCONTAINER_ID })).container;
 const { BlobServiceClient, ContainerSASPermissions } = require("@azure/storage-blob");
 const blobClient = BlobServiceClient.fromConnectionString(process.env.BLOB_CONNSTR);
 const blobContainer = blobClient.getContainerClient(process.env.BLOB_CONTAINER_NAME);
@@ -23,14 +23,18 @@ export async function POST(req) {
     if (payload == null) {
         return new Response("bad session", { status: 401 });
     }
-    if((await GetIsAdmin(session)) == false){
-        return new Response("feat not available yet", {status: 403});
+    if ((await GetIsAdmin(session)) == false) {
+        return new Response("feat not available yet", { status: 403 });
     }
     const team = (await teamcontainer.items.query({
         query: sqlstring.format("SELECT * FROM c WHERE c.owner.uid=? AND c.owner.provider=?", [payload.uid, payload.provider])
     }).fetchAll()).resources[0];
-    if (team == null) {
-        return new Response("not owner of a team");
+    if (team == null || payload.uid != team.owner.uid || payload.provider != team.owner.provider) {
+        return new Response("not owner of a team", {status: 403});
+    }
+    const blob = blobContainer.getBlobClient(team.id);
+    if ((await blob.exists()) && (await blob.getProperties()).leaseStatus == "locked") {
+        return new Response("Blob is currently locked by another active lease", { status: 500 });
     }
     team.submission = {
         state: 0,
