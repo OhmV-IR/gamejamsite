@@ -390,8 +390,6 @@ export default function TeamPage({ params }) {
             if (isUploading) {
                 await leaseClient.renewLease();
             } else {
-                await leaseClient.releaseLease();
-                leaseClient = null;
                 clearInterval(renewtask);
             }
         }, 20 * 1000);
