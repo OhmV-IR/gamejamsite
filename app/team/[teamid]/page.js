@@ -399,7 +399,10 @@ export default function TeamPage({ params }) {
                 conditions: { leaseId: leaseId },
                 concurrency: 1, // Concurrency other than 1 has bugs :C
                 blockSize: 4 * 1024 * 1024, // 4MB blocks
-                maxSingleShotSize: 10 * 1024 * 1024 // force to use blocks for files > 10MB
+                maxSingleShotSize: 10 * 1024 * 1024, // force to use blocks for files > 10MB
+                blobHTTPHeaders: {
+                    blobContentDisposition: `attachment; filename="${file.name}"`
+                }
             }).then(async () => {
                 clearInterval(renewtask);
                 try { leaseClient.releaseLease(); } catch (err) { };
@@ -458,25 +461,6 @@ export default function TeamPage({ params }) {
                     res.text().then(reason => setFailedBannerSubtext(reason));
                     setTimeout(() => setFailedBannerDisplay(false), 8000);
                 }
-            })
-        });
-    }
-
-    function DownloadUrlToName(url, filename) {
-        fetch(url, {
-            method: "GET",
-            mode: 'cors',
-            credentials: 'omit',
-        }).then(res => {
-            res.blob().then(blob => {
-                const blobUrl = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = blobUrl;
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-                URL.revokeObjectURL(blobUrl);
             })
         });
     }
@@ -966,7 +950,7 @@ export default function TeamPage({ params }) {
                                     <td>{submission.filename}</td>
                                     <td className="text-secondary">{(new Date(submission.uploadtime)).toLocaleString()}</td>
                                     <td className="text-secondary">{(submission.size / 1000000).toFixed(2)}MB</td>
-                                    <td><button className="btn btn-primary" onClick={() => DownloadUrlToName(submission.url, submission.filename)}><IconDownload></IconDownload>Download</button></td>
+                                    <td><a className="btn btn-primary" href={submission.url} download><IconDownload></IconDownload>Download</a></td>
                                     {isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)
                                         ? <td><button className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteSubmissionWarning"><IconTrash></IconTrash>Delete</button></td>
                                         : <></>
