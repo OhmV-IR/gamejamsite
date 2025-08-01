@@ -398,7 +398,7 @@ export default function TeamPage({ params }) {
         setUploadFileSize(file.size);
         setUploading(true);
         try {
-            await blob.uploadData(buf, {
+            blob.uploadData(buf, {
                 onProgress: (evt) => {
                     setUploadedBytes(evt.loadedBytes);
                 },
@@ -406,17 +406,18 @@ export default function TeamPage({ params }) {
                 concurrency: 1, // Max 1 block at a time for smoother status updates
                 blockSize: 4 * 1024 * 1024, // 4MB blocks
                 maxSingleShotSize: 10 * 1024 * 1024 // force to use blocks for files > 10MB
-            })
-            await leaseClient.releaseLease();
-            setOkBannerDisplay(true);
-            setOkBannerText("Uploaded submission successfully");
-            setTimeout(() => setOkBannerDisplay(false), 7000);
-            setUploading(false);
-            const blobUrl = new URL(blob.url);
-            blobUrl.search = "";
-            setSubmission({ state: 1, filename: file.name, url: blobUrl.toString(), uploadtime: (new Date()).toISOString(), size: file.size });
-            setUploadFileSize(0);
-            setUploadedBytes(0);
+            }).then(async () => {
+                await leaseClient.releaseLease();
+                setOkBannerDisplay(true);
+                setOkBannerText("Uploaded submission successfully");
+                setTimeout(() => setOkBannerDisplay(false), 7000);
+                setUploading(false);
+                const blobUrl = new URL(blob.url);
+                blobUrl.search = "";
+                setSubmission({ state: 1, filename: file.name, url: blobUrl.toString(), uploadtime: (new Date()).toISOString(), size: file.size });
+                setUploadFileSize(0);
+                setUploadedBytes(0);
+            });
         } catch (err) {
             await leaseClient.releaseLease();
             setFailedBannerDisplay(true);
