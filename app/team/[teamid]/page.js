@@ -392,7 +392,7 @@ export default function TeamPage({ params }) {
             } else {
                 clearInterval(renewtask);
             }
-        }, 20 * 1000);
+        }, 15 * 1000);
         setUploadFileSize(file.size);
         setUploading(true);
         try {
