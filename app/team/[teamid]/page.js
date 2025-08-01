@@ -387,11 +387,7 @@ export default function TeamPage({ params }) {
             return;
         }
         const renewtask = setInterval(async () => {
-            try{
-                await leaseClient.renewLease();
-            } catch(err){
-                clearInterval(renewtask);
-            }
+            await leaseClient.renewLease();
         }, 15 * 1000);
         setUploadFileSize(file.size);
         setUploading(true);
@@ -405,7 +401,8 @@ export default function TeamPage({ params }) {
                 blockSize: 4 * 1024 * 1024, // 4MB blocks
                 maxSingleShotSize: 10 * 1024 * 1024 // force to use blocks for files > 10MB
             }).then(async () => {
-                try {leaseClient.releaseLease();} catch(err){};
+                clearInterval(renewtask);
+                try { leaseClient.releaseLease(); } catch (err) { };
                 setUploading(false);
                 setOkBannerDisplay(true);
                 setOkBannerText("Uploaded submission successfully");
@@ -417,7 +414,8 @@ export default function TeamPage({ params }) {
                 setUploadedBytes(0);
             });
         } catch (err) {
-            try{leaseClient.releaseLease();} catch(err){};
+            clearInterval(renewtask);
+            try { leaseClient.releaseLease(); } catch (err) { };
             setFailedBannerDisplay(true);
             setFailedBannerText("Failed to upload");
             setFailedBannerSubtext(err.message);
