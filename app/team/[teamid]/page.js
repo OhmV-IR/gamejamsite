@@ -404,8 +404,8 @@ export default function TeamPage({ params }) {
                 },
                 conditions: { leaseId: leaseId },
                 concurrency: 1, // Max 1 block at a time for smoother status updates
-                blockSize: 16 * 1024 * 1024, // 16MB blocks
-                maxSingleShotSize: 25 * 1024 * 1024 // force to use blocks for files > 25MB
+                blockSize: 4 * 1024 * 1024, // 4MB blocks
+                maxSingleShotSize: 10 * 1024 * 1024 // force to use blocks for files > 10MB
             })
             await leaseClient.releaseLease();
             setOkBannerDisplay(true);
