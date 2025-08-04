@@ -18,7 +18,7 @@
     "google-auth-library": "^10.2.0",
     "googleapis": "^153.0.0",
     "jose": "^6.0.12",
-    "next": "15.4.2",
+    "next": "15.4.5",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "sqlstring": "^2.3.3"
