@@ -29,6 +29,14 @@
     background-color: black;
 }
 
+.bgcolorwhite {
+    background-color: white;
+}
+
+.mobileurlbtn {
+    width: 82vw;
+}
+
 .bgcarousel {
     margin-top: 10vh;
 }

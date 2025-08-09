@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link";
-import { IconCalendar, IconClipboardCheck, IconHome, IconInfoCircle, IconJetpack, IconLayoutDashboard, IconUserSearch, IconBrandGoogleFilled, IconAlertTriangle, IconBrandGithubFilled, IconBrandDiscordFilled, IconUsersGroup, IconBinoculars } from "@tabler/icons-react";
+import { IconCalendar, IconClipboardCheck, IconHome, IconInfoCircle, IconJetpack, IconLayoutDashboard, IconUserSearch, IconBrandGoogleFilled, IconAlertTriangle, IconBrandGithubFilled, IconBrandDiscordFilled, IconUsersGroup, IconBinoculars, IconMenuDeep, IconX } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import styles from './page.module.css';
@@ -13,6 +13,7 @@ export default function Navbar() {
   const [role, setRole] = useState("");
   const [hasRole, setHasRole] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [mobile, setMobile] = useState(false);
 
   function Capitalize(str) {
     return String(str).charAt(0).toUpperCase() + String(str).slice(1);
@@ -49,6 +50,11 @@ export default function Navbar() {
   }
 
   const path = usePathname();
+
+  useEffect(() => {
+    setMobile(window.innerHeight > window.innerWidth);
+  }, []);
+
   useEffect(() => {
     var navitems = document.getElementsByClassName("nav-item");
     for (let i = 0; i < navitems.length; i++) {
@@ -72,102 +78,212 @@ export default function Navbar() {
           }
           setIsSignedIn(true);
         });
-      } else if(res.status == 307){
-        if(!path.includes("finishaccount") && !path.includes("tos") && !path.includes("privacy")){
+      } else if (res.status == 307) {
+        if (!path.includes("finishaccount") && !path.includes("tos") && !path.includes("privacy")) {
           window.location.href = "/finishaccount";
         }
       }
     })
   }, [path]);
 
-  return (
-    <div>
-      <header className="navbar navbar-expand-md d-print-none">
-        <div className="container-xl">
-          <Link href="/" aria-label="SiteLogo" className="navbar-brand navbar-brand-autodark me-3">
-            <Image src="/favicon.svg" width={48} height={48} alt="The JamBytes logo"></Image>
-            <h1>JamBytes</h1>
-          </Link>
-          <ul className="navbar-nav">
-            <li className="nav-item" id="/">
-              <Link className="nav-link" href="/">
-                <span className="nav-link-icon">
-                  <IconHome></IconHome>
-                </span>
-                <span className="nav-link-title"> Home </span>
-              </Link>
-            </li>
-            <li className="nav-item" id="/aboutus">
-              <Link className="nav-link" href="/aboutus">
-                <span className="nav-link-icon">
-                  <IconInfoCircle></IconInfoCircle>
-                </span>
-                <span className="nav-link-title"> About us </span>
-              </Link>
-            </li>
-            <li className="nav-item" id="/eventdetails">
-              <Link className="nav-link" href="/eventdetails">
-                <span className="nav-link-icon">
-                  <IconCalendar></IconCalendar>
-                </span>
-                <span className="nav-link-title"> Event Details </span>
-              </Link>
-            </li>
-            <li className="nav-item" id="/myteam">
-              <Link className="nav-link" href="/myteam">
-                <span className="nav-link-icon">
-                  <IconLayoutDashboard></IconLayoutDashboard>
-                </span>
-                <span className="nav-link-title"> My Team </span>
-              </Link>
-            </li>
-            <li className="nav-item" id="/teamfinder">
-              <Link className="nav-link" href="/teamfinder">
-                <span className="nav-link-icon">
-                  <IconUserSearch></IconUserSearch>
-                </span>
-                <span className="nav-link-title"> Team Finder </span>
-              </Link>
-            </li>
-            <li className="nav-item" id="/userfinder">
-              <Link className="nav-link" href="/userfinder">
-                <span className="nav-link-icon">
-                  <IconUserSearch></IconUserSearch>
-                </span>
-                <span className="nav-link-title"> User Finder </span>
-              </Link>
-            </li>
-            {isSignedIn
-              ? <div className="navbar-nav flex-row order-md-last ms-auto">
-                <div className="nav-item dropdown">
-                  <a href="#" className="nav-link d-flex lh-1 text-reset" data-bs-toggle="dropdown" aria-label="Open user menu">
-                    <span className="avatar avatar-sm" style={{ backgroundImage: "url(" + pfpurl + ")" }}></span>
-                    <div className="d-none d-xl-block ps-2">
-                      <div>{name}</div>
-                      { hasRole
-                      ? <div className="mt-1 small text-secondary">{role}</div>
-                      : <></>
-                      }
+  function MobilePage() {
+    return (
+      <div className={`container-xl ${styles.bgcolorwhite} navbar navbar-expand-md d-print-none`}>
+        <Link href="/" aria-label="SiteLogo" className="navbar-brand navbar-brand-autodark me-3">
+          <Image src="/favicon.svg" width={48} height={48} alt="The JamBytes logo"></Image>
+          <h1>JamBytes</h1>
+        </Link>
+        <button className="btn text-primary navbar-nav flex-row order-md-last ms-auto w-25" id="navbarMenuBtn" data-bs-toggle="modal" data-bs-target="#navbarModal"><IconMenuDeep></IconMenuDeep></button>
+        <div className="modal" id="navbarModal">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-body">
+                <button className={`btn ${styles.mobileurlbtn}`} id="/" data-bs-dismiss="modal">
+                  <Link className="nav-link" href="/">
+                    <span className="nav-link-icon">
+                      <IconHome></IconHome>
+                    </span>
+                    <span className="nav-link-title"> Home </span>
+                  </Link>
+                </button>
+                <button className={`mt-5 btn ${styles.mobileurlbtn}`} id="/aboutus" data-bs-dismiss="modal">
+                  <Link className="nav-link" href="/aboutus">
+                    <span className="nav-link-icon">
+                      <IconInfoCircle></IconInfoCircle>
+                    </span>
+                    <span className="nav-link-title"> About us </span>
+                  </Link>
+                </button>
+                <button className={`mt-5 btn ${styles.mobileurlbtn}`} id="/eventdetails" data-bs-dismiss="modal">
+                  <Link className="nav-link" href="/eventdetails">
+                    <span className="nav-link-icon">
+                      <IconCalendar></IconCalendar>
+                    </span>
+                    <span className="nav-link-title"> Event Details </span>
+                  </Link>
+                </button>
+                { isSignedIn ? <button className={`mt-5 btn ${styles.mobileurlbtn}`} id="/myteam" data-bs-dismiss="modal">
+                  <Link className="nav-link" href="/myteam">
+                    <span className="nav-link-icon">
+                      <IconLayoutDashboard></IconLayoutDashboard>
+                    </span>
+                    <span className="nav-link-title"> My Team </span>
+                  </Link>
+                </button>
+                : <></>
+                }
+                <button className={`mt-5 btn ${styles.mobileurlbtn}`} id="/teamfinder" data-bs-dismiss="modal">
+                  <Link className="nav-link" href="/teamfinder">
+                    <span className="nav-link-icon">
+                      <IconUserSearch></IconUserSearch>
+                    </span>
+                    <span className="nav-link-title"> Team Finder </span>
+                  </Link>
+                </button>
+                <button className={`mt-5 btn ${styles.mobileurlbtn}`} id="/userfinder" data-bs-dismiss="modal">
+                  <Link className="nav-link" href="/userfinder">
+                    <span className="nav-link-icon">
+                      <IconUserSearch></IconUserSearch>
+                    </span>
+                    <span className="nav-link-title"> User Finder </span>
+                  </Link>
+                </button>
+                {isSignedIn
+                  ? <div className="mt-5">
+                    <div className="dropdown">
+                      <a href="#" className="nav-link d-flex lh-1 text-reset" data-bs-toggle="dropdown" aria-label="Open user menu">
+                        <span className="avatar avatar-sm" style={{ backgroundImage: "url(" + pfpurl + ")" }}></span>
+                        <div className="d-xl-block ps-2">
+                          <div>{name}</div>
+                          {hasRole
+                            ? <div className="mt-1 small text-secondary">{role}</div>
+                            : <></>
+                          }
+                        </div>
+                      </a>
+                      <div className="dropdown-menu dropdown-menu-arrow">
+                        <button className="btn dropdown-item" data-bs-dismiss="modal"><Link href="/finishaccount" className="text-black">Account Details</Link></button>
+                        <div className="dropdown-divider"></div>
+                        <button className="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteaccountmodal">Delete my account</button>
+                        <a href="/api/logout" className="dropdown-item text-danger">Logout</a>
+                      </div>
                     </div>
-                  </a>
-                  <div className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <Link href="/finishaccount" className="dropdown-item">Account Details</Link>
-                    <div className="dropdown-divider"></div>
-                    <button className="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteaccountmodal">Delete my account</button>
-                    <a href="/api/logout" className="dropdown-item text-danger">Logout</a>
+                  </div>
+                  : <button className={`mt-5 btn text-primary ${styles.mobileurlbtn}`} data-bs-toggle="modal" data-bs-target="#loginmodal">
+                    <span className="nav-link-icon">
+                      <IconClipboardCheck></IconClipboardCheck>
+                    </span>
+                    <span className="nav-link-title"> Login / Register </span>
+                  </button>
+                }
+              </div>
+              <div className="modal-footer d-flex justify-content-center align-items-center">
+                <button className="btn btn-close w-100" aria-label="Close" data-bs-dismiss="modal"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  function ComputerPage() {
+    return (
+      <div>
+        <header className="navbar navbar-expand-md d-print-none">
+          <div className="container-xl">
+            <Link href="/" aria-label="SiteLogo" className="navbar-brand navbar-brand-autodark me-3">
+              <Image src="/favicon.svg" width={48} height={48} alt="The JamBytes logo"></Image>
+              <h1>JamBytes</h1>
+            </Link>
+            <ul className="navbar-nav">
+              <li className="nav-item" id="/">
+                <Link className="nav-link" href="/">
+                  <span className="nav-link-icon">
+                    <IconHome></IconHome>
+                  </span>
+                  <span className="nav-link-title"> Home </span>
+                </Link>
+              </li>
+              <li className="nav-item" id="/aboutus">
+                <Link className="nav-link" href="/aboutus">
+                  <span className="nav-link-icon">
+                    <IconInfoCircle></IconInfoCircle>
+                  </span>
+                  <span className="nav-link-title"> About us </span>
+                </Link>
+              </li>
+              <li className="nav-item" id="/eventdetails">
+                <Link className="nav-link" href="/eventdetails">
+                  <span className="nav-link-icon">
+                    <IconCalendar></IconCalendar>
+                  </span>
+                  <span className="nav-link-title"> Event Details </span>
+                </Link>
+              </li>
+              {isSignedIn ? <li className="nav-item" id="/myteam">
+                <Link className="nav-link" href="/myteam">
+                  <span className="nav-link-icon">
+                    <IconLayoutDashboard></IconLayoutDashboard>
+                  </span>
+                  <span className="nav-link-title"> My Team </span>
+                </Link>
+              </li>
+              : <></>
+              }
+              <li className="nav-item" id="/teamfinder">
+                <Link className="nav-link" href="/teamfinder">
+                  <span className="nav-link-icon">
+                    <IconUserSearch></IconUserSearch>
+                  </span>
+                  <span className="nav-link-title"> Team Finder </span>
+                </Link>
+              </li>
+              <li className="nav-item" id="/userfinder">
+                <Link className="nav-link" href="/userfinder">
+                  <span className="nav-link-icon">
+                    <IconUserSearch></IconUserSearch>
+                  </span>
+                  <span className="nav-link-title"> User Finder </span>
+                </Link>
+              </li>
+              {isSignedIn
+                ? <div className="navbar-nav flex-row order-md-last ms-auto">
+                  <div className="nav-item dropdown">
+                    <a href="#" className="nav-link d-flex lh-1 text-reset" data-bs-toggle="dropdown" aria-label="Open user menu">
+                      <span className="avatar avatar-sm" style={{ backgroundImage: "url(" + pfpurl + ")" }}></span>
+                      <div className="d-xl-block ps-2">
+                        <div>{name}</div>
+                        {hasRole
+                          ? <div className="mt-1 small text-secondary">{role}</div>
+                          : <></>
+                        }
+                      </div>
+                    </a>
+                    <div className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                      <Link href="/finishaccount" className="dropdown-item">Account Details</Link>
+                      <div className="dropdown-divider"></div>
+                      <button className="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteaccountmodal">Delete my account</button>
+                      <a href="/api/logout" className="dropdown-item text-danger">Logout</a>
+                    </div>
                   </div>
                 </div>
-              </div>
-              : <button className="nav-item btn btn-ghost-primary" data-bs-toggle="modal" data-bs-target="#loginmodal">
-                <span className="nav-link-icon">
-                  <IconClipboardCheck></IconClipboardCheck>
-                </span>
-                <span className="nav-link-title"> Login / Register </span>
-              </button>
-            }
-          </ul>
-        </div>
-      </header>
+                : <button className="nav-item btn btn-ghost-primary" data-bs-toggle="modal" data-bs-target="#loginmodal">
+                  <span className="nav-link-icon">
+                    <IconClipboardCheck></IconClipboardCheck>
+                  </span>
+                  <span className="nav-link-title"> Login / Register </span>
+                </button>
+              }
+            </ul>
+          </div>
+        </header>
+      </div>
+    )
+  }
+
+  return (
+    <div>
       <div className="modal modal-xl" id="loginmodal" tabIndex={-1}>
         <div className="modal-dialog" role="document">
           <div className="modal-content">
@@ -225,6 +341,12 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+      {mobile
+        // START MOBILE PAGE
+        ? MobilePage()
+        // START PC PAGE
+        : ComputerPage()
+      }
     </div>
   )
 }

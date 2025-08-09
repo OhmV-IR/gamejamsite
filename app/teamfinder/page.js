@@ -99,7 +99,7 @@ export default function TeamFinder() {
                 </div>
                 {
                     teams.map(team => (
-                        <Link href={`/team/${team.id}`} key={team.id} className="btn btn-dark w-50">
+                        <Link href={`/team/${team.id}`} key={team.id} className="btn btn-dark w-100">
                             <span>{team.name}, owned by &nbsp;&nbsp;</span>
                             <span className="avatar" style={{ backgroundImage: `url(${team.ownerPfp})` }}></span>
                             <span>{team.ownerName}</span>

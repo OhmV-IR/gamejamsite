@@ -929,39 +929,40 @@ export default function TeamPage({ params }) {
                         </table>
                     </div>
                 </div>
-                {submission.state == 1
-                    ? <div className="col">
-                        <h1 className={`${styles.subheader} ${styles.centeralign}`}>Submission</h1>
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                    <th>Filename</th>
-                                    <th>Upload time</th>
-                                    <th>Size</th>
-                                    <th className="w-1"></th>
-                                    {isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)
-                                        ? <th className="w-1"></th>
-                                        : <></>
-                                    }
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr key={submission.id}>
-                                    <td>{submission.filename}</td>
-                                    <td className="text-secondary">{(new Date(submission.uploadtime)).toLocaleString()}</td>
-                                    <td className="text-secondary">{(submission.size / 1000000).toFixed(2)}MB</td>
-                                    <td><a className="btn btn-primary" href={submission.url} download><IconDownload></IconDownload>Download</a></td>
-                                    {isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)
-                                        ? <td><button className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteSubmissionWarning"><IconTrash></IconTrash>Delete</button></td>
-                                        : <></>
-                                    }
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    : <></>
-                }
             </div>
+            {submission.state == 1
+                ? <div className="row w-100 mt-5"><div className="col">
+                    <h1 className={`${styles.subheader} ${styles.centeralign}`}>Submission</h1>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Filename</th>
+                                <th>Upload time</th>
+                                <th>Size</th>
+                                <th className="w-1"></th>
+                                {isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)
+                                    ? <th className="w-1"></th>
+                                    : <></>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr key={submission.id}>
+                                <td>{submission.filename}</td>
+                                <td className="text-secondary">{(new Date(submission.uploadtime)).toLocaleString()}</td>
+                                <td className="text-secondary">{(submission.size / 1000000).toFixed(2)}MB</td>
+                                <td><a className="btn btn-primary" href={submission.url} download><IconDownload></IconDownload>Download</a></td>
+                                {isAdmin || (ownerId == viewerUid && ownerProvider == viewerProvider)
+                                    ? <td><button className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteSubmissionWarning"><IconTrash></IconTrash>Delete</button></td>
+                                    : <></>
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+                : <></>
+            }
             {joinRequests.length > 0 && (isAdmin || (viewerUid == ownerId && viewerProvider == ownerProvider))
                 ? <div className="row w-100 mt-5">
                     <div className="col">

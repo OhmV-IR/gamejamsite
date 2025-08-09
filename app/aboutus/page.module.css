@@ -1,31 +1,29 @@
 .pagetitle {
     position: relative;
     margin-top: 8vh;
-    width: 50vw;
-    margin-left: 25vw;
+    width: 100vw;
     margin-bottom: 12vh;
     text-align: center;
-    font-size: 5vw;
+    font-size: max(5vw, 5vh);
     color: #0d911e;
     text-rendering: optimizeLegibility;
 }
 
 .subtitle {
     position: relative;
-    width: 50vw;
+    width: 100vw;
     margin-top: 12vh;
-    margin-left: 25vw;
     text-align: center;
-    font-size: 3vw;
+    font-size: max(4vw, 4vh);
     color: #0d911e;
     text-rendering: optimizeLegibility;
 }
 
 .subheader {
     position: relative;
-    width: 50vw;
+    width: 98vw;
+    margin-left: 2vw;
     margin-top: 4vh;
-    margin-left: 20vw;
     text-align: left;
     font-size: xx-large;
     font-weight: bolder;
@@ -35,12 +33,12 @@
 
 .text {
     position: relative;
-    width: 50vw;
+    width: 95vw;
+    margin-left: 5vw;
     margin-top: 2vh;
     text-align: left;
     font-size: x-large;
     text-rendering: optimizeLegibility;
-    margin-left: 25vw;
 }
 
 .cardtextpadding {
@@ -53,17 +51,21 @@
 }
 
 .personcard {
-    width: 25vw;
+    width: 48vw;
     position: relative;
+    margin-left: 0.5vw;
     margin-top: 10vh;
-    margin-left: 18vw;
+}
+
+.cardmiddlepad {
+    width: 1vw;
 }
 
 .centrecard {
-    width: 25vw;
+    width: 50vw;
     position: relative;
-    margin-top: 10vh;
-    margin-left: 37.5vw;
+    margin-top: 5vh;
+    margin-left: 25vw;
 }
 
 .roundImage {
