@@ -8,6 +8,7 @@ on:
 
 jobs:
     Run-Build:
+        if: github.actor != 'dependabot[bot]'
         runs-on: ubuntu-latest
         steps:
             - name: Check out repository code
