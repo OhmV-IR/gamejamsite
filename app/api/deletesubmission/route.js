@@ -40,12 +40,13 @@ export async function POST(req) {
     if (blobexists) {
         const leaseClient = blob.getBlobLeaseClient();
         try {
-            leaseClient.acquireLease(60);
+            await leaseClient.acquireLease(60);
         } catch (err) {
             return new Response(err.message, { status: 500 });
         }
         await blob.delete({
-            deleteSnapshots: "include"
+            deleteSnapshots: "include",
+            conditions: { leaseId: leaseClient.leaseId }
         });
     }
     team.submission = {};
