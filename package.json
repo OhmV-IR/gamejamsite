@@ -14,7 +14,7 @@
     "@tabler/icons-react": "^3.34.1",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
-    "dotenv": "^17.2.0",
+    "dotenv": "^17.2.1",
     "google-auth-library": "^10.2.0",
     "googleapis": "^153.0.0",
     "jose": "^6.0.12",
