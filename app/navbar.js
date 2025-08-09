@@ -50,8 +50,12 @@ export default function Navbar() {
   }
 
   const path = usePathname();
+
   useEffect(() => {
     setMobile(window.innerHeight > window.innerWidth);
+  }, []);
+
+  useEffect(() => {
     var navitems = document.getElementsByClassName("nav-item");
     for (let i = 0; i < navitems.length; i++) {
       navitems[i].classList.remove("active");
@@ -189,7 +193,7 @@ export default function Navbar() {
                 <h1>JamBytes</h1>
               </Link>
               <ul className="navbar-nav">
-                <li className="mt-5" id="/">
+                <li className="nav-item" id="/">
                   <Link className="nav-link" href="/">
                     <span className="nav-link-icon">
                       <IconHome></IconHome>
@@ -197,7 +201,7 @@ export default function Navbar() {
                     <span className="nav-link-title"> Home </span>
                   </Link>
                 </li>
-                <li className="mt-5" id="/aboutus">
+                <li className="nav-item" id="/aboutus">
                   <Link className="nav-link" href="/aboutus">
                     <span className="nav-link-icon">
                       <IconInfoCircle></IconInfoCircle>
@@ -205,7 +209,7 @@ export default function Navbar() {
                     <span className="nav-link-title"> About us </span>
                   </Link>
                 </li>
-                <li className="mt-5" id="/eventdetails">
+                <li className="nav-item" id="/eventdetails">
                   <Link className="nav-link" href="/eventdetails">
                     <span className="nav-link-icon">
                       <IconCalendar></IconCalendar>
@@ -213,7 +217,7 @@ export default function Navbar() {
                     <span className="nav-link-title"> Event Details </span>
                   </Link>
                 </li>
-                <li className="mt-5" id="/myteam">
+                <li className="nav-item" id="/myteam">
                   <Link className="nav-link" href="/myteam">
                     <span className="nav-link-icon">
                       <IconLayoutDashboard></IconLayoutDashboard>
@@ -221,7 +225,7 @@ export default function Navbar() {
                     <span className="nav-link-title"> My Team </span>
                   </Link>
                 </li>
-                <li className="mt-5" id="/teamfinder">
+                <li className="nav-item" id="/teamfinder">
                   <Link className="nav-link" href="/teamfinder">
                     <span className="nav-link-icon">
                       <IconUserSearch></IconUserSearch>
@@ -229,7 +233,7 @@ export default function Navbar() {
                     <span className="nav-link-title"> Team Finder </span>
                   </Link>
                 </li>
-                <li className="mt-5" id="/userfinder">
+                <li className="nav-item" id="/userfinder">
                   <Link className="nav-link" href="/userfinder">
                     <span className="nav-link-icon">
                       <IconUserSearch></IconUserSearch>
