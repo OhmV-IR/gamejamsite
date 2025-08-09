@@ -93,7 +93,7 @@ export default function Navbar() {
           <Image src="/favicon.svg" width={48} height={48} alt="The JamBytes logo"></Image>
           <h1>JamBytes</h1>
         </Link>
-        <button className="btn btn-ghost-primary navbar-nav flex-row order-md-last ms-auto w-25" id="navbarMenuBtn" data-bs-toggle="modal" data-bs-target="#navbarModal"><IconMenuDeep></IconMenuDeep></button>
+        <button className="btn text-primary navbar-nav flex-row order-md-last ms-auto w-25" id="navbarMenuBtn" data-bs-toggle="modal" data-bs-target="#navbarModal"><IconMenuDeep></IconMenuDeep></button>
         <div className="modal" id="navbarModal">
           <div className="modal-dialog" role="document">
             <div className="modal-content">
