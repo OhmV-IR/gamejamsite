@@ -32,15 +32,15 @@ export default function AboutUs() {
             <h2 className={styles.text}>We are always appreciative of sponsorships and volunteer offers; please send us an email&nbsp;
                 <a className={styles.emaillink} href="mailto:jambytesteam@gmail.com">here</a> to learn more about how you can get involved!</h2>
             <h1 className={styles.subtitle}>Meet The Team</h1>
-            <div className="row w-75">
+            <div className="row w-100">
                 {createCard("/Vishnu.jpg", styles.personcard, "A portrait of Vishnu", "Vishnu", "Lead Organizer")}
                 {createCard("/Aryaman.jpeg", styles.personcard, "A portrait of Aryaman", "Aryaman", "Workshop Coordinator")}
             </div>
-            <div className="row w-75">
+            <div className="row w-100">
                 {createCard("/Jared.png", styles.personcard, "A portrait of Jared", "Jared", "Workshop Coordinator")}
                 {createCard("/Adrien.png", styles.personcard, "A portrait of Adrien", "Adrien", "Website Manager")}
             </div>
-            <div className="row w-75">
+            <div className="row w-100">
                 {createCard("/Maharshi.png", styles.centrecard, "A portrait of Maharshi", "Maharshi", "Head of Marketing")}
             </div>
         </div>
