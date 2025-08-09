@@ -100,7 +100,7 @@ export default function Navbar() {
             <div className="modal-dialog" role="document">
               <div className="modal-content">
                 <div className="modal-body">
-                  <div className="mt-5" id="/">
+                  <div id="/">
                     <Link className="nav-link" href="/">
                       <span className="nav-link-icon">
                         <IconHome></IconHome>
