@@ -29,6 +29,10 @@
     background-color: black;
 }
 
+.bgcolorwhite {
+    background-color: white;
+}
+
 .bgcarousel {
     margin-top: 10vh;
 }
