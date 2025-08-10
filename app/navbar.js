@@ -99,7 +99,7 @@ export default function Navbar() {
             <div className="modal-content">
               <div className="modal-body">
                 <button className={`btn ${styles.mobileurlbtn}`} id="/" data-bs-dismiss="modal">
-                  <Link className="nav-link" href="/">
+                  <Link className="nav-link w-100" href="/">
                     <span className="nav-link-icon">
                       <IconHome></IconHome>
                     </span>
@@ -107,7 +107,7 @@ export default function Navbar() {
                   </Link>
                 </button>
                 <button className={`mt-5 btn ${styles.mobileurlbtn}`} id="/aboutus" data-bs-dismiss="modal">
-                  <Link className="nav-link" href="/aboutus">
+                  <Link className="nav-link w-100" href="/aboutus">
                     <span className="nav-link-icon">
                       <IconInfoCircle></IconInfoCircle>
                     </span>
@@ -115,7 +115,7 @@ export default function Navbar() {
                   </Link>
                 </button>
                 <button className={`mt-5 btn ${styles.mobileurlbtn}`} id="/eventdetails" data-bs-dismiss="modal">
-                  <Link className="nav-link" href="/eventdetails">
+                  <Link className="nav-link w-100" href="/eventdetails">
                     <span className="nav-link-icon">
                       <IconCalendar></IconCalendar>
                     </span>
@@ -123,7 +123,7 @@ export default function Navbar() {
                   </Link>
                 </button>
                 { isSignedIn ? <button className={`mt-5 btn ${styles.mobileurlbtn}`} id="/myteam" data-bs-dismiss="modal">
-                  <Link className="nav-link" href="/myteam">
+                  <Link className="nav-link w-100" href="/myteam">
                     <span className="nav-link-icon">
                       <IconLayoutDashboard></IconLayoutDashboard>
                     </span>
@@ -133,7 +133,7 @@ export default function Navbar() {
                 : <></>
                 }
                 <button className={`mt-5 btn ${styles.mobileurlbtn}`} id="/teamfinder" data-bs-dismiss="modal">
-                  <Link className="nav-link" href="/teamfinder">
+                  <Link className="nav-link w-100" href="/teamfinder">
                     <span className="nav-link-icon">
                       <IconUserSearch></IconUserSearch>
                     </span>
@@ -141,7 +141,7 @@ export default function Navbar() {
                   </Link>
                 </button>
                 <button className={`mt-5 btn ${styles.mobileurlbtn}`} id="/userfinder" data-bs-dismiss="modal">
-                  <Link className="nav-link" href="/userfinder">
+                  <Link className="nav-link w-100" href="/userfinder">
                     <span className="nav-link-icon">
                       <IconUserSearch></IconUserSearch>
                     </span>
