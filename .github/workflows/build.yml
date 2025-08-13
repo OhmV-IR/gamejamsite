@@ -45,6 +45,9 @@ jobs:
                 printf 'BLOB_CONTAINER_NAME=${{secrets.BLOB_CONTAINER_NAME}}\n' >> .env
                 printf 'COOKIE_SECRET=${{secrets.COOKIE_SECRET}}\n' >> .env
                 printf 'WEBHOOK_KEY=${{secrets.WEBHOOK_KEY}}\n' >> .env
+                printf 'EDGE_CONFIG=${{secrets.EDGE_CONFIG}}\n' >> .env
+                printf 'EDGE_CONFIG_ID=${{secrets.EDGE_CONFIG_ID}}\n' >> .env
+                printf 'EDGE_CONFIG_TOKEN=${{secrets.EDGE_CONFIG_TOKEN}}\n' >> .env
 
             - name: Build site
               run: npm run build
