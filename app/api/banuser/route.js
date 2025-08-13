@@ -42,7 +42,7 @@ export async function POST(req) {
         return new Response("user not found", { status: 404 });
     }
     // offload delete to async function
-    //PerformDelete({uid: incomingbody.uid, provider: incomingbody.provider}, useracc);
+    PerformDelete({uid: incomingbody.uid, provider: incomingbody.provider}, useracc);
     await AddToBanList(useracc.resources[0].email);
     return new Response("banned successfully", {status: 200});
 }
