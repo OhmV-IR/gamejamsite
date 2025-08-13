@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link";
-import { IconCalendar, IconClipboardCheck, IconHome, IconInfoCircle, IconJetpack, IconLayoutDashboard, IconUserSearch, IconBrandGoogleFilled, IconAlertTriangle, IconBrandGithubFilled, IconBrandDiscordFilled, IconUsersGroup, IconBinoculars, IconMenuDeep, IconX } from "@tabler/icons-react";
+import { IconCalendar, IconClipboardCheck, IconHome, IconInfoCircle, IconJetpack, IconLayoutDashboard, IconUserSearch, IconBrandGoogleFilled, IconAlertTriangle, IconBrandGithubFilled, IconBrandDiscordFilled, IconUsersGroup, IconBinoculars, IconMenuDeep, IconX, IconRestore } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import styles from './page.module.css';
@@ -13,7 +13,9 @@ export default function Navbar() {
   const [role, setRole] = useState("");
   const [hasRole, setHasRole] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [mobile, setMobile] = useState(false);
+  const [userToUnbanEml, setUserToUnbanEml] = useState("");
 
   function Capitalize(str) {
     return String(str).charAt(0).toUpperCase() + String(str).slice(1);
@@ -49,6 +51,20 @@ export default function Navbar() {
     })
   }
 
+  function UnbanUser(){
+    fetch("/api/unbanuser", {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify({
+        email: userToUnbanEml
+      })
+    }).then(res => {
+      if(!res.ok){
+        res.text().then(text => console.error(text));
+      }
+    })
+  }
+
   const path = usePathname();
 
   useEffect(() => {
@@ -70,6 +86,7 @@ export default function Navbar() {
     }).then((res) => {
       if (res.ok) {
         res.json().then((body) => {
+          setIsAdmin(body.permissions == "admin");
           setName(body.name);
           setPfpurl(body.pfp);
           if (body.role) {
@@ -262,6 +279,10 @@ export default function Navbar() {
                     </a>
                     <div className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                       <Link href="/finishaccount" className="dropdown-item">Account Details</Link>
+                      {isAdmin
+                      ? <button className="dropdown-item" data-bs-toggle="modal" data-bs-target="#unbanModal">Unban user</button>
+                      : <></>
+                      }
                       <div className="dropdown-divider"></div>
                       <button className="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteaccountmodal">Delete my account</button>
                       <a href="/api/logout" className="dropdown-item text-danger">Logout</a>
@@ -337,6 +358,26 @@ export default function Navbar() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="modal modal-xl" id="unbanModal" tabIndex={-1}>
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Unban user</h5>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+            </div>
+            <div className="modal-body">
+              <label className="form-label">Email of user to unban</label>
+              <input type="text" className="form-control" placeholder="user@example.com" value={userToUnbanEml} onChange={(evt) => setUserToUnbanEml(evt.target.value)}></input>
+            </div>
+            <div className="modal-footer">
+              { (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i).test(userToUnbanEml)
+             ? <button type="button" className="btn btn-primary me-auto" data-bs-dismiss="modal" onClick={UnbanUser}><IconRestore></IconRestore>Unban</button>
+             : <button type="button" className="btn btn-primary disabled me-auto" data-bs-dismiss="modal" disabled><IconRestore></IconRestore>Unban</button>
+            }
             </div>
           </div>
         </div>
