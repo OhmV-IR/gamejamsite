@@ -25,10 +25,27 @@ export async function AddToBanList(email) {
             ]
         })
     });
-    if(!res.ok){
-        console.error(await res.text());
-    }
+    return res.ok;
 };
+
+export async function RemoveFromBanList(email){
+    const res = await fetch(`https://api.vercel.com/v1/edge-config/${process.env.EDGE_CONFIG_ID}/items`, {
+        method: "PATCH",
+        headers: {
+            "Authorization": `Bearer ${process.env.EDGE_CONFIG_TOKEN}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            items: [
+                {
+                    operation: "delete",
+                    key: getKeyFromEmail(email)
+                }
+            ]
+        })
+    });
+    return res.ok;
+}
 
 export async function IsBanned(email) {
     const banned = await get(getKeyFromEmail(email));
