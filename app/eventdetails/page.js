@@ -34,7 +34,7 @@ export default function EventDetails() {
             <h1 className={styles.header}>Junior Event Information</h1>
             <ul>
                 <li className={styles.answertext}>Full day, in-person event</li>
-                <li className={styles.answertext}>Location at Kitchener Public Library Central Branch (85 Queen St N, Kitchener, ON N2H 2H1), Meeting Room C</li>
+                <li className={styles.answertext}>Location at Kitchener Public Library Central Branch (85 Queen St N, Kitchener, ON N2H 2H1)</li>
                 <li className={styles.answertext}>Parental supervision recommended but not required</li>
             </ul>
 
