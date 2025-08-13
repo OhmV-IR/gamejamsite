@@ -1,5 +1,5 @@
 "use client"
-import { IconDeviceFloppy } from '@tabler/icons-react';
+import { IconDeviceFloppy, IconHammer, IconAlertTriangle } from '@tabler/icons-react';
 import styles from './page.module.css'
 import React from "react"
 import { useEffect, useState } from "react"
@@ -35,6 +35,23 @@ export default function UserPage({ params }) {
                 bracket: bracket
             })
         });
+    }
+
+    function BanUser(){
+        fetch("/api/banuser", {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify({
+                uid: id,
+                provider: provider
+            })
+        }).then(res => {
+            if(res.ok){
+                window.location.href="/userfinder";
+            } else {
+                res.text().then(text => console.error(text))
+            }
+        })
     }
 
     useEffect(() => {
@@ -100,8 +117,41 @@ export default function UserPage({ params }) {
                         ? <button className="btn btn-indigo" data-bs-toggle="modal" data-bs-target="#editaccountmodal">Edit account settings</button>
                         : <></>
                     }
+                    {isUserAdmin
+                        ? <button className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#banModal"><IconHammer></IconHammer>Ban user</button>
+                        : <></>
+                    }
                 </div>
             </div>
+            <div className="modal" id="banModal" tabIndex={-1}>
+        <div className="modal-dialog modal-sm" role="document">
+          <div className="modal-content">
+            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div className="modal-status bg-danger"></div>
+            <div className="modal-body text-center py-4">
+              <IconAlertTriangle className="text-danger"></IconAlertTriangle>
+              <h3 className="text-danger mt-3 mb-3">Are you sure?</h3>
+              <div className="text-secondary">
+                Do you really want to ban this user? This will also delete <strong>all</strong> of their data, so make sure you have made a copy if you want to keep any of it.
+              </div>
+            </div>
+            <div className="modal-footer">
+              <div className="w-100">
+                <div className="row">
+                  <div className="col">
+                    <a href="#" className="btn w-100" data-bs-dismiss="modal"> Cancel </a>
+                  </div>
+                  <div className="col">
+                    <button onClick={BanUser} className="btn btn-danger w-100" data-bs-dismiss="modal">
+                      Ban this user
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
             <div className="modal" id="editaccountmodal" tabIndex={-1}>
                 <div className="modal-dialog modal-lg" role="document">
                     <div className="modal-content">

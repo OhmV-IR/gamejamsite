@@ -43,7 +43,7 @@ export async function GET(req) {
     return NextResponse.redirect(process.env.DOMAIN + "/");
 }
 
-async function PerformDelete(payload, items){
+export async function PerformDelete(payload, items){
     container.item(items.resources[0].id, items.resources[0].userid).delete();
     const memberteams = (await teamcontainer.items.query({
         query: sqlstring.format("SELECT * FROM c WHERE ARRAY_CONTAINS(c.members, { 'uid': ?, 'provider': ? })", [payload.uid, payload.provider])

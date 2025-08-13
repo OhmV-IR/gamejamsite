@@ -3,6 +3,7 @@ import { CosmosClient } from "@azure/cosmos";
 const dotenv = require('dotenv');
 dotenv.config();
 import { createSession } from "@/app/lib/session"
+import { IsBanned } from "@/app/lib/banlist";
 const sqlstring = require('sqlstring');
 
 const endpoint = process.env.DB_ENDPOINT;
@@ -45,6 +46,9 @@ export async function GET(req){
         return new Response((await userdatares.text()), {status: 400});
     }
     const userdata = await userdatares.json();
+    if(await IsBanned(userdata.email)){
+        return new Response("Please contact jambytesteam@gmail.com and ask about error 403 when creating an account.", {status: 403});
+    }
     var user = {
         userid: userdata.id,
         email: userdata.email,

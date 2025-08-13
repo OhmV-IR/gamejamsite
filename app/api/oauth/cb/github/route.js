@@ -3,6 +3,7 @@ import { CosmosClient } from "@azure/cosmos";
 const dotenv = require('dotenv');
 dotenv.config();
 import { createSession } from "@/app/lib/session"
+import { IsBanned } from "@/app/lib/banlist";
 const sqlstring = require('sqlstring');
 
 const endpoint = process.env.DB_ENDPOINT;
@@ -13,10 +14,10 @@ const dbclient = new CosmosClient({
     key
 });
 
-const { database } = await dbclient.databases.createIfNotExists({id: process.env.DB_ID});
-const { container } = await database.containers.createIfNotExists({id: process.env.USERCONTAINER_ID});
+const { database } = await dbclient.databases.createIfNotExists({ id: process.env.DB_ID });
+const { container } = await database.containers.createIfNotExists({ id: process.env.USERCONTAINER_ID });
 
-export async function GET(req){
+export async function GET(req) {
     var patUrl = new URL("https://github.com/login/oauth/access_token");
     patUrl.searchParams.append("client_id", process.env.GITHUB_OAUTH_CLIENT_ID);
     patUrl.searchParams.append("client_secret", process.env.GITHUB_OAUTH_CLIENT_SECRET);
@@ -28,8 +29,8 @@ export async function GET(req){
             Accept: "application/json"
         }
     });
-    if(!res.ok){
-        return new Response("invalid code", {status: 400});
+    if (!res.ok) {
+        return new Response("invalid code", { status: 400 });
     }
     const tokenbody = await res.json();
     const userres = await fetch("https://api.github.com/user", {
@@ -38,10 +39,13 @@ export async function GET(req){
             Authorization: "Bearer " + tokenbody.access_token
         }
     });
-    if(!userres.ok){
-        return new Response((await userres.text()), {status: 403});
+    if (!userres.ok) {
+        return new Response((await userres.text()), { status: 403 });
     }
     const userdata = await userres.json();
+    if (await IsBanned(userdata.email)) {
+        return new Response("Please contact jambytesteam@gmail.com with your email and ask about error 403 when creating an account.", { status: 403 });
+    }
     var user = {
         userid: userdata.id,
         email: userdata.email,
@@ -55,7 +59,7 @@ export async function GET(req){
     }
     const existinguser = await container.items.query(query).fetchAll();
     await createSession(user.userid, "github");
-    if(existinguser.resources.length != 0){
+    if (existinguser.resources.length != 0) {
         return NextResponse.redirect(process.env.DOMAIN + "/myteam");
     }
     container.items.create(user);
