@@ -8,8 +8,8 @@ export default function EventDetails() {
             <h1 className={styles.header}>Event Details</h1>
             <h2 className={styles.subheader}>Basic Information</h2>
             <p className={styles.answertext}>Cost: Free!</p> 
-            <p className={styles.answertext}>Date: August 2025 (exact date and time to be determined)</p>
-            <p className={styles.answertext}>Location: online (Senior), in-person (Junior)</p>
+            <p className={styles.answertext}>Date: Senior section - August 30-31, 2025, Junior section - August 23, 2025 (9:30AM-4:00PM)</p>
+            <p className={styles.answertext}>Location: Senior section online, Junior section in-person at Kitchener Public Library, Central Branch (85 Queen St N, Kitchener, ON N2H 2H1)</p>
             <p className={styles.answertext}>Signup: create an account on <Link href="/">jambytes.ca</Link> (this website) by clicking the &quot;Login/Register&quot; button at the top right of the page</p>
             <ul>
                 <li className={styles.answertext}>Junior registrants, please also sign up via Google Forms (<a href="https://forms.gle/Z6U9KK6FJvuaMkG68">https://forms.gle/Z6U9KK6FJvuaMkG68</a>)</li>
@@ -34,7 +34,7 @@ export default function EventDetails() {
             <h1 className={styles.header}>Junior Event Information</h1>
             <ul>
                 <li className={styles.answertext}>Full day, in-person event</li>
-                <li className={styles.answertext}>Location to be determined (within the Kitchener-Waterloo Region)</li>
+                <li className={styles.answertext}>Location at Kitchener Public Library Central Branch (85 Queen St N, Kitchener, ON N2H 2H1), Meeting Room C</li>
                 <li className={styles.answertext}>Parental supervision recommended but not required</li>
             </ul>
 
@@ -49,7 +49,7 @@ export default function EventDetails() {
             <ul>
                 <li className={styles.answertext}>Your own device (preferrably a personal computer)</li>
                 <li className={styles.answertext}>Device charger</li>
-                <li className={styles.answertext}>A set-up Scratch and Google account</li>
+                <li className={styles.answertext}>A set-up Scratch account</li>
                 <li className={styles.answertext}>Food and water (no nuts please!)</li>
                 <li className={styles.answertext}>Any required medication</li>
             </ul>
