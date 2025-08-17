@@ -24,7 +24,7 @@ export default function EventDetails() {
             <u1>
                 <li className={styles.answertext}>Date: August 30-31, 2025</li>
                 <li className={styles.answertext}>Location: Online (check this website!)</li>
-                <li className={styles.answertext}>Prizes: </li>
+                <li className={styles.answertext}>Prizes: $125, $100, $75 for first, second and third place teams respectively</li>
             </u1>
 
             <h2 className={styles.subheader}>Overview</h2>
@@ -34,7 +34,7 @@ export default function EventDetails() {
                 <li className={styles.answertext}>Teams should be created using the Team Finder feature on the website (teams of four are recommended, however groups of any size — including solo participants — are welcome)</li>
                 <li className={styles.answertext}>Seniors will be given 48 hours (2 days) to create and refine their game before submission</li>
                 <li className={styles.answertext}>All games submitted within the time limit will be reviewed by our team who will assess them based on a set of criteria and decide winners</li>
-                <li className={styles.answertext}>If you are a winner, you will be displayed as such on the website, and will be sent your prize via email</li>
+                <li className={styles.answertext}>If you are a winner, you will be displayed as such on the website, and prize claiming will be coordinated via email</li>
             </ul>
 
 
