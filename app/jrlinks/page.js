@@ -13,7 +13,6 @@ export default function JrLinks() {
     return (
         <div>
             <h3 className={styles.page}>This page gives links to every resource we created for the Junior JamBytes workshop.</h3>
-            <u1>
                 {createLink("Junior Event Schedule", "https://docs.google.com/presentation/d/17_DSEsHY7JEBaIhDok1FzDjsv5lpQ_NFBPSmWLAAKBQ/edit?usp=sharing")}
                 {createLink("Scratch Workshop Slideshow", "https://docs.google.com/presentation/d/1qBkYeNdQ0xIVJ5pYLtnzL3-fMNKQ_xNrp_MW-US5pDw/edit?usp=sharing")}
                 {createLink("JamBytes Scratch Account", "https://scratch.mit.edu/users/JamBytes_2025/")}
@@ -23,7 +22,6 @@ export default function JrLinks() {
                 {createLink("Platformer Base Code", "https://scratch.mit.edu/projects/1207081923/")}
                 {createLink("PyGame Workshop Slideshow", "https://docs.google.com/presentation/d/1Uh3UaUWNs6GgfPFtWur3N1Kjm28wvbJnk_FnNuck_Gs/edit?usp=sharing")}
                 {createLink("Trinket (PyGame)", "https://trinket.io/features/pygame")}
-            </u1>
         </div>
     )
 }
