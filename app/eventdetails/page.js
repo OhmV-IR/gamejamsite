@@ -26,8 +26,8 @@ export default function EventDetails() {
             <h2 className={styles.subheader}>Finer Details and Regulations</h2>
             <ul>
                 <li className={styles.answertext}>A prompt will be announced at the start of the game jam which participant games should be based on</li>
-                 <li className={styles.answertext}>You can either work alone(in a team of 1), or with other people by having them request to join your team and you accepting that request in the <Link href="/myteam">My Team</Link> dashboard</li>
-                <li className={styles.answertext}>We will accept submisions of games from the start date to the end date, submissions outside of that time frame will not be accepted for any reason</li>
+                 <li className={styles.answertext}>You can either work alone (in a team of 1), or with other people by having them request to join your team and you accepting that request in the <Link href="/myteam">My Team</Link> dashboard</li>
+                <li className={styles.answertext}>We will accept all submissions of games from the start date to the end date, submissions outside of that time frame will not be accepted for any reason</li>
                 <li className={styles.answertext}>Games can be made in any engine or programming language, and can be 2D or 3D</li>
                  <li className={styles.answertext}>Basic coding knowledge of your language&apos;s syntax is recommended, but not required</li>
                  <li className={styles.answertext}>You can use any coding language you want to create your game, we are judging the end product, not code. If you&apos;re not sure what to use, C# for the Unity game engine or Python for PyGame are some options</li>
