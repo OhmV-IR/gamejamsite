@@ -23,7 +23,7 @@ export default function EventDetails() {
             <li className={styles.answertext}>Age range: 14-18 years old (high school)</li>
             </ul>
 
-            <h2 className={styles.subheader}>Finer Details / Regulations</h2>
+            <h2 className={styles.subheader}>Finer Details and Regulations</h2>
             <ul>
                 <li className={styles.answertext}>A prompt will be announced at the start of the game jam which participant games should be based on</li>
                  <li className={styles.answertext}>You can either work alone(in a team of 1), or with other people by having them request to join your team and you accepting that request in the <Link href="/myteam">My Team</Link> dashboard</li>
