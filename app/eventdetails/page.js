@@ -19,7 +19,7 @@ export default function EventDetails() {
             <h2 className={styles.subheader}>Registration Information</h2>
             <ul>
             <li className={styles.answertext}>Cost: Free!</li>
-            <li className={styles.answertext}>Signup: create an account on <Link href="/">jambytes.ca</Link> (this website) by clicking the &quot;Login/Register&quot; button at the top right of the page</li>
+            <li className={styles.answertext}>Signup: create an account on <Link href="/">jambytes.ca</Link> (this website) by clicking the &quot;Login/Register&quot; button at the top right of the page (or in the navigation menu on mobile)</li>
             <li className={styles.answertext}>Age range: 14-18 years old (high school)</li>
             </ul>
 
