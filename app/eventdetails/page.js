@@ -6,20 +6,21 @@ export default function EventDetails() {
     return (
         <div>
             <h1 className={styles.header}>Event Details</h1>
+            
+            <h2 className={styles.subheader}>Overview</h2>
+            <ul>
+                <li className={styles.answertext}>Start: August 30th, 2025 at 9AM EDT</li>
+                <li className={styles.answertext}>End: September 1st, 2025 at 9AM EDT</li>
+                <li className={styles.answertext}>Location: Online (check this website!)</li>
+                <li className={styles.answertext}>Prizes: $125, $100, $75 for first, second, third places respectively</li>
+            </ul>
+            
 
             <h2 className={styles.subheader}>Registration Information</h2>
             <ul>
             <li className={styles.answertext}>Cost: Free!</li>
             <li className={styles.answertext}>Signup: create an account on <Link href="/">jambytes.ca</Link> (this website) by clicking the &quot;Login/Register&quot; button at the top right of the page</li>
             <li className={styles.answertext}>Age range: 14-18 years old (high school)</li>
-            </ul>
-            
-            <h2 className={styles.subheader}>Overview</h2>
-            <ul>
-            <li className={styles.answertext}>Start: August 30th, 2025 at 9AM EDT</li>
-            <li className={styles.answertext}>End: September 1st, 2025 at 9AM EDT</li>
-            <li className={styles.answertext}>Location: Online (check this website!)</li>
-            <li className={styles.answertext}>Prizes: $125, $100, $75 for first, second, third places respectively</li>
             </ul>
 
             <h2 className={styles.subheader}>Finer Details / Regulations</h2>
