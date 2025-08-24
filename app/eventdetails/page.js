@@ -6,13 +6,13 @@ export default function EventDetails() {
     return (
         <div>
             <h1 className={styles.header}>Event Details</h1>
-            <h2 className={styles.subheader}>Age Range</h2>
-            <p className={styles.answertext}>14-18 years old (high school)</p>
 
             <h2 className={styles.subheader}>Registration Information</h2>
-            <p className={styles.answertext}>Cost: Free!</p>
-            <p className={styles.answertext}>Signup</p>
-            <p className={styles.answertext}>Senior section: create an account on <Link href="/">jambytes.ca</Link> (this website) by clicking the &quot;Login/Register&quot; button at the top right of the page</li> 
+            <ul>
+            <li className={styles.answertext}>Cost: Free!</li>
+            <li className={styles.answertext}>Signup: create an account on <Link href="/">jambytes.ca</Link> (this website) by clicking the &quot;Login/Register&quot; button at the top right of the page</li>
+            <li className={styles.answertext}>Age range: 14-18 years old (high school)</li>
+            </ul>
             
             <h2 className={styles.subheader}>Overview</h2>
             <ul>
