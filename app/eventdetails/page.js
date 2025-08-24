@@ -29,8 +29,8 @@ export default function EventDetails() {
             <ul>
                 <li className={styles.answertext}>A prompt will be announced at the start of the game jam which participant games should be based on</li>
                 <li className={styles.answertext}>Games can be made in any engine or programming language, and can be 2D or 3D</li>
-                 <li className={styles.answertext}>Basic coding knowledge of your language's syntax is recommended, but not required</li>
-                 <li className={styles.answertext}>You can use any coding language you want to create your game, we are judging the end product, not code. If you're not sure what to use, C# for the Unity game engine or python for pygame are some options</li>
+                 <li className={styles.answertext}>Basic coding knowledge of your language&apos;s syntax is recommended, but not required</li>
+                 <li className={styles.answertext}>You can use any coding language you want to create your game, we are judging the end product, not code. If you&apos;re not sure what to use, C# for the Unity game engine or python for pygame are some options</li>
                  <li className={styles.answertext}>If you want to find a team, it is recommended to work with people you know and communicate with them often, while delegating tasks to make sure everyone is doing something.</li>
                  <li className={styles.answertext}>When working in a team, use version control software like git so you can all work on the code at the same time</li>
                 <li className={styles.answertext}>Seniors will be given 48 hours (2 days) to create and refine their game before submission</li>
