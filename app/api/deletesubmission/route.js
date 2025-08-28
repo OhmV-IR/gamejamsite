@@ -35,23 +35,7 @@ export async function POST(req) {
         return new Response("not enough rights", { status: 403 });
     }
     const blobContainer = blobClient.getContainerClient(team.id);
-    if(!(await blobContainer.exists())){
-        return new Response("no submission for team", {status: 404});
-    }
-    const blob = blobContainer.getBlobClient(team.submission.filename);
-    const blobexists = await blob.exists();
-    if (blobexists) {
-        const leaseClient = blob.getBlobLeaseClient();
-        try {
-            await leaseClient.acquireLease(60);
-        } catch (err) {
-            return new Response(err.message, { status: 500 });
-        }
-        await blob.delete({
-            deleteSnapshots: "include",
-            conditions: { leaseId: leaseClient.leaseId }
-        });
-    }
+    blobContainer.deleteIfExists();
     team.submission = {};
     teamcontainer.item(team.id, team.id).replace(team);
     return new Response("submission deleted");
