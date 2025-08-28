@@ -444,7 +444,7 @@ export default function TeamPage({ params }) {
                     res.json().then(body => {
                         if (body.url == null) return;
                         const submissionContainer = new ContainerClient(body.url);
-                        const blob = submissionContainer.getBlockBlobClient(teamId);
+                        const blob = submissionContainer.getBlockBlobClient(file.name);
                         blob.exists().then(exists => {
                             if (!exists) {
                                 blob.upload("", 0).then(() => {

@@ -14,10 +14,12 @@ const { database } = await dbclient.databases.createIfNotExists({ id: process.en
 const teamcontainer = (await database.containers.createIfNotExists({ id: process.env.TEAMSCONTAINER_ID })).container;
 const { BlobServiceClient, ContainerSASPermissions } = require("@azure/storage-blob");
 const blobClient = BlobServiceClient.fromConnectionString(process.env.BLOB_CONNSTR);
-const blobContainer = blobClient.getContainerClient(process.env.BLOB_CONTAINER_NAME);
 
 export async function POST(req) {
     const incomingbody = await req.json();
+    if (incomingbody.filename == null) {
+        return new Response("missing data", { status: 400 });
+    }
     const session = (await cookies()).get("session")?.value;
     const payload = await decrypt(session);
     if (payload == null) {
@@ -30,9 +32,14 @@ export async function POST(req) {
         query: sqlstring.format("SELECT * FROM c WHERE c.owner.uid=? AND c.owner.provider=?", [payload.uid, payload.provider])
     }).fetchAll()).resources[0];
     if (team == null || payload.uid != team.owner.uid || payload.provider != team.owner.provider) {
-        return new Response("not owner of a team", {status: 403});
+        return new Response("not owner of a team", { status: 403 });
     }
-    const blob = blobContainer.getBlobClient(team.id);
+    const blobContainer = blobClient.getContainerClient(team.id);
+    await blobContainer.createIfNotExists({
+        access: "blob"
+    });
+    // for every blob check if it is active and leased and if it is throw
+    const blob = blobContainer.getBlobClient(incomingbody.filename);
     if ((await blob.exists()) && (await blob.getProperties()).leaseStatus == "locked") {
         return new Response("Blob is currently locked by another active lease", { status: 500 });
     }
@@ -40,7 +47,7 @@ export async function POST(req) {
         state: 0,
         filename: incomingbody.filename
     }
-    teamcontainer.item(team.id, team.id).replace(team);
+    await teamcontainer.item(team.id, team.id).replace(team);
     return new Response(JSON.stringify({
         url: await blobContainer.generateSasUrl({
             // Create and write

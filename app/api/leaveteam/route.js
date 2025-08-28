@@ -16,7 +16,6 @@ const teamcontainer = (await database.containers.createIfNotExists({ id: process
 
 const { BlobServiceClient, ContainerSASPermissions } = require("@azure/storage-blob");
 const blobClient = BlobServiceClient.fromConnectionString(process.env.BLOB_CONNSTR);
-const blobContainer = blobClient.getContainerClient(process.env.BLOB_CONTAINER_NAME);
 
 export async function POST(req){
     const incomingbody = await req.json();
@@ -39,7 +38,24 @@ export async function POST(req){
         return new Response("not part of team", {status: 400});
     }
     team.members.splice(index, 1);
-    if(team.members.length == 0 || (payload.uid == team.owner.uid && payload.provider == team.owner.provider)){
+    if((team.members.length == 0 || (payload.uid == team.owner.uid && payload.provider == team.owner.provider)) && team.submission.filename != null){
+        const blobContainer = blobClient.getContainerClient(team.id);
+        if(await blobContainer.exists()){
+            const blob = blobContainer.getBlobClient(team.submission.filename);
+            const blobexists = await blob.exists();
+            if (blobexists) {
+                const leaseClient = blob.getBlobLeaseClient();
+                try {
+                    await leaseClient.acquireLease(60);
+                } catch (err) {
+                    return new Response(err.message, { status: 500 });
+                }
+                await blob.delete({
+                    deleteSnapshots: "include",
+                    conditions: { leaseId: leaseClient.leaseId }
+                });
+            }
+        }
         blobContainer.getBlobClient(team.id).deleteIfExists({
             deleteSnapshots: "include"
         });
