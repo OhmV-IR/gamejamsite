@@ -54,22 +54,7 @@ export async function PerformDelete(payload, items) {
         if ((memberteams[i].members.length == 0 || (payload.uid == memberteams[i].owner.uid && payload.provider == memberteams[i].owner.provider))) {
             if (memberteams[i].submission.filename != null) {
                 const blobContainer = blobClient.getContainerClient(memberteams[i].id);
-                if (await blobContainer.exists()) {
-                    const blob = blobContainer.getBlobClient(memberteams[i].submission.filename);
-                    const blobexists = await blob.exists();
-                    if (blobexists) {
-                        const leaseClient = blob.getBlobLeaseClient();
-                        try {
-                            await leaseClient.acquireLease(60);
-                        } catch (err) {
-                            return new Response(err.message, { status: 500 });
-                        }
-                        await blob.delete({
-                            deleteSnapshots: "include",
-                            conditions: { leaseId: leaseClient.leaseId }
-                        });
-                    }
-                }
+                blobContainer.deleteIfExists();
             }
             teamcontainer.item(memberteams[i].id, memberteams[i].id).delete();
         }
