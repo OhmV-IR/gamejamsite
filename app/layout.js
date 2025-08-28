@@ -1,5 +1,6 @@
 import "./globals.css";
 import Script from "next/script";
+import CountdownBar from "./countdown";
 import Navbar from "./navbar";
 import Footer from "./footer";
 import { Analytics } from "@vercel/analytics/next";
@@ -21,6 +22,7 @@ export default function RootLayout({ children }) {
       <body>
       <Analytics></Analytics>
       <SpeedInsights></SpeedInsights>
+      <CountdownBar></CountdownBar>
       <Navbar></Navbar>
         {children}
       <Footer></Footer>

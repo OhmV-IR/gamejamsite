@@ -21,6 +21,7 @@
     "jose": "^6.0.13",
     "next": "15.5.0",
     "react": "^19.1.1",
+    "react-countdown": "^2.3.6",
     "react-dom": "^19.1.1",
     "sqlstring": "^2.3.3"
   },
