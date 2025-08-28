@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { IconAlertCircle, IconAlertTriangle, IconCheck, IconChevronUp, IconDeviceFloppy, IconDoorExit, IconDownload, IconInfoCircle, IconKarate, IconMail, IconMinus, IconPencil, IconPlus, IconTrash, IconUpload, IconX } from "@tabler/icons-react";
 import React from "react";
 import styles from './page.module.css';
+import { IsJamRunning } from "@/app/lib/jamdetails";
 const { ContainerClient } = require("@azure/storage-blob");
 
 export default function TeamPage({ params }) {
@@ -693,11 +694,11 @@ export default function TeamPage({ params }) {
                 </button>
                 : <></>
             }
-            {isAdmin && ownerId == viewerUid && ownerProvider == viewerProvider && submission.size == null && !isUploading
+            {(isAdmin || IsJamRunning()) && ownerId == viewerUid && ownerProvider == viewerProvider && submission.size == null && !isUploading
                 ? <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#submitModal"><IconUpload></IconUpload>Upload submission</button>
                 : <></>
             }
-            {isAdmin && ownerId == viewerUid && ownerProvider == viewerProvider && submission.state == 1 && !isUploading
+            {(isAdmin || IsJamRunning()) && ownerId == viewerUid && ownerProvider == viewerProvider && submission.state == 1 && !isUploading
                 ? <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#dangerSubmitModal"><IconUpload></IconUpload>Upload submission</button>
                 : <></>
             }

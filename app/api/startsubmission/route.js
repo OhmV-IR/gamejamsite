@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { decrypt, GetIsAdmin } from "@/app/lib/session";
 import { CosmosClient } from "@azure/cosmos";
+import { IsJamRunning } from "@/app/lib/jamdetails";
 const dotenv = require('dotenv')
 dotenv.config();
 const sqlstring = require('sqlstring');
@@ -25,7 +26,7 @@ export async function POST(req) {
     if (payload == null) {
         return new Response("bad session", { status: 401 });
     }
-    if ((await GetIsAdmin(session)) == false) {
+    if ((await GetIsAdmin(session)) == false && IsJamRunning() == false) {
         return new Response("feat not available yet", { status: 403 });
     }
     const team = (await teamcontainer.items.query({
