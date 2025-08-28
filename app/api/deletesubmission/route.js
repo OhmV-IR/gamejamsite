@@ -14,7 +14,6 @@ const { database } = await dbclient.databases.createIfNotExists({ id: process.en
 const teamcontainer = (await database.containers.createIfNotExists({ id: process.env.TEAMSCONTAINER_ID })).container;
 const { BlobServiceClient, ContainerSASPermissions } = require("@azure/storage-blob");
 const blobClient = BlobServiceClient.fromConnectionString(process.env.BLOB_CONNSTR);
-const blobContainer = blobClient.getContainerClient(process.env.BLOB_CONTAINER_NAME);
 
 export async function POST(req) {
     const incomingbody = await req.json();
@@ -35,7 +34,11 @@ export async function POST(req) {
     if ((team.owner.uid != payload.uid || team.owner.provider != payload.provider) && GetIsAdmin(session) == false) {
         return new Response("not enough rights", { status: 403 });
     }
-    const blob = blobContainer.getBlobClient(team.id);
+    const blobContainer = blobClient.getContainerClient(team.id);
+    if(!(await blobContainer.exists())){
+        return new Response("no submission for team", {status: 404});
+    }
+    const blob = blobContainer.getBlobClient(team.submission.filename);
     const blobexists = await blob.exists();
     if (blobexists) {
         const leaseClient = blob.getBlobLeaseClient();

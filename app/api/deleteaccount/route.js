@@ -51,10 +51,24 @@ export async function PerformDelete(payload, items){
     // The user should only be part of 1 team, this running multiple times is an if all else fails scenario, at least we keep to the privacy regulations
     for (let i = 0; i < memberteams.length; i++) {
         memberteams[i].members = memberteams[i].members.filter(member => member.uid != payload.uid || member.provider != payload.provider);
-        if (memberteams[i].members.length == 0 || (memberteams[i].owner.uid == payload.uid && memberteams[i].owner.provider == payload.provider)) {
-            blobContainer.getBlobClient(memberteams[i].id).deleteIfExists({
-                deleteSnapshots: "include"
-            });
+        if((memberteams[i].members.length == 0 || (payload.uid == memberteams[i].owner.uid && payload.provider == memberteams[i].owner.provider)) && memberteams[i].submission.filename != null){
+            const blobContainer = blobClient.getContainerClient(memberteams[i].id);
+            if(await blobContainer.exists()){
+                const blob = blobContainer.getBlobClient(memberteams[i].submission.filename);
+                const blobexists = await blob.exists();
+                if (blobexists) {
+                    const leaseClient = blob.getBlobLeaseClient();
+                    try {
+                        await leaseClient.acquireLease(60);
+                    } catch (err) {
+                        return new Response(err.message, { status: 500 });
+                    }
+                    await blob.delete({
+                        deleteSnapshots: "include",
+                        conditions: { leaseId: leaseClient.leaseId }
+                    });
+                }
+            }
             teamcontainer.item(memberteams[i].id, memberteams[i].id).delete();
         }
         else {
