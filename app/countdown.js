@@ -12,18 +12,18 @@ export default function CountdownBar(){
                             if(!completed){
                             return (
                                 <h1 className={styles.countdowntext}>
-                                    {days}d, {hours}h, {minutes}m, {seconds}s until event end
+                                    Event End: {days}d, {hours}h, {minutes}m, {seconds}s
                                 </h1>
                             )
                             } else {
-                                return <h1 className={styles.countdowntext}>Event ended</h1>
+                                return <h1 className={styles.countdowntext}>Event ended!</h1>
                             }
                         }}></Countdown>
                     )
                 } else {
                     return (
                         <h1 className={styles.countdowntext}>
-                            {days}d, {hours}h, {minutes}m, {seconds}s until event start
+                            Event Start: {days}d, {hours}h, {minutes}m, {seconds}s
                         </h1>
                     )
                 }
