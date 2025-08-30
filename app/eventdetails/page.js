@@ -52,6 +52,12 @@ export default function EventDetails() {
                 <li className={styles.answertext}>Submit either your source code (preferred) or compiled product through the <Link href="/myteam">My Team</Link> page (if you need to submit a folder, use a .zip file. Only the owner of the team can submit your game. You can resubmit as frequently as you want - your new submission will override your previous one.)</li>
                 <li className={styles.answertext}>Wait for your submission to be judged by the JamBytes team (we will contact the team owner by email if you win a prize)</li>
             </ol>
+
+            <h2 className={styles.subheader}>Resources</h2>
+            <ul>
+                <li className={styles.answertext}>Unity tutorial 1: <a href="https://www.youtube.com/watch?v=ujykNUOGp3E">https://www.youtube.com/watch?v=ujykNUOGp3E</a></li>
+                <li className={styles.answertext}>For code help, you can dm ohmvir on discord</li>
+            </ul>
         </div>
     )
 }
