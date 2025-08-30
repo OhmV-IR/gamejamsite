@@ -12,6 +12,7 @@ export default function CountdownBar(){
                             if(!completed){
                             return (
                                 <h1 className={styles.countdowntext}>
+                                    Theme: Protect It |
                                     Event End: {days}d, {hours}h, {minutes}m, {seconds}s
                                 </h1>
                             )
