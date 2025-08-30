@@ -56,6 +56,7 @@ export default function EventDetails() {
             <h2 className={styles.subheader}>Resources</h2>
             <ul>
                 <li className={styles.answertext}>Unity tutorial 1: <a href="https://www.youtube.com/watch?v=ujykNUOGp3E">https://www.youtube.com/watch?v=ujykNUOGp3E</a></li>
+                <li className={styles.answertext}>Unity tutorial 2: <a href="https://www.youtube.com/watch?v=tJaYc1VDfsU">https://www.youtube.com/watch?v=tJaYc1VDfsU</a></li>
                 <li className={styles.answertext}>For code help, you can dm ohmvir on discord, and I will do my best to help you with your problem</li>
             </ul>
         </div>
