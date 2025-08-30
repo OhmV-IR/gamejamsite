@@ -38,9 +38,11 @@ export async function POST(req){
         return new Response("not part of team", {status: 400});
     }
     team.members.splice(index, 1);
-    if((team.members.length == 0 || (payload.uid == team.owner.uid && payload.provider == team.owner.provider)) && team.submission.filename != null){
+    if((team.members.length == 0 || (payload.uid == team.owner.uid && payload.provider == team.owner.provider))){
+        if(team.submission.filename != null){
         const blobContainer = blobClient.getContainerClient(team.id);
         blobContainer.deleteIfExists();
+        }
         teamcontainer.item(team.id, team.id).delete();
     }
     else{
