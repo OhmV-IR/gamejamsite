@@ -2,7 +2,7 @@
     width: 100vw;
     height: 25vh;
     position: relative;
-    margin-top: 20vh;
+    margin-top: 10vh;
     text-align: center;
 }
 
@@ -16,6 +16,14 @@
 .jamdetails {
     font-size: x-large;
     color: white;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.jamdetails2 {
+    font-size: x-large;
+    color: white;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    margin-top: 7vh;
 }
 
 .bg {
