@@ -20,7 +20,7 @@ const { container } = await database.containers.createIfNotExists({ id: process.
 
 export async function POST(req) {
     const incomingbody = await req.json();
-    if (incomingbody.uid == null || incomingbody.provider == null) {
+    if (incomingbody.uid == null) {
         return new Response("missing info", { status: 400 });
     }
     const session = (await cookies()).get("session")?.value;
@@ -34,18 +34,16 @@ export async function POST(req) {
     if (await GetIsAdmin(session) != true) {
         return new Response("not enough rights", { status: 403 });
     }
-    const query = {
-        query: sqlstring.format("SELECT * from c WHERE c.userid=? AND c.provider=?", [incomingbody.uid, incomingbody.provider])
-    }
-    const useracc = await container.items.query(query).fetchAll();
-    if (useracc.resources.length != 1) {
-        return new Response("user not found", { status: 404 });
-    }
-    // offload delete to async function
-    PerformDelete({ uid: incomingbody.uid, provider: incomingbody.provider }, useracc);
-    if (await AddToBanList(useracc.resources[0].email)) {
-        return new Response("banned successfully", { status: 200 });
-    } else {
-        return new Response("failed to ban", { status: 500 });
+    try {
+        const useracc = (await container.item(incomingbody.uid, incomingbody.uid).read()).resource;
+        // Offload delete to async func
+        PerformDelete({ uid: incomingbody.uid }, useracc);
+        if (await AddToBanList(useracc.resources[0].email)) {
+            return new Response("banned successfully", { status: 200 });
+        } else {
+            return new Response("failed to ban", { status: 500 });
+        }
+    } catch (err) {
+        return new Response("Failed to find user", { status: 404 });
     }
 }

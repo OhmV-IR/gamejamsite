@@ -18,9 +18,8 @@ const { database } = await dbclient.databases.createIfNotExists({ id: process.en
 const { container } = await database.containers.createIfNotExists({ id: process.env.USERCONTAINER_ID });
 const teamcontainer = (await database.containers.createIfNotExists({ id: process.env.TEAMSCONTAINER_ID })).container;
 
-const { BlobServiceClient, ContainerSASPermissions } = require("@azure/storage-blob");
+const { BlobServiceClient } = require("@azure/storage-blob");
 const blobClient = BlobServiceClient.fromConnectionString(process.env.BLOB_CONNSTR);
-const blobContainer = blobClient.getContainerClient(process.env.BLOB_CONTAINER_NAME);
 
 export async function GET(req) {
     const session = (await cookies()).get("session")?.value;
@@ -31,28 +30,25 @@ export async function GET(req) {
     if (!payload) {
         return new Response("Bad session", { status: 400 });
     }
-    const query = {
-        query: sqlstring.format("SELECT * from c WHERE c.userid=? AND c.provider=?", [payload.uid, payload.provider])
+    try{
+        const user = (await container.item(payload.uid, payload.uid).read()).resource;
+        PerformDelete(payload, user);
+        return NextResponse.redirect(process.env.DOMAIN + "/");
+    } catch(err){
+        return new Response("User not found", {status: 404});
     }
-    const items = await container.items.query(query).fetchAll();
-    if (items.resources.length != 1) {
-        return new Response("user not found", { status: 401 });
-    }
-    // offload delete to async function
-    PerformDelete(payload, items);
-    return NextResponse.redirect(process.env.DOMAIN + "/");
 }
 
-export async function PerformDelete(payload, items) {
-    container.item(items.resources[0].id, items.resources[0].userid).delete();
+export async function PerformDelete(payload, user) {
+    container.item(user.id, user.id).delete();
     const memberteams = (await teamcontainer.items.query({
-        query: sqlstring.format("SELECT * FROM c WHERE ARRAY_CONTAINS(c.members, { 'uid': ?, 'provider': ? })", [payload.uid, payload.provider])
+        query: sqlstring.format("SELECT * FROM c WHERE ARRAY_CONTAINS(c.members, { 'uid': ? })", [payload.uid])
     }).fetchAll()).resources;
     // The user should only be part of 1 team, this running multiple times is an if all else fails scenario, at least we keep to the privacy regulations
     for (let i = 0; i < memberteams.length; i++) {
-        memberteams[i].members = memberteams[i].members.filter(member => member.uid != payload.uid || member.provider != payload.provider);
-        if ((memberteams[i].members.length == 0 || (payload.uid == memberteams[i].owner.uid && payload.provider == memberteams[i].owner.provider))) {
-            if (memberteams[i].submission.filename != null) {
+        memberteams[i].members = memberteams[i].members.filter(member => member.uid != payload.uid);
+        if (memberteams[i].members.length == 0 || payload.uid == memberteams[i].owner.uid) {
+            if (memberteams[i].submission.state == 1) {
                 const blobContainer = blobClient.getContainerClient(memberteams[i].id);
                 blobContainer.deleteIfExists();
             }
@@ -63,10 +59,10 @@ export async function PerformDelete(payload, items) {
         }
     }
     const jrqteams = (await teamcontainer.items.query({
-        query: sqlstring.format('SELECT * FROM c WHERE ARRAY_CONTAINS(c.joinrequests, { "uid": ?, "provider": ? })', [payload.uid, payload.provider])
+        query: sqlstring.format('SELECT * FROM c WHERE ARRAY_CONTAINS(c.joinrequests, { "uid": ? })', [payload.uid])
     }).fetchAll()).resources;
     for (let i = 0; i < jrqteams.length; i++) {
-        jrqteams[i].joinrequests = jrqteams[i].joinrequests.filter(jrq => jrq.uid != payload.uid || jrq.provider != payload.provider);
+        jrqteams[i].joinrequests = jrqteams[i].joinrequests.filter(jrq => jrq.uid != payload.uid);
         teamcontainer.item(jrqteams[i].id, jrqteams[i].id).replace(jrqteams[i]);
     }
 }

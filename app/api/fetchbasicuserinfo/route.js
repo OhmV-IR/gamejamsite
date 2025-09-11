@@ -1,7 +1,5 @@
 import { CosmosClient } from "@azure/cosmos";
-import { decrypt, refreshSession } from "@/app/lib/session";
-import { cookies } from "next/headers";
-const sqlstring = require('sqlstring');
+import { refreshSession } from "@/app/lib/session";
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -13,23 +11,21 @@ const dbclient = new CosmosClient({
     key
 });
 
-const { database } = await dbclient.databases.createIfNotExists({id: process.env.DB_ID});
-const { container } = await database.containers.createIfNotExists({id: process.env.USERCONTAINER_ID});
+const { database } = await dbclient.databases.createIfNotExists({ id: process.env.DB_ID });
+const { container } = await database.containers.createIfNotExists({ id: process.env.USERCONTAINER_ID });
 
-export async function POST(req){
+export async function POST(req) {
     const incomingbody = await req.json();
-    const query = {
-        query: sqlstring.format("SELECT * from c WHERE c.userid=? AND c.provider=?", [incomingbody.uid, incomingbody.provider])
+    try {
+        const user = (await container.item(incomingbody.uid, incomingbody.uid).read()).resource;
+        refreshSession();
+        return new Response(JSON.stringify({
+            uid: user.userid,
+            pfp: user.pfp,
+            name: user.name
+        }), { status: 200 });
     }
-    const items = await container.items.query(query).fetchAll();
-    if(items.resources.length != 1){
-        return new Response("user not found", {status: 404});
+    catch (err) {
+        return new Response("Could not find user", { status: 404 });
     }
-    refreshSession();
-    return new Response(JSON.stringify({
-        uid: items.resources[0].userid,
-        provider: items.resources[0].provider,
-        pfp: items.resources[0].pfp,
-        name: items.resources[0].name
-    }), {status: 200});
 }

@@ -61,10 +61,10 @@ export async function GET(req){
         query: sqlstring.format("SELECT * from c WHERE c.userid=? AND c.provider=?", [user.userid, "discord"])
     }
     const existinguser = await container.items.query(query).fetchAll();
-    await createSession(user.userid, "discord");
     if(existinguser.resources.length != 0){
+        await createSession(existinguser.resources[0].id);
         return NextResponse.redirect(process.env.DOMAIN + "/myteam");
     }
-    container.items.create(user);
+    await createSession((await container.items.create(user)).resource.id);
     return NextResponse.redirect(process.env.DOMAIN + "/finishaccount");
 }

@@ -14,40 +14,29 @@ const dbclient = new CosmosClient({
     key
 });
 
-const { database } = await dbclient.databases.createIfNotExists({id: process.env.DB_ID});
-const { container } = await database.containers.createIfNotExists({id: process.env.USERCONTAINER_ID});
+const { database } = await dbclient.databases.createIfNotExists({ id: process.env.DB_ID });
+const { container } = await database.containers.createIfNotExists({ id: process.env.USERCONTAINER_ID });
 
-export async function POST(req){
+export async function POST(req) {
     const incomingurl = new URL(req.url);
     const session = (await cookies()).get("session")?.value;
-    if(!session){
-        return new Response("No session", {status: 401});
+    if (!session) {
+        return new Response("No session", { status: 401 });
     }
     const payload = await decrypt(session);
-    if(!payload){
-        return new Response("Bad session", {status: 400});
-    }
-    const query = {
-        query: sqlstring.format("SELECT * from c WHERE c.userid=? AND c.provider=?", [payload.uid, payload.provider])
-    }
-    const items = await container.items.query(query).fetchAll();
-    if(items.resources.length != 1){
-        return new Response("user not found", {status: 404});
-    }
-    if(items.resources[0].permissions == "admin" && incomingurl.searchParams.has("userid") && incomingurl.searchParams.has("provider")){
-        const query2 = {
-            query: sqlstring.format("SELECT * from c WHERE c.userid=? AND c.provider=?" [incomingurl.searchParams.get("userid"), incomingurl.searchParams.get("provider")])
-        }
-        const user = await container.items.query(query2).fetchAll();
-        if(user.resources.length != 1){
-            return new Response("user not found", {status: 404})
-        }
-        return new Response(JSON.stringify(user.resources[0], {status: 200}));
+    if (!payload) {
+        return new Response("Bad session", { status: 400 });
     }
     refreshSession();
-    // user has not finished setup
-    if(items.resources[0].experiencelevel == null){
-        return new Response(process.env.DOMAIN + "/finishaccount", {status: 307});
+    const user = (await container.item(payload.uid, payload.uid).read()).resource;
+    if (user.permissions == "admin" && incomingurl.searchParams.has("userid")) {
+        const userrequested = (await container.item(incomingurl.searchParams.get("userid"), incomingurl.searchParams.get("userid")).read()).resource;
+        return new Response(JSON.stringify(userrequested), { status: 200 });
+    } else {
+        // user has not finished setup
+        if (user.experiencelevel == null) {
+            return new Response(process.env.DOMAIN + "/finishaccount", { status: 307 });
+        }
+        return new Response(JSON.stringify(user), { status: 200 });
     }
-    return new Response(JSON.stringify(items.resources[0]), {status: 200});
 }

@@ -21,7 +21,7 @@ const blobContainer = blobClient.getContainerClient(process.env.BLOB_CONTAINER_N
 
 export async function POST(req) {
     const incomingbody = await req.json();
-    if (incomingbody.uid == null || incomingbody.provider == null || incomingbody.tid == null) {
+    if (incomingbody.uid == null || incomingbody.tid == null) {
         return new Response("missing info", { status: 400 });
     }
     const session = (await cookies()).get("session")?.value;
@@ -29,21 +29,12 @@ export async function POST(req) {
     if (payload == null) {
         return new Response("no session", { status: 401 });
     }
-    const team = (await teamcontainer.items.query({
-        query: sqlstring.format('SELECT * FROM c WHERE c.id=?', [incomingbody.tid])
-    }).fetchAll()).resources[0];
-    if (team == null) {
-        return new Response("team not found", { status: 404 });
-    }
-    if (!GetIsAdmin(session) && (payload.uid != team.owner.uid || payload.provider != team.owner.provider)) {
+    const team = (await teamcontainer.item(incomingbody.tid, incomingbody.tid).read()).resource;
+    if (!GetIsAdmin(session) && payload.uid != team.owner.uid) {
         return new Response("not enough rights", { status: 403 });
     }
-    const index = team.members.findIndex(member => member.uid == incomingbody.uid && member.provider == incomingbody.provider);
-    if (index == -1) {
-        return new Response("not a member of team", { status: 400 });
-    }
-    team.members.splice(index, 1);
-    if ((team.members.length == 0 || (payload.uid == team.owner.uid && payload.provider == team.owner.provider))) {
+    team.members.filter(member => member.uid != incomingbody.uid);
+    if (team.members.length == 0 || payload.uid == team.owner.uid) {
         if (team.submission.filename != null) {
             const blobContainer = blobClient.getContainerClient(team.id);
             blobContainer.deleteIfExists();

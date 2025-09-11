@@ -37,7 +37,7 @@ export default function UserFinder() {
                 </div>
                 {
                     users.map(user => (
-                        <Link href={`/user/${user.id}/${user.provider}`} key={user.id} className="btn btn-dark w-100">
+                        <Link href={`/user/${user.id}`} key={user.id} className="btn btn-dark w-100">
                             <span className="avatar" style={{ backgroundImage: `url(${user.pfp})` }}></span>
                             <span>{user.name}</span>
                         </Link>

@@ -26,8 +26,7 @@ export default function TeamFinder() {
                             method: "POST",
                             credentials: "include",
                             body: JSON.stringify({
-                                uid: body.teams[i].owner.uid,
-                                provider: body.teams[i].owner.provider
+                                uid: body.teams[i].owner.uid
                             })
                         }).then((res) => {
                             if (res.ok) {
@@ -63,7 +62,6 @@ export default function TeamFinder() {
                             credentials: "include",
                             body: JSON.stringify({
                                 uid: body.teams[i].owner.uid,
-                                provider: body.teams[i].owner.provider
                             })
                         }).then((res) => {
                             if (res.ok) {

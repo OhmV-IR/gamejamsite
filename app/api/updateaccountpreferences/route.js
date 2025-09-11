@@ -28,45 +28,31 @@ export async function POST(req) {
     if (!payload) {
         return new Response("Bad session", { status: 400 });
     }
-    if (isAdmin && incomingurl.searchParams.has("id") && incomingurl.searchParams.has("provider")) {
-        const query = {
-            query: sqlstring.format("SELECT * from c WHERE c.userid=? AND c.provider=?", [incomingurl.searchParams.get("id"), incomingurl.searchParams.get("provider")])
-        }
-        const user = await container.items.query(query).fetchAll();
-        if(user.resources.length != 1){
-            return new Response("Account not found", { status: 404 });
-        }
-        var userdata = user.resources[0];
+    if (isAdmin && incomingurl.searchParams.has("id")) {
+        const user = (await container.item(incomingurl.searchParams.get("id"), incomingurl.searchParams.get("id")).read()).resource;
         const data = await req.json();
-        if(!data.role || !data.experiencelevel || !data.bracket || !data.email || !data.name || !data.pfp || !data.permissions){
-            return new Response("missing data", {status: 400});
+        if (!data.role || !data.experiencelevel || !data.bracket || !data.email || !data.name || !data.pfp || !data.permissions) {
+            return new Response("missing data", { status: 400 });
         }
-        userdata.role = data.role;
-        userdata.experiencelevel = data.experiencelevel;
-        userdata.bracket = data.bracket;
-        userdata.email = data.email;
-        userdata.name = data.name;
-        userdata.pfp = data.pfp;
-        userdata.permissions = data.permissions;
-        container.item(userdata.id, userdata.userid).replace(userdata);
+        user.role = data.role;
+        user.experiencelevel = data.experiencelevel;
+        user.bracket = data.bracket;
+        user.email = data.email;
+        user.name = data.name;
+        user.pfp = data.pfp;
+        user.permissions = data.permissions;
+        container.item(user.id, user.userid).replace(user);
     }
     else {
-        const query = {
-            query: sqlstring.format("SELECT * from c WHERE c.userid=? AND c.provider=?", [payload.uid, payload.provider])
-        }
-        const items = await container.items.query(query).fetchAll();
-        if (items.resources.length != 1) {
-            return new Response("Account not found", { status: 404 });
-        }
-        var userdata = items.resources[0];
+        const user = (await container.item(payload.uid, payload.uid).read()).resource;
         const data = await req.json();
         if (!data.role || !data.experiencelevel || !data.bracket) {
             return new Response("Bad body", { status: 400 });
         }
-        userdata.role = data.role;
-        userdata.experiencelevel = data.experiencelevel;
-        userdata.bracket = data.bracket;
-        container.item(userdata.id, userdata.userid).replace(userdata);
+        user.role = data.role;
+        user.experiencelevel = data.experiencelevel;
+        user.bracket = data.bracket;
+        container.item(user.id, user.userid).replace(user);
     }
     refreshSession();
     return new Response("Success", { status: 200 });

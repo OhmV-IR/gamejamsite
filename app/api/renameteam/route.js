@@ -24,13 +24,8 @@ export async function POST(req){
     if(payload == null){
         return new Response("no session", {status: 401});
     }
-    const team = (await teamcontainer.items.query({
-        query: sqlstring.format("SELECT * FROM c WHERE c.id=?", [incomingbody.tid])
-    }).fetchAll()).resources[0];
-    if(team == null){
-        return new Response("team not found", {status: 404});
-    }
-    if(!GetIsAdmin(session) && (payload.uid != team.owner.uid || payload.provider != team.owner.provider)){
+    const team = (await teamcontainer.item(incomingbody.tid, incomingbody.tid).read()).resource;
+    if(!GetIsAdmin(session) && payload.uid != team.owner.uid){
         return new Response("not enough rights", {status: 403});
     }
     team.name = incomingbody.name;

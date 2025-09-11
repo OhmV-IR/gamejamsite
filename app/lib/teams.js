@@ -12,9 +12,9 @@ const dbclient = new CosmosClient({
 const { database } = await dbclient.databases.createIfNotExists({id: process.env.DB_ID});
 const teamcontainer = (await database.containers.createIfNotExists({id: process.env.TEAMSCONTAINER_ID})).container;
 
-export async function IsPartOfTeam(uid, provider) {
+export async function IsPartOfTeam(uid) {
     if ((await teamcontainer.items.query({
-        query: sqlstring.format('SELECT * FROM c WHERE ARRAY_CONTAINS(c.members, { "uid": ?, "provider": ? }) OFFSET 0 LIMIT 1', [uid, provider])
+        query: sqlstring.format('SELECT * FROM c WHERE ARRAY_CONTAINS(c.members, { "uid": ? }) OFFSET 0 LIMIT 1', [uid])
     })
         .fetchAll()).resources.length > 0) {
         return true;
@@ -24,12 +24,12 @@ export async function IsPartOfTeam(uid, provider) {
     }
 }
 
-export async function RemoveAllJoinRequests(uid, provider){
+export async function RemoveAllJoinRequests(uid){
     const jrqteams = (await teamcontainer.items.query({
-        query: sqlstring.format('SELECT * FROM c WHERE ARRAY_CONTAINS(c.joinrequests, {"uid": ?, "provider": ? })', [uid, provider])
+        query: sqlstring.format('SELECT * FROM c WHERE ARRAY_CONTAINS(c.joinrequests, {"uid": ? })', [uid])
     }).fetchAll()).resources;
     for(let i = 0; i < jrqteams.length; i++){
-        jrqteams[i].joinrequests = jrqteams[i].joinrequests.filter(jrq => jrq.uid != uid || jrq.provider != provider)
+        jrqteams[i].joinrequests = jrqteams[i].joinrequests.filter(jrq => jrq.uid != uid)
         teamcontainer.item(jrqteams[i].id, jrqteams[i].id).replace(jrqteams[i]);
     }
 }
