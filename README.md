@@ -75,3 +75,7 @@ A vercel account token to write to vercel edge configs
 1. Go to the repository page of your fork on github
 2. Go to settings tab -> Secrets and variables -> Actions
 3. For each variable in your .env, add a new repository secret with the same name and value.
+## How to run the website locally
+1. Run ```npm i``` in the project directory
+2. Run ```npm run dev``` in the project directory
+3. Go to http://localhost:3000/ in your browser
