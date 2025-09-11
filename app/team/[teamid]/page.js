@@ -4,6 +4,7 @@ import { IconAlertCircle, IconAlertTriangle, IconCheck, IconChevronUp, IconDevic
 import React from "react";
 import styles from './page.module.css';
 import { IsJamRunning } from "@/app/lib/jamdetails";
+import { maxfilesize } from "@/app/lib/submission";
 const { ContainerClient } = require("@azure/storage-blob");
 
 export default function TeamPage({ params }) {
@@ -334,8 +335,6 @@ export default function TeamPage({ params }) {
         const openSubmitBtn = document.getElementById('submitModalBtn');
         openSubmitBtn.click();
     }
-
-    const maxfilesize = 750 * 1024 * 1024; // 750MB
 
     function HandleFile(filevt) {
         if (filevt.target.files.length < 1) {

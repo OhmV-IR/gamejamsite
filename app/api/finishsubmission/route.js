@@ -1,4 +1,5 @@
 import { AddToBanList } from "@/app/lib/banlist";
+import { maxfilesize } from "@/app/lib/submission";
 import { CosmosClient } from "@azure/cosmos";
 const dotenv = require('dotenv')
 dotenv.config();
@@ -13,8 +14,6 @@ const { database } = await dbclient.databases.createIfNotExists({ id: process.en
 const teamcontainer = (await database.containers.createIfNotExists({ id: process.env.TEAMSCONTAINER_ID })).container;
 const usercontainer = (await database.containers.createIfNotExists({id: process.env.USERCONTAINER_ID})).container;
 const { BlobClient } = require("@azure/storage-blob");
-
-const maxfilesize = 750 * 1024 * 1024; // 750MB
 
 export async function POST(req) {
     const body = await req.json();
