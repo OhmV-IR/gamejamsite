@@ -27,21 +27,19 @@ export async function POST(req){
         return new Response("invalid session", {status: 400});
     }
 
-    if(await IsPartOfTeam(payload.uid, payload.provider)){
+    if(await IsPartOfTeam(payload.uid)){
         return new Response("already in team", {status: 406})
     }
     const team = {
         name: incomingbody.teamName,
         owner: {
             uid: payload.uid,
-            provider: payload.provider
         },
         submission: {},
         joinrequests: [],
         members: [
             {
                 uid: payload.uid,
-                provider: payload.provider
             }
         ]
     }

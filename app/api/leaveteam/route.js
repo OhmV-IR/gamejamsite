@@ -33,12 +33,8 @@ export async function POST(req){
     if(team == null){
         return new Response("team not found", {status: 404});
     }
-    const index = team.members.findIndex(member => member.uid == payload.uid && member.provider == payload.provider);
-    if(index == -1){
-        return new Response("not part of team", {status: 400});
-    }
-    team.members.splice(index, 1);
-    if((team.members.length == 0 || (payload.uid == team.owner.uid && payload.provider == team.owner.provider))){
+    const index = team.members.filter(member => member.uid != payload.uid);
+    if(team.members.length == 0 || payload.uid == team.owner.uid){
         if(team.submission.filename != null){
         const blobContainer = blobClient.getContainerClient(team.id);
         blobContainer.deleteIfExists();

@@ -40,16 +40,16 @@ export async function GET(req) {
         name: userres.data.name,
         pfp: userres.data.picture,
         provider: "google",
-        permissions: "user"
+        permissions: "user",
     }
     const query = {
-        query: sqlstring.format("SELECT * from c WHERE c.userid=?", user.userid)
+        query: sqlstring.format('SELECT * from c WHERE c.userid=? AND c.provider="google"', user.userid)
     }
     const existinguser = await container.items.query(query).fetchAll();
-    await createSession(userres.data.id, "google");
     if (existinguser.resources.length != 0) {
+        await createSession(existinguser.resources[0].id);
         return NextResponse.redirect(process.env.DOMAIN + "/myteam");
     }
-    container.items.create(user);
+    await createSession((await container.items.create(user)).resource.id);
     return NextResponse.redirect(process.env.DOMAIN + "/finishaccount");
 }

@@ -27,12 +27,12 @@ export async function POST(req) {
         return new Response("bad session", { status: 401 });
     }
     if ((await GetIsAdmin(session)) == false && IsJamRunning() == false) {
-        return new Response("feat not available yet", { status: 403 });
+        return new Response("feat not available", { status: 403 });
     }
     const team = (await teamcontainer.items.query({
-        query: sqlstring.format("SELECT * FROM c WHERE c.owner.uid=? AND c.owner.provider=?", [payload.uid, payload.provider])
+        query: sqlstring.format("SELECT * FROM c WHERE c.owner.uid=?", [payload.uid])
     }).fetchAll()).resources[0];
-    if (team == null || payload.uid != team.owner.uid || payload.provider != team.owner.provider) {
+    if (team == null) {
         return new Response("not owner of a team", { status: 403 });
     }
     const blobContainer = blobClient.getContainerClient(team.id);

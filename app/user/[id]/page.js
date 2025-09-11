@@ -17,10 +17,10 @@ export default function UserPage({ params }) {
     const [experienceLevel, setExperienceLevel] = useState(0);
     const [isAdmin, setIsAdmin] = useState(false);
     const [isUserAdmin, setIsUserAdmin] = useState(false);
-    const { id, provider } = React.use(params);
+    const { id } = React.use(params);
 
     function SaveAccountChanges() {
-        fetch("/api/updateaccountpreferences?id=" + id + "&provider=" + provider, {
+        fetch("/api/updateaccountpreferences?id=" + id, {
             method: "POST",
             credentials: "include",
             body: JSON.stringify({
@@ -42,8 +42,7 @@ export default function UserPage({ params }) {
             method: "POST",
             credentials: "include",
             body: JSON.stringify({
-                uid: id,
-                provider: provider
+                uid: id
             })
         }).then(res => {
             if(res.ok){
@@ -55,7 +54,7 @@ export default function UserPage({ params }) {
     }
 
     useEffect(() => {
-        fetch("/api/getuser?id=" + id + "&provider=" + provider, {
+        fetch("/api/getuser?id=" + id, {
             method: "POST",
             credentials: "include"
         }).then((res) => {
@@ -87,7 +86,7 @@ export default function UserPage({ params }) {
                 window.location.href = "/teamfinder";
             }
         });
-    }, [id, provider]);
+    }, [id]);
 
     function Capitalize(inputstr) {
         if (typeof inputstr == "string") {

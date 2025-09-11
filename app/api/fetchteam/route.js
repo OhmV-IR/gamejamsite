@@ -20,15 +20,12 @@ export async function POST(req) {
         return new Response("no session", { status: 401 });
     }
     const team = (await teamcontainer.items.query({
-        query: sqlstring.format('SELECT * FROM c WHERE ARRAY_CONTAINS(c.members, {"uid": ?, "provider": ? }) OFFSET 0 LIMIT 1', [payload.uid, payload.provider])
+        query: sqlstring.format('SELECT * FROM c WHERE ARRAY_CONTAINS(c.members, {"uid": ? }) OFFSET 0 LIMIT 1', [payload.uid])
     }).fetchAll()).resources[0];
     if (team == null) {
         return new Response("team not found", { status: 404 });
     }
     else {
-        if(payload.uid != team.owner.uid || payload.provider != team.owner.provider){
-            team.joinrequests = null;
-        }
         return new Response(JSON.stringify(team), { status: 200 });
     }
 }

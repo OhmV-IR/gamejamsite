@@ -18,29 +18,26 @@ const { container } = await database.containers.createIfNotExists({id: process.e
 
 export async function POST(req){
     const incomingbody = await req.json();
-    if(incomingbody.id == null || incomingbody.uid == null || incomingbody.provider == null){
+    if(incomingbody.id == null || incomingbody.uid == null){
         return new Response("missing info", {status: 400});
     }
     const session = (await cookies()).get("session")?.value;
     if(!(await GetIsAdmin(session))){
         return new Response("not enough rights", {status: 403});
     }
-    if(await IsPartOfTeam(incomingbody.uid, incomingbody.provider)){
+    if(await IsPartOfTeam(incomingbody.uid)){
         return new Response("person already on team", {status: 406});
     }
-    const query = {
-        query: sqlstring.format("SELECT * FROM c WHERE c.id=?", [incomingbody.id])
+    try{
+        const team = (await container.item(incomingbody.id, incomingbody.id).read()).resource;
+        team.members.push({
+            uid: incomingbody.uid,
+        });
+        // Must be awaited to avoid a race con where this is replaced after RemoveAllJoinRequests pulls the file, which then causes the member add to be overwritten
+        await container.item(team.id, team.id).replace(team);
+        RemoveAllJoinRequests(incomingbody.uid);
+        return new Response("added person to team", {status: 200});
+    } catch(err){
+        return new Response("Could not find team", {status: 404});
     }
-    const team = (await container.items.query(query).fetchAll()).resources[0];
-    if(team == null){
-        return new Response("team not found", {status: 404});
-    }
-    team.members.push({
-        uid: incomingbody.uid,
-        provider: incomingbody.provider
-    });
-    // Must be awaited to avoid a race con where this is replaced after RemoveAllJoinRequests pulls the file, which then causes the member add to be overwritten
-    await container.item(team.id, team.id).replace(team);
-    RemoveAllJoinRequests(incomingbody.uid, incomingbody.provider);
-    return new Response("added person to team", {status: 200});
 }

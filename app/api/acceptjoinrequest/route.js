@@ -1,11 +1,9 @@
 import { CosmosClient } from "@azure/cosmos";
 import { cookies } from "next/headers";
 import { decrypt } from "@/app/lib/session"
-import { container } from "googleapis/build/src/apis/container";
 import { RemoveAllJoinRequests } from "@/app/lib/teams";
 const dotenv = require('dotenv')
 dotenv.config();
-const sqlstring = require('sqlstring');
 
 const dbclient = new CosmosClient({
     endpoint: process.env.DB_ENDPOINT,
@@ -15,24 +13,26 @@ const dbclient = new CosmosClient({
 const { database } = await dbclient.databases.createIfNotExists({ id: process.env.DB_ID });
 const teamcontainer = (await database.containers.createIfNotExists({ id: process.env.TEAMSCONTAINER_ID })).container;
 
-export async function POST(req){
+export async function POST(req) {
     const incomingbody = await req.json();
-    if(incomingbody.uid == null || incomingbody.provider == null || incomingbody.tid == null){
-        return new Response("missing rq details", {status: 400});
+    if (incomingbody.uid == null || incomingbody.tid == null) {
+        return new Response("missing rq details", { status: 400 });
     }
     const session = (await cookies()).get("session")?.value;
     const payload = await decrypt(session);
-    if(payload == null){
-        return new Response("no session", {status: 401});
+    if (payload == null) {
+        return new Response("no session", { status: 401 });
     }
-    const team = (await teamcontainer.items.query({
-        query: sqlstring.format('SELECT * FROM c WHERE c.id=?', [incomingbody.tid])
-    }).fetchAll()).resources[0];
-    if(team == null){
-        return new Response("team not found", {status: 404});
+    try {
+        const team = (await teamcontainer.item(incomingbody.tid, incomingbody.tid).read()).resource;
+        if (team.owner.uid != payload.uid) {
+            return new Response("Not team owner", { status: 403 });
+        }
+        team.members.push({ uid: incomingbody.uid });
+        await teamcontainer.item(team.id, team.id).replace(team);
+        RemoveAllJoinRequests(incomingbody.uid);
+    } catch (err) {
+        return new Response("team not found", { status: 404 });
     }
-    team.members.push({uid: incomingbody.uid, provider: incomingbody.provider});
-    await teamcontainer.item(team.id, team.id).replace(team);
-    RemoveAllJoinRequests(incomingbody.uid, incomingbody.provider);
-    return new Response("added to team", {status: 200});
+    return new Response("added to team", { status: 200 });
 }

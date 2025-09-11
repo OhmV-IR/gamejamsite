@@ -17,7 +17,6 @@ const { BlobClient } = require("@azure/storage-blob");
 const maxfilesize = 750 * 1024 * 1024; // 750MB
 
 export async function POST(req) {
-    // TODO: Run these submissions through VirusTotal to avoid malicious data being uploaded
     const body = await req.json();
     // Event subscription set up to only send 1 event at a time
     const event = body[0];
@@ -32,7 +31,6 @@ export async function POST(req) {
         return new Response("Unauthorized", { status: 401 });
     }
     if (event.eventType == 'Microsoft.Storage.BlobCreated') {
-        console.log(event.subject);
         const blobname = event.subject.match(/blobs\/(.+)$/)[1];
         const containername = event.subject.match(/containers\/([^\/]+)\/blobs/)[1];
         if(event.data.contentLength == 0){
@@ -51,7 +49,7 @@ export async function POST(req) {
             blob.deleteIfExists({
                 deleteSnapshots: "include"
             });
-            const user = (await usercontainer.items.query(sqlstring.format("SELECT * FROM c WHERE c.userid=? AND c.provider=?", [team.owner.uid, team.owner.provider])).fetchAll()).resources[0];
+            const user = (await usercontainer.items.query(sqlstring.format("SELECT * FROM c WHERE c.userid=?", [team.owner.uid])).fetchAll()).resources[0];
             if(user == null){
                 console.error("could not find account of team owner uploading invalid submission");
                 return false;

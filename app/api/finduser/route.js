@@ -30,7 +30,6 @@ export async function POST(req){
                 name: users[i].name,
                 pfp: users[i].pfp,
                 id: users[i].userid,
-                provider: users[i].provider
             }
         )
     }

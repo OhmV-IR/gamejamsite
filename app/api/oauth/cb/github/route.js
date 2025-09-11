@@ -52,16 +52,16 @@ export async function GET(req) {
         name: userdata.name,
         pfp: userdata.avatar_url,
         provider: "github",
-        permissions: "user"
+        permissions: "user",
     }
     const query = {
         query: sqlstring.format("SELECT * from c WHERE c.userid=? AND c.provider=?", [user.userid, "github"])
     }
     const existinguser = await container.items.query(query).fetchAll();
-    await createSession(user.userid, "github");
     if (existinguser.resources.length != 0) {
+        await createSession(existinguser.resources[0].id);
         return NextResponse.redirect(process.env.DOMAIN + "/myteam");
     }
-    container.items.create(user);
+    await createSession((await container.items.create(user)).resource.id);
     return NextResponse.redirect(process.env.DOMAIN + "/finishaccount");
 }

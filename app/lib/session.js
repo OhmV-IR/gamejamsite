@@ -27,7 +27,7 @@ export async function encrypt(payload) {
 }
 
 export async function decrypt(session) {
-    if(!session){
+    if (!session) {
         return null;
     }
     try {
@@ -41,9 +41,9 @@ export async function decrypt(session) {
     }
 }
 
-export async function createSession(uid, provider) {
+export async function createSession(uid) {
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-    const session = await encrypt({ uid, provider, expiresAt })
+    const session = await encrypt({ uid, expiresAt })
     const cookieStore = await cookies();
     cookieStore.set('session', session, {
         httpOnly: true,
@@ -87,15 +87,12 @@ export async function GetIsAdmin(session) {
         return false;
     }
     const payload = await decrypt(session);
-    if(payload == null || payload.uid == null || payload.provider == null){
+    if (payload == null || payload.uid == null) {
         return false;
     }
-    const query = {
-        query: sqlstring.format("SELECT * from c WHERE c.userid=? AND c.provider=?", [payload.uid, payload.provider])
+    try {
+        return (await container.item(payload.uid, payload.uid).read()).resource.permissions == "admin";
+    } catch (err) {
+        return false;
     }
-    const items = await container.items.query(query).fetchAll();
-    if (items.resources.length == 1 && items.resources[0].permissions == "admin") {
-        return true;
-    }
-    return false;
 }
