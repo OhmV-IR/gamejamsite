@@ -24,6 +24,9 @@ export async function POST(req){
         return new Response("no session", {status: 401});
     }
     const team = (await teamcontainer.item(incomingbody.tid, incomingbody.tid).read()).resource;
+    if(team == null){
+        return new Response("team not found", {status: 404});
+    }
     team.joinrequests.filter(jr => jr.uid != incomingbody.uid);
     teamcontainer.item(team.id, team.id).replace(team);
     return new Response("removed join rq", {status: 200});

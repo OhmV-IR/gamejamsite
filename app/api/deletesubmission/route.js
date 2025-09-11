@@ -25,17 +25,16 @@ export async function POST(req) {
     if (payload == null) {
         return new Response("bad session", { status: 401 });
     }
-    try {
-        const team = (await teamcontainer.item(incomingbody.tid, incomingbody.tid).read()).resource;
-        if (team.owner.uid != payload.uid && GetIsAdmin(session) == false) {
-            return new Response("not enough rights", { status: 403 });
-        }
-        const blobContainer = blobClient.getContainerClient(team.id);
-        blobContainer.deleteIfExists();
-        team.submission = {};
-        teamcontainer.item(team.id, team.id).replace(team);
-    } catch (err) {
+    const team = (await teamcontainer.item(incomingbody.tid, incomingbody.tid).read()).resource;
+    if (team == null) {
         return new Response("team not found", { status: 404 });
     }
+    if (team.owner.uid != payload.uid && GetIsAdmin(session) == false) {
+        return new Response("not enough rights", { status: 403 });
+    }
+    const blobContainer = blobClient.getContainerClient(team.id);
+    blobContainer.deleteIfExists();
+    team.submission = {};
+    teamcontainer.item(team.id, team.id).replace(team);
     return new Response("submission deleted");
 }

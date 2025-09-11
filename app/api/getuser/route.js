@@ -23,6 +23,9 @@ export async function POST(req) {
     }
     const userid = incomingurl.searchParams.get("id");
     const user = (await container.item(userid, userid).read()).resource;
+    if (user == null) {
+        return new Response("user not found", { status: 404 });
+    }
     if (!isadmin) {
         return new Response(JSON.stringify({
             name: user.name,
@@ -30,7 +33,7 @@ export async function POST(req) {
             role: user.role,
             permissions: user.permissions,
             containsprivate: isadmin
-        }), {status: 200});
+        }), { status: 200 });
     } else {
         return new Response(JSON.stringify({
             name: user.name,
@@ -41,6 +44,6 @@ export async function POST(req) {
             bracket: user.bracket,
             permissions: user.permissions,
             containsprivate: isadmin
-        }), {status: 200});
+        }), { status: 200 });
     }
 }

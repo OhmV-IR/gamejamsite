@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-const {OAuth2Client} = require('google-auth-library');
+const { OAuth2Client } = require('google-auth-library');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -15,10 +15,12 @@ const scopes = [
     "openid"
 ]
 
-export async function POST(req, res){
-    return NextResponse.json({url: auth.generateAuthUrl({
-        access_type: "offline",
-        scope: scopes.join(" "),
-        prompt: "consent"
-    })});
+export async function POST(req, res) {
+    return NextResponse.json({
+        url: auth.generateAuthUrl({
+            access_type: "offline",
+            scope: scopes.join(" "),
+            prompt: "consent"
+        })
+    });
 }

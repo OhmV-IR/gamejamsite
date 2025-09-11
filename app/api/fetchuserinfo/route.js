@@ -29,6 +29,9 @@ export async function POST(req) {
     }
     refreshSession();
     const user = (await container.item(payload.uid, payload.uid).read()).resource;
+    if (user == null) {
+        return new Response("user not found", { status: 404 });
+    }
     if (user.permissions == "admin" && incomingurl.searchParams.has("userid")) {
         const userrequested = (await container.item(incomingurl.searchParams.get("userid"), incomingurl.searchParams.get("userid")).read()).resource;
         return new Response(JSON.stringify(userrequested), { status: 200 });

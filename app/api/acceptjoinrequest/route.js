@@ -23,16 +23,15 @@ export async function POST(req) {
     if (payload == null) {
         return new Response("no session", { status: 401 });
     }
-    try {
-        const team = (await teamcontainer.item(incomingbody.tid, incomingbody.tid).read()).resource;
-        if (team.owner.uid != payload.uid) {
-            return new Response("Not team owner", { status: 403 });
-        }
-        team.members.push({ uid: incomingbody.uid });
-        await teamcontainer.item(team.id, team.id).replace(team);
-        RemoveAllJoinRequests(incomingbody.uid);
-    } catch (err) {
-        return new Response("team not found", { status: 404 });
+    const team = (await teamcontainer.item(incomingbody.tid, incomingbody.tid).read()).resource;
+    if(team == null){
+        return new Response("no team found", {status: 404});
     }
+    if (team.owner.uid != payload.uid) {
+        return new Response("Not team owner", { status: 403 });
+    }
+    team.members.push({ uid: incomingbody.uid });
+    await teamcontainer.item(team.id, team.id).replace(team);
+    RemoveAllJoinRequests(incomingbody.uid);
     return new Response("added to team", { status: 200 });
 }

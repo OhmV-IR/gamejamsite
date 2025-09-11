@@ -34,16 +34,15 @@ export async function POST(req) {
     if (await GetIsAdmin(session) != true) {
         return new Response("not enough rights", { status: 403 });
     }
-    try {
-        const useracc = (await container.item(incomingbody.uid, incomingbody.uid).read()).resource;
-        // Offload delete to async func
-        PerformDelete({ uid: incomingbody.uid }, useracc);
-        if (await AddToBanList(useracc.resources[0].email)) {
-            return new Response("banned successfully", { status: 200 });
-        } else {
-            return new Response("failed to ban", { status: 500 });
-        }
-    } catch (err) {
-        return new Response("Failed to find user", { status: 404 });
+    const useracc = (await container.item(incomingbody.uid, incomingbody.uid).read()).resource;
+    if(useracc == null){
+        return new Response("user not found", {status: 404});
+    }
+    // Offload delete to async func
+    PerformDelete({ uid: incomingbody.uid }, useracc);
+    if (await AddToBanList(useracc.resources[0].email)) {
+        return new Response("banned successfully", { status: 200 });
+    } else {
+        return new Response("failed to ban", { status: 500 });
     }
 }

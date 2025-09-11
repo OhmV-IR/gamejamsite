@@ -24,6 +24,9 @@ export async function POST(req){
         return new Response("no session", {status: 401});
     }
     const team = (await teamcontainer.item(incomingbody.tid, incomingbody.tid).read()).resource;
+    if(team == null){
+        return new Response("team not found", {status: 404});
+    }
     if(!team.members.some(member => member.uid == incomingbody.uid)){
         return new Response("new owner must already be a member of the team", {status: 403});
     }

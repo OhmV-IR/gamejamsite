@@ -30,6 +30,9 @@ export async function POST(req) {
     }
     if (isAdmin && incomingurl.searchParams.has("id")) {
         const user = (await container.item(incomingurl.searchParams.get("id"), incomingurl.searchParams.get("id")).read()).resource;
+        if (user == null) {
+            return new Response("user not found", { status: 404 });
+        }
         const data = await req.json();
         if (!data.role || !data.experiencelevel || !data.bracket || !data.email || !data.name || !data.pfp || !data.permissions) {
             return new Response("missing data", { status: 400 });
@@ -45,6 +48,9 @@ export async function POST(req) {
     }
     else {
         const user = (await container.item(payload.uid, payload.uid).read()).resource;
+        if (user == null) {
+            return new Response("user not found", { status: 404 });
+        }
         const data = await req.json();
         if (!data.role || !data.experiencelevel || !data.bracket) {
             return new Response("Bad body", { status: 400 });

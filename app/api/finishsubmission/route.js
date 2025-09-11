@@ -35,7 +35,7 @@ export async function POST(req) {
         if(event.data.contentLength == 0){
             return new Response("handled empty file", {status: 200});
         }
-        const team = (await teamcontainer.items.query(sqlstring.format("SELECT * FROM c WHERE c.id=?", containername)).fetchAll()).resources[0];
+        const team = (await teamcontainer.item(containername, containername).read()).resource;
         if (team == null) {
             const blob = new BlobClient(process.env.BLOB_CONNSTR, containername, blobname);
             blob.deleteIfExists({

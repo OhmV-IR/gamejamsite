@@ -16,16 +16,14 @@ const { container } = await database.containers.createIfNotExists({ id: process.
 
 export async function POST(req) {
     const incomingbody = await req.json();
-    try {
-        const user = (await container.item(incomingbody.uid, incomingbody.uid).read()).resource;
-        refreshSession();
-        return new Response(JSON.stringify({
-            uid: user.userid,
-            pfp: user.pfp,
-            name: user.name
-        }), { status: 200 });
+    const user = (await container.item(incomingbody.uid, incomingbody.uid).read()).resource;
+    if (user == null) {
+        return new Response("user not found", { status: 404 });
     }
-    catch (err) {
-        return new Response("Could not find user", { status: 404 });
-    }
+    refreshSession();
+    return new Response(JSON.stringify({
+        uid: user.userid,
+        pfp: user.pfp,
+        name: user.name
+    }), { status: 200 });
 }

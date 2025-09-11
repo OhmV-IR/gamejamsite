@@ -30,13 +30,12 @@ export async function GET(req) {
     if (!payload) {
         return new Response("Bad session", { status: 400 });
     }
-    try{
-        const user = (await container.item(payload.uid, payload.uid).read()).resource;
-        PerformDelete(payload, user);
-        return NextResponse.redirect(process.env.DOMAIN + "/");
-    } catch(err){
-        return new Response("User not found", {status: 404});
+    const user = (await container.item(payload.uid, payload.uid).read()).resource;
+    if (user == null) {
+        return new Response("user not found", { status: 404 });
     }
+    PerformDelete(payload, user);
+    return NextResponse.redirect(process.env.DOMAIN + "/");
 }
 
 export async function PerformDelete(payload, user) {

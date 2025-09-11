@@ -14,10 +14,10 @@ const dbclient = new CosmosClient({
     key
 });
 
-const { database } = await dbclient.databases.createIfNotExists({id: process.env.DB_ID});
-const { container } = await database.containers.createIfNotExists({id: process.env.USERCONTAINER_ID});
+const { database } = await dbclient.databases.createIfNotExists({ id: process.env.DB_ID });
+const { container } = await database.containers.createIfNotExists({ id: process.env.USERCONTAINER_ID });
 
-export async function GET(req){
+export async function GET(req) {
     const paturl = new URL("https://discord.com/api/oauth2/token");
     paturl.searchParams.append("grant_type", "authorization_code");
     paturl.searchParams.append("code", (new URL(req.url)).searchParams.get("code"));
@@ -31,8 +31,8 @@ export async function GET(req){
         },
         body: paturl.searchParams.toString()
     });
-    if(!patres.ok){
-        return new Response((await patres.text()), {status: 400});
+    if (!patres.ok) {
+        return new Response((await patres.text()), { status: 400 });
     }
     const patbody = await patres.json();
     const userdataurl = new URL("https://discord.com/api/v10/users/@me");
@@ -42,12 +42,12 @@ export async function GET(req){
             Authorization: "Bearer " + patbody.access_token
         }
     });
-    if(!userdatares.ok){
-        return new Response((await userdatares.text()), {status: 400});
+    if (!userdatares.ok) {
+        return new Response((await userdatares.text()), { status: 400 });
     }
     const userdata = await userdatares.json();
-    if(await IsBanned(userdata.email)){
-        return new Response("Please contact jambytesteam@gmail.com and ask about error 403 when creating an account.", {status: 403});
+    if (await IsBanned(userdata.email)) {
+        return new Response("Please contact jambytesteam@gmail.com and ask about error 403 when creating an account.", { status: 403 });
     }
     var user = {
         userid: userdata.id,
@@ -61,7 +61,7 @@ export async function GET(req){
         query: sqlstring.format("SELECT * from c WHERE c.userid=? AND c.provider=?", [user.userid, "discord"])
     }
     const existinguser = await container.items.query(query).fetchAll();
-    if(existinguser.resources.length != 0){
+    if (existinguser.resources.length != 0) {
         await createSession(existinguser.resources[0].id);
         return NextResponse.redirect(process.env.DOMAIN + "/myteam");
     }

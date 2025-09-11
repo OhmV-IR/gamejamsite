@@ -6,8 +6,8 @@ dotenv.config();
 
 export async function POST(req) {
     const incomingbody = await req.json();
-    if(incomingbody.email == null){
-        return new Response("missing info", {status: 400});
+    if (incomingbody.email == null) {
+        return new Response("missing info", { status: 400 });
     }
     const session = (await cookies()).get("session")?.value;
     if (!session) {
@@ -17,12 +17,12 @@ export async function POST(req) {
     if (!payload) {
         return new Response("Bad session", { status: 400 });
     }
-    if(await GetIsAdmin(session) != true){
-        return new Response("not enough rights", {status: 403});
+    if (await GetIsAdmin(session) != true) {
+        return new Response("not enough rights", { status: 403 });
     }
-    if(await RemoveFromBanList(incomingbody.email)){
-        return new Response("unbanned successfully", {status: 200});
+    if (await RemoveFromBanList(incomingbody.email)) {
+        return new Response("unbanned successfully", { status: 200 });
     } else {
-        return new Response("failed to unban", {status: 500});
+        return new Response("failed to unban", { status: 500 });
     }
 }

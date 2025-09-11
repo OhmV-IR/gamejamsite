@@ -12,20 +12,17 @@ const dbclient = new CosmosClient({
     key
 });
 
-const { database } = await dbclient.databases.createIfNotExists({id: process.env.DB_ID});
-const { container } = await database.containers.createIfNotExists({id: process.env.TEAMSCONTAINER_ID});
+const { database } = await dbclient.databases.createIfNotExists({ id: process.env.DB_ID });
+const { container } = await database.containers.createIfNotExists({ id: process.env.TEAMSCONTAINER_ID });
 
-export async function POST(req){
+export async function POST(req) {
     const incomingbody = await req.json();
-    if(incomingbody.id == null || typeof(incomingbody.id) != "string"){
-        return new Response("Missing id", {status: 400});
+    if (incomingbody.id == null || typeof (incomingbody.id) != "string") {
+        return new Response("Missing id", { status: 400 });
     }
-    const query = {
-        query: sqlstring.format('SELECT * from c WHERE c.id=?', [incomingbody.id])
+    const team = (await container.item(incomingbody.id, incomingbody.id).read()).resource;
+    if (!team) {
+        return new Response("team not found", { status: 404 });
     }
-    const team = (await container.items.query(query).fetchAll()).resources[0];
-    if(!team){
-        return new Response("team not found", {status: 404});
-    }
-    return new Response(JSON.stringify(team), {status: 200});
+    return new Response(JSON.stringify(team), { status: 200 });
 }

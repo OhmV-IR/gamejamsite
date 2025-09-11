@@ -90,9 +90,5 @@ export async function GetIsAdmin(session) {
     if (payload == null || payload.uid == null) {
         return false;
     }
-    try {
-        return (await container.item(payload.uid, payload.uid).read()).resource.permissions == "admin";
-    } catch (err) {
-        return false;
-    }
+    return (await container.item(payload.uid, payload.uid).read()).resource.permissions == "admin";
 }

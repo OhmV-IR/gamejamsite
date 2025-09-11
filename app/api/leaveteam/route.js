@@ -27,13 +27,11 @@ export async function POST(req){
     if(payload == null){
         return new Response("no session", {status: 401});
     }
-    const team = (await teamcontainer.items.query({
-        query: sqlstring.format('SELECT * from c WHERE c.id=?', [incomingbody.tid])
-    }).fetchAll()).resources[0];
+    const team = (await teamcontainer.item(incomingbody.tid, incomingbody.tid).read()).resource;
     if(team == null){
         return new Response("team not found", {status: 404});
     }
-    const index = team.members.filter(member => member.uid != payload.uid);
+    team.members.filter(member => member.uid != payload.uid);
     if(team.members.length == 0 || payload.uid == team.owner.uid){
         if(team.submission.filename != null){
         const blobContainer = blobClient.getContainerClient(team.id);

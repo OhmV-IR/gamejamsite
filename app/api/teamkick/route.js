@@ -30,6 +30,9 @@ export async function POST(req) {
         return new Response("no session", { status: 401 });
     }
     const team = (await teamcontainer.item(incomingbody.tid, incomingbody.tid).read()).resource;
+    if (team == null) {
+        return new Response("team not found", { status: 404 });
+    }
     if (!GetIsAdmin(session) && payload.uid != team.owner.uid) {
         return new Response("not enough rights", { status: 403 });
     }
