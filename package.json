@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "npx eslint@8.57.1 ."
+    "lint": "npx eslint ."
   },
   "dependencies": {
     "@azure/cosmos": "^4.7.0",
@@ -26,8 +26,8 @@
     "sqlstring": "^2.3.3"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "15.5.2"
+    "@eslint/eslintrc": "^3.3.5",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^16.2.1"
   }
 }
