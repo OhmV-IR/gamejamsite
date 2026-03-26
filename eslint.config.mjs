@@ -1,4 +1,3 @@
-import nextPlugin from "eslint-plugin-next";
 import nextConfig from "eslint-config-next";
 
 export default [
