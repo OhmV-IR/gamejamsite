@@ -18,7 +18,7 @@ pipeline {
         
         stage("deps"){
             steps {
-                bat "npm install"
+                bat "npm ci"
             }
         }
 
