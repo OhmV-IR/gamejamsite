@@ -1,23 +1,16 @@
-import nextConfig from "eslint-config-next";
-
-export default [
-  {
-    ignores: [
-      "node_modules/**",
-      ".next/**",
-      "out/**",
-      "build/**",
-      "next-env.d.ts"
-    ]
-  },
-
-  // Next.js recommended rules
-  ...nextConfig,
-
-  // Custom rules
-  {
-    rules: {
-      "@next/next/no-img-element": "off"
-    }
-  }
-];
+import { defineConfig, globalIgnores } from 'eslint/config'
+import nextVitals from 'eslint-config-next/core-web-vitals'
+ 
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    '.next/**',
+    'out/**',
+    'build/**',
+    'next-env.d.ts',
+  ]),
+])
+ 
+export default eslintConfig

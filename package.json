@@ -28,7 +28,6 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
     "eslint": "^9.39.4",
-    "eslint-config-next": "^16.2.1",
-    "eslint-plugin-next": "^0.0.0"
+    "eslint-config-next": "^16.2.1"
   }
 }
