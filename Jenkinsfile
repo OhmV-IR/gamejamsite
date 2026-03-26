@@ -92,7 +92,7 @@ pipeline {
 
         stage("lint"){
             steps {
-                bat "npm run lint"
+                bat "npx eslint ."
             }
         }
         
