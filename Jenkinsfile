@@ -5,10 +5,6 @@ pipeline {
         nodejs 'node24'
     }
     
-    environment {
-        NODE_ENV = 'production'
-    }
-    
     stages {
         stage("Checkout") {
             steps {
