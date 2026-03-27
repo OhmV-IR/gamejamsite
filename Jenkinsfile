@@ -33,9 +33,9 @@ pipeline {
             string(credentialsId: 'EDGE_CONFIG', variable: 'EDGE_CONFIG'),
             string(credentialsId: 'EDGE_CONFIG_ID', variable: 'EDGE_CONFIG_ID'),
             string(credentialsId: 'EDGE_CONFIG_TOKEN', variable: 'EDGE_CONFIG_TOKEN'),
-            string(credentialsId: 'GH_OAUTH_CLIENT_ID', variable: 'GH_OAUTH_CLIENT_ID'),
-            string(credentialsId: 'GH_OAUTH_CLIENT_SECRET', variable: 'GH_OAUTH_CLIENT_SECRET'),
-            string(credentialsId: 'GH_OAUTH_REDIRECT_URL', variable: 'GH_OAUTH_REDIRECT_URL'),
+            string(credentialsId: 'GITHUB_OAUTH_CLIENT_ID', variable: 'GITHUB_OAUTH_CLIENT_ID'),
+            string(credentialsId: 'GITHUB_OAUTH_CLIENT_SECRET', variable: 'GITHUB_OAUTH_CLIENT_SECRET'),
+            string(credentialsId: 'GITHUB_OAUTH_REDIRECT_URL', variable: 'GITHUB_OAUTH_REDIRECT_URL'),
             string(credentialsId: 'GOOGLE_OAUTH_CLIENT_ID', variable: 'GOOGLE_OAUTH_CLIENT_ID'),
             string(credentialsId: 'GOOGLE_OAUTH_CLIENT_SECRET', variable: 'GOOGLE_OAUTH_CLIENT_SECRET'),
             string(credentialsId: 'GOOGLE_OAUTH_REDIRECT_URL', variable: 'GOOGLE_OAUTH_REDIRECT_URL'),
@@ -63,9 +63,9 @@ pipeline {
                     echo EDGE_CONFIG_ID=%EDGE_CONFIG_ID%>> .env
                     echo EDGE_CONFIG_TOKEN=%EDGE_CONFIG_TOKEN%>> .env
 
-                    echo GH_OAUTH_CLIENT_ID=%GH_OAUTH_CLIENT_ID%>> .env
-                    echo GH_OAUTH_CLIENT_SECRET=%GH_OAUTH_CLIENT_SECRET%>> .env
-                    echo GH_OAUTH_REDIRECT_URL=%GH_OAUTH_REDIRECT_URL%>> .env
+                    echo GITHUB_OAUTH_CLIENT_ID=%GITHUB_OAUTH_CLIENT_ID%>> .env
+                    echo GITHUB_OAUTH_CLIENT_SECRET=%GITHUB_OAUTH_CLIENT_SECRET%>> .env
+                    echo GITHUB_OAUTH_REDIRECT_URL=%GITHUB_OAUTH_REDIRECT_URL%>> .env
 
                     echo GOOGLE_OAUTH_CLIENT_ID=%GOOGLE_OAUTH_CLIENT_ID%>> .env
                     echo GOOGLE_OAUTH_CLIENT_SECRET=%GOOGLE_OAUTH_CLIENT_SECRET%>> .env
