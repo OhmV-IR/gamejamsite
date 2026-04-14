@@ -21,60 +21,11 @@ pipeline {
         stage("create .env"){
             steps {
                 withCredentials([
-            string(credentialsId: 'BLOB_CONNSTR', variable: 'BLOB_CONNSTR'),
-            string(credentialsId: 'COOKIE_SECRET', variable: 'COOKIE_SECRET'),
-            string(credentialsId: 'DB_ENDPOINT', variable: 'DB_ENDPOINT'),
-            string(credentialsId: 'DB_ID', variable: 'DB_ID'),
-            string(credentialsId: 'DB_KEY', variable: 'DB_KEY'),
-            string(credentialsId: 'DISCORD_OAUTH_CLIENT_ID', variable: 'DISCORD_OAUTH_CLIENT_ID'),
-            string(credentialsId: 'DISCORD_OAUTH_CLIENT_SECRET', variable: 'DISCORD_OAUTH_CLIENT_SECRET'),
-            string(credentialsId: 'DISCORD_OAUTH_REDIRECT_URL', variable: 'DISCORD_OAUTH_REDIRECT_URL'),
-            string(credentialsId: 'DOMAIN', variable: 'DOMAIN'),
-            string(credentialsId: 'EDGE_CONFIG', variable: 'EDGE_CONFIG'),
-            string(credentialsId: 'EDGE_CONFIG_ID', variable: 'EDGE_CONFIG_ID'),
-            string(credentialsId: 'EDGE_CONFIG_TOKEN', variable: 'EDGE_CONFIG_TOKEN'),
-            string(credentialsId: 'GITHUB_OAUTH_CLIENT_ID', variable: 'GITHUB_OAUTH_CLIENT_ID'),
-            string(credentialsId: 'GITHUB_OAUTH_CLIENT_SECRET', variable: 'GITHUB_OAUTH_CLIENT_SECRET'),
-            string(credentialsId: 'GITHUB_OAUTH_REDIRECT_URL', variable: 'GITHUB_OAUTH_REDIRECT_URL'),
-            string(credentialsId: 'GOOGLE_OAUTH_CLIENT_ID', variable: 'GOOGLE_OAUTH_CLIENT_ID'),
-            string(credentialsId: 'GOOGLE_OAUTH_CLIENT_SECRET', variable: 'GOOGLE_OAUTH_CLIENT_SECRET'),
-            string(credentialsId: 'GOOGLE_OAUTH_REDIRECT_URL', variable: 'GOOGLE_OAUTH_REDIRECT_URL'),
-            string(credentialsId: 'TEAMSCONTAINER_ID', variable: 'TEAMSCONTAINER_ID'),
-            string(credentialsId: 'USERCONTAINER_ID', variable: 'USERCONTAINER_ID'),
-            string(credentialsId: 'WEBHOOK_KEY', variable: 'WEBHOOK_KEY')
+                    file(credentialsId: 'ENV_FILE', variable: 'ENV_FILE')
             ]) {
                 bat """
                     if exist .env del .env
-
-                    echo DOTENV_CONFIG_QUIET=true>> .env
-                    echo BLOB_CONNSTR=%BLOB_CONNSTR%>> .env
-                    echo COOKIE_SECRET=%COOKIE_SECRET%>> .env
-                    echo DB_ENDPOINT=%DB_ENDPOINT%>> .env
-                    echo DB_ID=%DB_ID%>> .env
-                    echo DB_KEY=%DB_KEY%>> .env
-
-                    echo DISCORD_OAUTH_CLIENT_ID=%DISCORD_OAUTH_CLIENT_ID%>> .env
-                    echo DISCORD_OAUTH_CLIENT_SECRET=%DISCORD_OAUTH_CLIENT_SECRET%>> .env
-                    echo DISCORD_OAUTH_REDIRECT_URL=%DISCORD_OAUTH_REDIRECT_URL%>> .env
-
-                    echo DOMAIN=%DOMAIN%>> .env
-
-                    echo EDGE_CONFIG=%EDGE_CONFIG%>> .env
-                    echo EDGE_CONFIG_ID=%EDGE_CONFIG_ID%>> .env
-                    echo EDGE_CONFIG_TOKEN=%EDGE_CONFIG_TOKEN%>> .env
-
-                    echo GITHUB_OAUTH_CLIENT_ID=%GITHUB_OAUTH_CLIENT_ID%>> .env
-                    echo GITHUB_OAUTH_CLIENT_SECRET=%GITHUB_OAUTH_CLIENT_SECRET%>> .env
-                    echo GITHUB_OAUTH_REDIRECT_URL=%GITHUB_OAUTH_REDIRECT_URL%>> .env
-
-                    echo GOOGLE_OAUTH_CLIENT_ID=%GOOGLE_OAUTH_CLIENT_ID%>> .env
-                    echo GOOGLE_OAUTH_CLIENT_SECRET=%GOOGLE_OAUTH_CLIENT_SECRET%>> .env
-                    echo GOOGLE_OAUTH_REDIRECT_URL=%GOOGLE_OAUTH_REDIRECT_URL%>> .env
-
-                    echo TEAMSCONTAINER_ID=%TEAMSCONTAINER_ID%>> .env
-                    echo USERCONTAINER_ID=%USERCONTAINER_ID%>> .env
-
-                    echo WEBHOOK_KEY=%WEBHOOK_KEY%>> .env
+                    copy ${ENV_FILE} .env
                 """
             }
             }
