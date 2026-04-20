@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@azure/cosmos": "^4.7.0",
-    "@azure/storage-blob": "^12.28.0",
+    "@azure/storage-blob": "^12.29.1",
     "@tabler/icons-react": "^3.34.1",
     "@vercel/analytics": "^1.5.0",
     "@vercel/edge-config": "^1.4.0",
